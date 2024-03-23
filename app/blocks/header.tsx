@@ -3,6 +3,8 @@ import { Button } from "~/atoms/ui/button"
 import { Container } from "~/atoms/ui/container"
 import { Sun, Moon } from "lucide-react"
 
+
+/*routes roboczo */
 const routes = [
   {
     label: 'Home',
@@ -51,9 +53,10 @@ export const Header = () => {
             ))}
           </nav>
           <div className="flex items-center">
-            <Button variant={"ghost"} size={"icon"} className="mr-6" aria-label="Toogle Theme">
-              <Sun />
-              <Moon />
+            <Button variant={"ghost"} size={"icon"} className="mr-6" aria-label="Toggle Theme">
+              <Sun className="h-6 w-6 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absoluteh-6 w-6 rotate-90 scale-0 transition-all dark:-rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle Theme</span>
             </Button>
           </div>
         </div>
