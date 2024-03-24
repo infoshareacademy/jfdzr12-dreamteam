@@ -47,7 +47,7 @@ export const EventForm = () => {
                     <Label>
                         Reception address
                         <Input name='place' />
-                        <Input name='date' type='date'/>
+                        <Input name='date' type='address'/>
                     </Label>
                     <Label>
                         Lead color
@@ -63,6 +63,7 @@ export const EventForm = () => {
                     </Label>
                     <Label>
                         Unique event code
+                        <Input name='code' type='number' />
                     </Label>
 
                     <Button type='submit'>Add your event</Button>
