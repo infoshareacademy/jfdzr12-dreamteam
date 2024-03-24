@@ -3,9 +3,10 @@
 import { Link } from "@remix-run/react"
 import { Button } from "~/atoms/ui/button"
 import { Container } from "~/atoms/ui/container"
-import { Sun, Moon } from "lucide-react"
+import { Sun, Moon, Menu } from "lucide-react"
 import { ProfileButton } from "~/blocks/profileButton"
 import { useTheme } from "next-themes";
+import { Sheet, SheetContent, SheetTrigger } from "~/atoms/ui/sheet";
 
 
 /*routes roboczo */
@@ -40,6 +41,20 @@ export const Header = () => {
       <Container>
         <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="flex items-center">
+            <Sheet>
+              <SheetTrigger>
+                <Menu className="h-6 md:hidden w-6" />
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px sm:w-[400px]">
+                <nav className="flex flex-col gap-4">
+                  {routes.map((route, i) => (
+                    <Link key={i} to={route.href} className="block py-1 px-2 text-lg">
+                      {route.label}
+                    </Link>
+                  ))}
+                </nav>
+              </SheetContent>
+            </Sheet>
             <Link to="/" className="ml-4 lg:ml-0">
               <h1 className="text-xl font-semibold">Logo</h1>
             </Link>
