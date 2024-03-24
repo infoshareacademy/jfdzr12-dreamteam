@@ -1,59 +1,83 @@
-import { Link } from "remix"; // Zmieniony import na komponent Link z Remix.js
-import { Button } from "~/atoms/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/atoms/ui/card"
+import { useState } from "react";
+import { Button } from "~/atoms/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 
 export function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleSignIn = () => {
+    setEmailError(""); 
+    setPasswordError("");
+
+    if (!email) {
+      setEmailError("Email is required");
+      setPassword("");
+      return;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError("Invalid email format");
+      setEmail("");
+      setPassword("");
+      return;
+    }
+    if (!password) {
+      setPasswordError("Password is required");
+      return;
+    }
+    setEmail("");
+    setPassword("");
+    console.log("success!");
+  };
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-xl">Sign Up</CardTitle>
+        <CardTitle className="text-2x">Sign In</CardTitle>
         <CardDescription>
-          Enter your information to create an account
+          Enter your email below to login to your account
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="first-name">First name</Label>
-              <Input id="first-name" placeholder="Name" required />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="last-name">Last name</Label>
-              <Input id="last-name" placeholder="Surname" required />
-            </div>
-          </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
               placeholder="m@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
+            {emailError && <p className="text-red-500">{emailError}</p>}
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
+            <div className="flex items-center">
+              <Label htmlFor="password">Password</Label>
+            </div>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
-          <Button type="submit" className="w-full">
-            Create an account
+          <Button type="button" className="w-full" onClick={handleSignIn}>
+            Sign In
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Already have an account? i tutaj będzie można przełączyć sie na log in{" "}
-         
+          Don't have an account? Sign up{" "}
+
           {/* <Link to="#" className="underline"> 
-            Sign in
-          </Link> */}
+//             Sign in
+//           </Link> */}
         </div>
       </CardContent>
     </Card>
