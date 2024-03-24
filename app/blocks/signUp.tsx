@@ -118,9 +118,12 @@ export function SignUp() {
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account? Sign in{" "}
-          {/* Tutaj dodaj link do strony logowania */}
+         {/* <Link to="#" className="underline"> 
+//             Sign in
+//           </Link> */}
         </div>
       </CardContent>
     </Card>
   );
 }
+

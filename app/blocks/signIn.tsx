@@ -76,7 +76,7 @@ export function SignIn() {
           Don't have an account? Sign up{" "}
 
           {/* <Link to="#" className="underline"> 
-//             Sign in
+//             Sign up
 //           </Link> */}
         </div>
       </CardContent>
