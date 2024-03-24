@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Links,
   Meta,
@@ -11,8 +9,8 @@ import {
 import styles from "./globals.css?url";
 import { LinksFunction } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
-import { ThemeProvider } from "./blocks/themeProvider";
-import { Header } from "./blocks/header";
+import { Header } from "~/blocks/header";
+import { ThemeProvider } from "~/blocks/theme-provider"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -28,18 +26,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <Header />
-        <body>
-          {children}
-          <ScrollRestoration />
-          <Scripts />
-        </body>
-      </ThemeProvider>
+
+      <body>
+
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+      </body>
     </html>
   );
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <ThemeProvider storageKey="vite-ui-theme">
+      <Header />
+      <Outlet />
+    </ThemeProvider>
+  )
 }
