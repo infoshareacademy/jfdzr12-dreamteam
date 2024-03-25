@@ -55,7 +55,7 @@ export const EventForm = () => {
             title: 'Other',
             fields: [
                 { label: 'Lead color', name: 'color', type: 'color' },
-                { label: 'Unique event code', name: 'event_code' }
+                // { label: 'Unique event code', name: 'event_code' }
             ]
             }
         ];
