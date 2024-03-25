@@ -61,18 +61,18 @@ export const EventForm = () => {
         ];
 
     return (
-        <Card className='w-1/2'>
+        <Card className='w-full max-w-screen-lg'>
             <CardHeader>
                 <CardTitle className='text-center'>Your dream event</CardTitle>
             </CardHeader>
             <CardContent>
-                <form >
+                <form>
                     {formData.map((section, index) => (
                         <fieldset key={index}>
                         <legend className='text-lg font-bold mb-2 text-center'>{section.title}</legend>
                         <div className='grid grid-cols-2 gap-4'>
                             {section.fields.map((field, fieldIndex) => (
-                            <div key={fieldIndex} className='flex flex-col space-y-1.5'>
+                            <div key={fieldIndex} className='flex flex-col space-y-1.5 mb-5'>
                                 <Label>{field.label}</Label>
                                 <Input name={field.name} type={field.type || 'text'} />
                             </div>
@@ -80,9 +80,9 @@ export const EventForm = () => {
                         </div>
                         </fieldset>
                     ))}
-                    <CardFooter className='flex justify-between'>
-                        <Button type='button'>Cancel</Button>
-                        <Button type='submit'>Add your event</Button>
+                    <CardFooter className='grid grid-cols-2 gap-4 p-0'>
+                        <Button type='button' className='w-full'>Cancel</Button>
+                        <Button type='submit' className='w-full'>Add your event</Button>
                     </CardFooter>
                 </form>
             </CardContent>
@@ -94,7 +94,7 @@ export const EventForm = () => {
 // export const EventForm = () => {
 
 //     return (
-//         <Card className='w-1/2'>
+//         <Card className='w-full max-w-screen-lg'>
 //             <CardHeader>
 //                 <CardTitle className='text-center'>Your dream event</CardTitle>
 //             </CardHeader>
@@ -106,7 +106,7 @@ export const EventForm = () => {
 
 //                             <legend className='text-lg font-bold mb-2 text-center'>Names
 //                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Bride's</Label>
 //                                         <Input name='bride' />
 //                                     </div>
@@ -119,11 +119,11 @@ export const EventForm = () => {
 
 //                             <legend className='text-lg font-bold mb-2 text-center'>Event
 //                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Date</Label>
 //                                         <Input name='date' type='date'/>
 //                                     </div>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Time</Label>
 //                                         <Input name='time' type='number'/>
 //                                     </div>
@@ -132,7 +132,7 @@ export const EventForm = () => {
 
 //                             <legend className='text-lg font-bold mb-2 text-center'>Ceremony
 //                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Place</Label>
 //                                         <Input name='ceremony_place' />
 //                                     </div>
@@ -145,11 +145,11 @@ export const EventForm = () => {
 
 //                             <legend className='text-lg font-bold mb-2 text-center'>Reception
 //                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Place</Label>
 //                                         <Input name='reception_place' />
 //                                     </div>
-//                                     <div className='flex flex-col space-y-1.5'>    
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>    
 //                                         <Label>Address</Label>
 //                                         <Input name='reception_address' type='address'/> 
 //                                     </div>
@@ -158,11 +158,11 @@ export const EventForm = () => {
 
 //                             <legend className='text-lg font-bold mb-2 text-center'>Phone numbers
 //                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Bride's</Label>
 //                                         <Input name='bride_number' type='tel' />
 //                                     </div>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Groom's</Label>
 //                                         <Input name='groom_number' type='tel'/>
 //                                     </div>
@@ -171,11 +171,11 @@ export const EventForm = () => {
 
 //                             <legend className='text-lg font-bold mb-2 text-center'>Other
 //                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Lead color</Label>
 //                                         <Input name='color' type='color'/>
 //                                     </div>
-//                                     <div className='flex flex-col space-y-1.5'>
+//                                     <div className='flex flex-col space-y-1.5 mb-5'>
 //                                         <Label>Unique event code</Label>
 //                                         <div><p>Event code:</p></div>
 //                                     </div>
@@ -186,9 +186,9 @@ export const EventForm = () => {
 //                     </fieldset>
 //                 </form>
 //             </CardContent>
-//             <CardFooter className='flex justify-between'>
-//                 <Button>Cancel</Button>
-//                 <Button type='submit'>Add your event</Button>
+//             <CardFooter className='grid grid-cols-2 gap-4'>
+//                 <Button className='w-full'>Cancel</Button>
+//                 <Button type='submit' className='w-full'>Add your event</Button>
 //             </CardFooter>
 //         </Card>
 //     );
