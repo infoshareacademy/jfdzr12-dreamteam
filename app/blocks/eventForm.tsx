@@ -12,6 +12,7 @@ import { Button } from '~/atoms/ui/button'
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '~/atoms/ui/card';
+import { DatePicker } from './datePicker';
 
 export const EventForm = () => {
     
@@ -74,7 +75,8 @@ export const EventForm = () => {
                             {section.fields.map((field, fieldIndex) => (
                             <div key={fieldIndex} className='flex flex-col space-y-1.5 mb-5'>
                                 <Label>{field.label}</Label>
-                                <Input name={field.name} type={field.type || 'text'} />
+                                {field.type === 'date' ? (<DatePicker />) 
+                                : (<Input name={field.name} type={field.type || 'text'} />)} 
                             </div>
                             ))}
                         </div>
