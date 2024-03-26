@@ -2,11 +2,6 @@ import type { MetaFunction } from "@remix-run/node";
 
 import { Card } from "~/atoms/ui/card";
 import { GuestsForm } from "~/blocks/guestsForm";
-import { SignIn } from "~/blocks/signIn";
-import { SignUp } from "~/blocks/signUp";
-
-
-
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,13 +16,6 @@ export default function Index() {
       <Card>
         <GuestsForm onSubmit={(e) => { console.log("Onsubmit", e) }} />
       </Card>
-      <SignIn />
-      <SignUp />
     </div>
-  )
+  );
 }
-
-
-
-
-
