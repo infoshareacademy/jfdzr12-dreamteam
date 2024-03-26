@@ -73,11 +73,9 @@ export function SignIn() {
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Don't have an account? Sign up{" "}
+          Do not have an account? Sign up{" "}
 
-          {/* <Link to="#" className="underline"> 
-//             Sign up
-//           </Link> */}
+          {/* <Link to="#" className="underline">  Sign up </Link> */}
         </div>
       </CardContent>
     </Card>
