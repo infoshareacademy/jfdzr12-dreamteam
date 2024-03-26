@@ -11,7 +11,7 @@ export function SignIn() {
   const [passwordError, setPasswordError] = useState("");
 
   const handleSignIn = () => {
-    setEmailError(""); 
+    setEmailError("");
     setPasswordError("");
 
     if (!email) {
