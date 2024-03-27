@@ -20,63 +20,68 @@ function getRandomCode(min: number, max: number): number {
 const eventCode = getRandomCode(1000, 9000);
 console.log(eventCode)
 
+interface Field {
+    label: string;
+    name: string;
+    type?: string;
+}
+
+interface FormDataSection {
+    title: string;
+    fields: Field[];
+}
+
+const formData: FormDataSection[] = [
+        {
+        title: 'Names',
+        fields: [
+            { label: "Bride's", name: 'bride' },
+            { label: "Groom's", name: 'groom' }
+        ]
+        },
+        {
+        title: 'Event',
+        fields: [
+            { label: 'Date', name: 'date', type: 'date' },
+            { label: 'Time', name: 'time', type: 'number' }
+        ]
+        },
+        {
+        title: 'Ceremony',
+        fields: [
+            { label: 'Place', name: 'ceremony_place' },
+            { label: 'Address', name: 'ceremony_address', type: 'address' }
+        ]
+        },
+        {
+        title: 'Reception',
+        fields: [
+            { label: 'Place', name: 'reception_place' },
+            { label: 'Address', name: 'reception_address', type: 'address' }
+        ]
+        },
+        {
+        title: 'Phone numbers',
+        fields: [
+            { label: "Bride's", name: 'bride_number', type: 'tel' },
+            { label: "Groom's", name: 'groom_number', type: 'tel' }
+        ]
+        },
+        {
+        title: 'Other',
+        fields: [
+            { label: 'Lead color', name: 'color', type: 'color' },
+            // { label: 'Unique event code', name: 'event_code' }
+        ]
+        }
+    ];
+
 export const EventForm = (): React.ReactElement => {
 
-    interface Field {
-        label: string;
-        name: string;
-        type?: string;
+    function handleOnClick() {
+
     }
 
-    interface FormDataSection {
-        title: string;
-        fields: Field[];
-    }
-    
-    const formData: FormDataSection[] = [
-            {
-            title: 'Names',
-            fields: [
-                { label: "Bride's", name: 'bride' },
-                { label: "Groom's", name: 'groom' }
-            ]
-            },
-            {
-            title: 'Event',
-            fields: [
-                { label: 'Date', name: 'date', type: 'date' },
-                { label: 'Time', name: 'time', type: 'number' }
-            ]
-            },
-            {
-            title: 'Ceremony',
-            fields: [
-                { label: 'Place', name: 'ceremony_place' },
-                { label: 'Address', name: 'ceremony_address', type: 'address' }
-            ]
-            },
-            {
-            title: 'Reception',
-            fields: [
-                { label: 'Place', name: 'reception_place' },
-                { label: 'Address', name: 'reception_address', type: 'address' }
-            ]
-            },
-            {
-            title: 'Phone numbers',
-            fields: [
-                { label: "Bride's", name: 'bride_number', type: 'tel' },
-                { label: "Groom's", name: 'groom_number', type: 'tel' }
-            ]
-            },
-            {
-            title: 'Other',
-            fields: [
-                { label: 'Lead color', name: 'color', type: 'color' },
-                // { label: 'Unique event code', name: 'event_code' }
-            ]
-            }
-        ];
 
     return (
         <Card className='w-full max-w-screen-lg'>
@@ -99,12 +104,13 @@ export const EventForm = (): React.ReactElement => {
                         </div>
                         </fieldset>
                     ))}
-                    <CardFooter className='grid grid-cols-2 gap-4 p-0'>
-                        <Button type='button' className='w-full'>Cancel</Button>
-                        <Button type='submit' className='w-full'>Add your event</Button>
-                    </CardFooter>
                 </form>
             </CardContent>
+            <CardFooter className='grid grid-cols-2 gap-4 p-5'>
+                <Button type='button' className='w-full'>Cancel</Button>
+                <Button type='submit' className='w-full' onClick={handleOnClick}>Add your event</Button>
+            </CardFooter>
+            
         </Card>
     );
 };
