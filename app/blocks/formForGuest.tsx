@@ -19,9 +19,9 @@ interface NameFormProps {
 }
 
 export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
-  const [isPresenceChecked, setIsPresenceChecked] = useState<string | undefined>();
+  const [isPresenceChecked, setIsPresenceChecked] = useState<string>();
   const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean>(false);
-  const [isPartnerChecked, setIsPartnerChecked] = useState<string | undefined>();
+  const [isPartnerChecked, setIsPartnerChecked] = useState<string>();
 
   const handleRadioPresenceChange = (value: string) => {
     setIsPresenceChecked(value);
@@ -38,7 +38,10 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isPresenceChecked !== undefined && (!showAdditionalQuestions || isPartnerChecked !== undefined)) {
+    if (isPresenceChecked === "false"){
+      onSubmit({isPresenceChecked})
+    }
+    else if (isPresenceChecked !== undefined && (!showAdditionalQuestions || isPartnerChecked !== undefined)) {
       onSubmit({isPresenceChecked, isPartnerChecked});
     }
   };
