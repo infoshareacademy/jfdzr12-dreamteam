@@ -7,11 +7,13 @@ const textAnswerNo = "Nie";
 const textLabelPresence = "Potwierdzenie przybycia : ";
 const textLabelPartner = "Obecność Osoby Towarzyszącej : ";
 const textButtonSubmit = "Wyślij";
+const textLabelChild = "Obecność dziecka";
 
 // interface reprezentujący obiekt przekazywany do onSubmit
 interface FormValues {
   isPresenceChecked: string;
   isPartnerChecked?: string;
+  isChildChecked?:string;
 }
 
 interface NameFormProps {
@@ -22,6 +24,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
   const [isPresenceChecked, setIsPresenceChecked] = useState<string>();
   const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean>(false);
   const [isPartnerChecked, setIsPartnerChecked] = useState<string>();
+  const [isChildChecked, setIsChildChecked] = useState<string>();
 
   const handleRadioPresenceChange = (value: string) => {
     setIsPresenceChecked(value);
@@ -29,6 +32,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       setShowAdditionalQuestions(true);
     } else {
       setShowAdditionalQuestions(false);
+      // setIsPartnerChecked(null);
     }
   };
 
@@ -36,13 +40,17 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     setIsPartnerChecked(value);
   };
 
+  const handleRadioChildChange = (value: string) => {
+    setIsChildChecked(value);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isPresenceChecked === "false"){
       onSubmit({isPresenceChecked})
     }
-    else if (isPresenceChecked !== undefined && (!showAdditionalQuestions || isPartnerChecked !== undefined)) {
-      onSubmit({isPresenceChecked, isPartnerChecked});
+    else if (isPresenceChecked !== undefined && (!showAdditionalQuestions || isPartnerChecked !== undefined || isChildChecked !== undefined)) {
+      onSubmit({isPresenceChecked, isPartnerChecked, isChildChecked});
     }
   };
 
@@ -95,6 +103,30 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
               required
             />
             <Label htmlFor="partner-no">{textAnswerNo}</Label>
+          </div>
+
+          <Label htmlFor="child">{textLabelChild}</Label>
+          <div>
+          <input 
+              name="child" 
+              type="radio" 
+              id="child-yes" 
+              value={isChildChecked} 
+              onChange={() => handleRadioChildChange("true")} 
+              required
+            />
+            <Label htmlFor="partner-yes">{textAnswerYes}</Label>
+          </div>
+          <div>
+          <input 
+              name="child" 
+              type="radio" 
+              id="child-no" 
+              value={isChildChecked} 
+              onChange={() => handleRadioChildChange("false")} 
+              required
+            />
+            <Label htmlFor="child-no">{textAnswerNo}</Label>
           </div>
         </>
       )}
