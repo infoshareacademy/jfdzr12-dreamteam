@@ -14,15 +14,26 @@ import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '~/atoms/ui/card';
 import { DatePicker } from './datePicker';
 
-function getRandomCode(min, max) {
+function getRandomCode(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-const eventCode = getRandomCode(1, 9000);
+const eventCode = getRandomCode(1000, 9000);
 console.log(eventCode)
 
-export const EventForm = () => {
+export const EventForm = (): React.ReactElement => {
+
+    interface Field {
+        label: string;
+        name: string;
+        type?: string;
+    }
+
+    interface FormDataSection {
+        title: string;
+        fields: Field[];
+    }
     
-    const formData = [
+    const formData: FormDataSection[] = [
             {
             title: 'Names',
             fields: [
