@@ -17,8 +17,6 @@ import { DatePicker } from './datePicker';
 function getRandomCode(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-const eventCode = getRandomCode(1000, 9000);
-console.log(eventCode)
 
 interface Field {
     label: string;
@@ -79,7 +77,8 @@ const formData: FormDataSection[] = [
 export const EventForm = (): React.ReactElement => {
 
     function handleOnClick() {
-
+        const eventCode = getRandomCode(1000, 9000);
+        console.log(eventCode)
     }
 
 
@@ -95,11 +94,11 @@ export const EventForm = (): React.ReactElement => {
                         <legend className='text-lg font-bold mb-2 text-center'>{section.title}</legend>
                         <div className='grid grid-cols-2 gap-4'>
                             {section.fields.map((field) => (
-                            <div key={field.name} className='flex flex-col space-y-1.5 mb-5'>
+                                <div key={field.name} className='flex flex-col space-y-1.5 mb-5'>
                                 <Label>{field.label}</Label>
                                 {field.type === 'date' ? (<DatePicker />) 
                                 : (<Input name={field.name} type={field.type || 'text'} />)} 
-                            </div>
+                                </div>
                             ))}
                         </div>
                         </fieldset>
@@ -110,7 +109,6 @@ export const EventForm = (): React.ReactElement => {
                 <Button type='button' className='w-full'>Cancel</Button>
                 <Button type='submit' className='w-full' onClick={handleOnClick}>Add your event</Button>
             </CardFooter>
-            
         </Card>
     );
 };
