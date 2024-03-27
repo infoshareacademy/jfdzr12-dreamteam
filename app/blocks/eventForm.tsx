@@ -14,6 +14,12 @@ import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '~/atoms/ui/card';
 import { DatePicker } from './datePicker';
 
+function getRandomCode(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+const eventCode = getRandomCode(1, 9000);
+console.log(eventCode)
+
 export const EventForm = () => {
     
     const formData = [
@@ -68,12 +74,12 @@ export const EventForm = () => {
             </CardHeader>
             <CardContent>
                 <form>
-                    {formData.map((section, index) => (
-                        <fieldset key={index}>
+                    {formData.map((section) => (
+                        <fieldset key={section.title}>
                         <legend className='text-lg font-bold mb-2 text-center'>{section.title}</legend>
                         <div className='grid grid-cols-2 gap-4'>
-                            {section.fields.map((field, fieldIndex) => (
-                            <div key={fieldIndex} className='flex flex-col space-y-1.5 mb-5'>
+                            {section.fields.map((field) => (
+                            <div key={field.name} className='flex flex-col space-y-1.5 mb-5'>
                                 <Label>{field.label}</Label>
                                 {field.type === 'date' ? (<DatePicker />) 
                                 : (<Input name={field.name} type={field.type || 'text'} />)} 
