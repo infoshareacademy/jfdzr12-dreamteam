@@ -20,7 +20,17 @@ function getRandomCode(min: number, max: number): number {
 
 export const EventForm = (): React.ReactElement => {
 
-
+    const [brideName, setBrideName] = useState<string>('');
+    const [groomName, serGroomName] = useState<string>('');
+    const [eventDate, setEventDate] = useState<string>('');
+    const [eventTime, setEventTime] = useState<string>('');
+    const [ceremonyPlace, setCeremonyPlace] = useState<string>('');
+    const [ceremonyAddress, setCeremonyAddress] = useState<string>('');
+    const [receptionPlace, setReceptionPlace] = useState<string>('');
+    const [receptionAddress, setReceptionAddress] = useState<string>('');
+    const [brideNumber, setBrideNumber] = useState<string>('');
+    const [groomNumber, setGroomNumber] = useState<string>('');
+    const [leadColor, setLeadColor] = useState<string>('');
 
     return (
         <Card className='w-full max-w-screen-lg'>
