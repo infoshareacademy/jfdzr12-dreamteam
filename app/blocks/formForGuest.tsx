@@ -8,12 +8,15 @@ const textLabelPresence = "Potwierdzenie przybycia : ";
 const textLabelPartner = "Obecność Osoby Towarzyszącej : ";
 const textButtonSubmit = "Wyślij";
 const textLabelChild = "Obecność dziecka";
+const textLabelNumberOfChildren = "Podaj liczbę dzieci";
+const initialNumber = 1;
 
 // interface reprezentujący obiekt przekazywany do onSubmit
 interface FormValues {
   isPresenceChecked: string;
   isPartnerChecked?: string;
-  isChildChecked?:string;
+  isChildChecked?: string;
+  numChildren?: number;
 }
 
 interface NameFormProps {
@@ -25,6 +28,8 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
   const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean>(false);
   const [isPartnerChecked, setIsPartnerChecked] = useState<string>();
   const [isChildChecked, setIsChildChecked] = useState<string>();
+  const [showQuestionAboutNumber, setShowQuestionAboutNumber] = useState<boolean>(false);
+  const [numChildren, setNumChildren] = useState<number>(initialNumber); 
 
   const handleRadioPresenceChange = (value: string) => {
     setIsPresenceChecked(value);
@@ -42,6 +47,11 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
 
   const handleRadioChildChange = (value: string) => {
     setIsChildChecked(value);
+    if (value === "true") {
+      setShowQuestionAboutNumber(true);
+    } else {
+      setShowQuestionAboutNumber(false);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,8 +60,13 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       onSubmit({isPresenceChecked})
     }
     else if (isPresenceChecked !== undefined && (!showAdditionalQuestions || isPartnerChecked !== undefined || isChildChecked !== undefined)) {
-      onSubmit({isPresenceChecked, isPartnerChecked, isChildChecked});
-    }
+      if (!showQuestionAboutNumber){
+        onSubmit({isPresenceChecked, isPartnerChecked, isChildChecked})
+      }
+      else if (!showQuestionAboutNumber || numChildren !== undefined){
+      onSubmit({isPresenceChecked, isPartnerChecked, isChildChecked, numChildren});
+       
+    }}
   };
 
   return (
@@ -115,7 +130,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
               onChange={() => handleRadioChildChange("true")} 
               required
             />
-            <Label htmlFor="partner-yes">{textAnswerYes}</Label>
+            <Label htmlFor="child-yes">{textAnswerYes}</Label>
           </div>
           <div>
           <input 
@@ -128,6 +143,25 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
             />
             <Label htmlFor="child-no">{textAnswerNo}</Label>
           </div>
+          {showQuestionAboutNumber && (
+            <>
+            <Label htmlFor="numberOfChildren">{textLabelNumberOfChildren}</Label>
+            <div>
+            <input 
+                name="numberOfChildren" 
+                type="number" 
+                id="numberOfChildren"
+                min="1" 
+                value={numChildren} 
+                onChange={(e) => {
+                  const num = e.target.valueAsNumber
+                  setNumChildren(num)
+                }}
+                required
+              />
+            </div>
+            </>
+          )}
         </>
       )}
 
