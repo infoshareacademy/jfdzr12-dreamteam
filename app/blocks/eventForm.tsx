@@ -21,7 +21,7 @@ function getRandomCode(min: number, max: number): number {
 export const EventForm = (): React.ReactElement => {
 
     const [brideName, setBrideName] = useState<string>('');
-    const [groomName, serGroomName] = useState<string>('');
+    const [groomName, setGroomName] = useState<string>('');
     const [eventDate, setEventDate] = useState<string>('');
     const [eventTime, setEventTime] = useState<string>('');
     const [ceremonyPlace, setCeremonyPlace] = useState<string>('');
@@ -31,6 +31,12 @@ export const EventForm = (): React.ReactElement => {
     const [brideNumber, setBrideNumber] = useState<string>('');
     const [groomNumber, setGroomNumber] = useState<string>('');
     const [leadColor, setLeadColor] = useState<string>('');
+
+    const handleOnClick = () => {
+        console.log(getRandomCode(1000, 9000));
+    }
+
+    console.log(brideName, groomName, eventDate, eventTime, ceremonyPlace, ceremonyAddress, receptionPlace, receptionAddress, brideNumber, groomNumber, leadColor)
 
     return (
         <Card className='w-full max-w-screen-lg'>
@@ -47,11 +53,11 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Bride's</Label>
-                                        <Input name='bride_name' />
+                                        <Input name='bride_name' value={brideName} onChange={(e) => setBrideName(e.target.value)}/>
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
                                         <Label>Groom's</Label>
-                                        <Input name='groom_name'/>
+                                        <Input name='groom_name' value={groomName} onChange={(e) => setGroomName(e.target.value)}/>
                                     </div>
                                 </div>
                             </legend>
@@ -60,11 +66,11 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Date</Label>
-                                        <DatePicker/>
+                                        <DatePicker value={eventDate} onSelectDate={setEventDate}/>
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Time</Label>
-                                        <Input name='event_time'/>
+                                        <Input name='event_time' value={eventTime} onChange={(e) => setEventTime(e.target.value)}/>
                                     </div>
                                 </div>
                             </legend>
@@ -73,11 +79,11 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Place</Label>
-                                        <Input name='ceremony_place' />
+                                        <Input name='ceremony_place' value={ceremonyPlace} onChange={(e) => setCeremonyPlace(e.target.value)}/>
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
                                         <Label>Address</Label>
-                                        <Input name='ceremony_address' type='address'/>
+                                        <Input name='ceremony_address' type='address' value={ceremonyAddress} onChange={(e) => setCeremonyAddress(e.target.value)}/>
                                     </div>
                                 </div>
                             </legend>
@@ -86,11 +92,11 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Place</Label>
-                                        <Input name='reception_place' />
+                                        <Input name='reception_place' value={receptionPlace} onChange={(e) => setReceptionPlace(e.target.value)}/>
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>    
                                         <Label>Address</Label>
-                                        <Input name='reception_address' type='address'/> 
+                                        <Input name='reception_address' type='address' value={receptionAddress} onChange={(e) => setReceptionAddress(e.target.value)}/> 
                                     </div>
                                 </div>
                             </legend>
@@ -99,11 +105,11 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Bride's</Label>
-                                        <Input name='bride_number' type='tel' />
+                                        <Input name='bride_number' type='tel' value={brideNumber} onChange={(e) => setBrideNumber(e.target.value)}/>
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Groom's</Label>
-                                        <Input name='groom_number' type='tel'/>
+                                        <Input name='groom_number' type='tel' value={groomNumber} onChange={(e) => setGroomNumber(e.target.value)}/>
                                     </div>
                                 </div>
                             </legend>
@@ -112,7 +118,7 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Lead color</Label>
-                                        <Input name='lead_color' type='color'/>
+                                        <Input name='lead_color' type='color' value={leadColor} onChange={(e) => setLeadColor(e.target.value)}/>
                                     </div>
                                 </div>
                             </legend>
@@ -123,7 +129,7 @@ export const EventForm = (): React.ReactElement => {
             </CardContent>
             <CardFooter className='grid grid-cols-2 gap-4'>
                 <Button className='w-full'>Cancel</Button>
-                <Button type='submit' className='w-full'>Add your event</Button>
+                <Button type='submit' className='w-full' onClick={handleOnClick}>Add your event</Button>
             </CardFooter>
         </Card>
     );

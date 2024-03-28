@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { cn } from '~/lib/utils'
@@ -10,8 +10,26 @@ import {
   PopoverTrigger,
 } from '~/atoms/ui/popover'
 
-export function DatePicker() {
-    const [date, setDate] = useState<Date>()
+interface DatePickerProps {
+    value: string;
+    onSelectDate: (date: string) => void;
+}
+
+export function DatePicker({value, onSelectDate}: DatePickerProps) {
+    const [date, setDate] = useState<Date>();
+
+    useEffect(() => {
+        if (value) {
+            setDate(new Date(value));
+        }
+    }, [value]);
+
+    const handleDateOnChange = (selectedDate: Date | undefined) => {
+        if(selectedDate) {
+        onSelectDate(selectedDate.toString());
+        setDate(selectedDate);
+        }
+    }
 
     return (
             <Popover>
@@ -31,7 +49,7 @@ export function DatePicker() {
                 <Calendar
                 mode='single'
                 selected={date}
-                onSelect={setDate}
+                onSelect={handleDateOnChange}
                 initialFocus
                 />
             </PopoverContent>
