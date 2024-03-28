@@ -18,68 +18,8 @@ function getRandomCode(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-interface Field {
-    label: string;
-    name: string;
-    type?: string;
-}
-
-interface FormDataSection {
-    title: string;
-    fields: Field[];
-}
-
-const formData: FormDataSection[] = [
-        {
-        title: 'Names',
-        fields: [
-            { label: "Bride's", name: 'bride' },
-            { label: "Groom's", name: 'groom' }
-        ]
-        },
-        {
-        title: 'Event',
-        fields: [
-            { label: 'Date', name: 'date', type: 'date' },
-            { label: 'Time', name: 'time', type: 'number' }
-        ]
-        },
-        {
-        title: 'Ceremony',
-        fields: [
-            { label: 'Place', name: 'ceremony_place' },
-            { label: 'Address', name: 'ceremony_address', type: 'address' }
-        ]
-        },
-        {
-        title: 'Reception',
-        fields: [
-            { label: 'Place', name: 'reception_place' },
-            { label: 'Address', name: 'reception_address', type: 'address' }
-        ]
-        },
-        {
-        title: 'Phone numbers',
-        fields: [
-            { label: "Bride's", name: 'bride_number', type: 'tel' },
-            { label: "Groom's", name: 'groom_number', type: 'tel' }
-        ]
-        },
-        {
-        title: 'Other',
-        fields: [
-            { label: 'Lead color', name: 'color', type: 'color' },
-            // { label: 'Unique event code', name: 'event_code' }
-        ]
-        }
-    ];
-
 export const EventForm = (): React.ReactElement => {
 
-    function handleOnClick() {
-        const eventCode = getRandomCode(1000, 9000);
-        console.log(eventCode)
-    }
 
 
     return (
@@ -89,32 +29,179 @@ export const EventForm = (): React.ReactElement => {
             </CardHeader>
             <CardContent>
                 <form>
-                    {formData.map((section) => (
-                        <fieldset key={section.title}>
-                        <legend className='text-lg font-bold mb-2 text-center'>{section.title}</legend>
-                        <div className='grid grid-cols-2 gap-4'>
-                            {section.fields.map((field) => (
-                                <div key={field.name} className='flex flex-col space-y-1.5 mb-5'>
-                                <Label>{field.label}</Label>
-                                {field.type === 'date' ? (<DatePicker />) 
-                                : (<Input name={field.name} type={field.type || 'text'} />)} 
+                    <fieldset>
+                        
+                        <div className='w-full'>
+
+                            <legend className='text-lg font-bold mb-2'>Names
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Bride's</Label>
+                                        <Input name='bride_name' />
+                                    </div>
+                                    <div className='flex flex-col space-y-1.5'>
+                                        <Label>Groom's</Label>
+                                        <Input name='groom_name'/>
+                                    </div>
                                 </div>
-                            ))}
+                            </legend>
+
+                            <legend className='text-lg font-bold mb-2'>Event
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Date</Label>
+                                        <DatePicker/>
+                                    </div>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Time</Label>
+                                        <Input name='event_time'/>
+                                    </div>
+                                </div>
+                            </legend>
+
+                            <legend className='text-lg font-bold mb-2'>Ceremony
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Place</Label>
+                                        <Input name='ceremony_place' />
+                                    </div>
+                                    <div className='flex flex-col space-y-1.5'>
+                                        <Label>Address</Label>
+                                        <Input name='ceremony_address' type='address'/>
+                                    </div>
+                                </div>
+                            </legend>
+
+                            <legend className='text-lg font-bold mb-2'>Reception
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Place</Label>
+                                        <Input name='reception_place' />
+                                    </div>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>    
+                                        <Label>Address</Label>
+                                        <Input name='reception_address' type='address'/> 
+                                    </div>
+                                </div>
+                            </legend>
+
+                            <legend className='text-lg font-bold mb-2'>Phone numbers
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Bride's</Label>
+                                        <Input name='bride_number' type='tel' />
+                                    </div>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Groom's</Label>
+                                        <Input name='groom_number' type='tel'/>
+                                    </div>
+                                </div>
+                            </legend>
+
+                            <legend className='text-lg font-bold mb-2'>Other
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div className='flex flex-col space-y-1.5 mb-5'>
+                                        <Label>Lead color</Label>
+                                        <Input name='lead_color' type='color'/>
+                                    </div>
+                                </div>
+                            </legend>
+
                         </div>
-                        </fieldset>
-                    ))}
+                    </fieldset>
                 </form>
             </CardContent>
-            <CardFooter className='grid grid-cols-2 gap-4 p-5'>
-                <Button type='button' className='w-full'>Cancel</Button>
-                <Button type='submit' className='w-full' onClick={handleOnClick}>Add your event</Button>
+            <CardFooter className='grid grid-cols-2 gap-4'>
+                <Button className='w-full'>Cancel</Button>
+                <Button type='submit' className='w-full'>Add your event</Button>
             </CardFooter>
         </Card>
     );
 };
 
 
-// export const EventForm = () => {
+
+
+
+// export const EventForm = (): React.ReactElement => {
+
+//     const [brideName, setBrideName] = useState<string>('');
+//     const [groomName, serGroomName] = useState<string>('');
+//     const [eventDate, setEventDate] = useState<string>('');
+//     const [eventTime, setEventTime] = useState<string>('');
+//     const [ceremonyPlace, setCeremonyPlace] = useState<string>('');
+//     const [ceremonyAddress, setCeremonyAddress] = useState<string>('');
+//     const [receptionPlace, setReceptionPlace] = useState<string>('');
+//     const [receptionAddress, setReceptionAddress] = useState<string>('');
+//     const [brideNumber, setBrideNumber] = useState<string>('');
+//     const [groomNumber, setGroomNumber] = useState<string>('');
+//     const [leadColor, setLeadColor] = useState<string>('');
+
+
+// interface Field {
+//     label: string;
+//     name: string;
+//     type?: string;
+//     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+// }
+
+// interface FormDataSection {
+//     title: string;
+//     fields: Field[];
+// }
+
+
+// const formData: FormDataSection[] = [
+//         {
+//         title: 'Names',
+//         fields: [
+//             { label: "Bride's", name: 'bride_name', onChange: (e) => setBrideName(e.target.value) },
+//             { label: "Groom's", name: 'groom_name' }
+//         ]
+//         },
+//         {
+//         title: 'Event',
+//         fields: [
+//             { label: 'Date', name: 'event_date', type: 'date' },
+//             { label: 'Time', name: 'event_time', type: 'number' }
+//         ]
+//         },
+//         {
+//         title: 'Ceremony',
+//         fields: [
+//             { label: 'Place', name: 'ceremony_place' },
+//             { label: 'Address', name: 'ceremony_address', type: 'address' }
+//         ]
+//         },
+//         {
+//         title: 'Reception',
+//         fields: [
+//             { label: 'Place', name: 'reception_place' },
+//             { label: 'Address', name: 'reception_address', type: 'address' }
+//         ]
+//         },
+//         {
+//         title: 'Phone numbers',
+//         fields: [
+//             { label: "Bride's", name: 'bride_number', type: 'tel' },
+//             { label: "Groom's", name: 'groom_number', type: 'tel' }
+//         ]
+//         },
+//         {
+//         title: 'Other',
+//         fields: [
+//             { label: 'Lead color', name: 'lead_color', type: 'color' },
+//             // { label: 'Unique event code', name: 'event_code' }
+//         ]
+//         }
+//     ];
+
+
+//     function handleOnClick() {
+//         const eventCode = getRandomCode(1000, 9000);
+//         console.log(eventCode)
+//     }
+
 
 //     return (
 //         <Card className='w-full max-w-screen-lg'>
@@ -123,99 +210,27 @@ export const EventForm = (): React.ReactElement => {
 //             </CardHeader>
 //             <CardContent>
 //                 <form>
-//                     <fieldset>
-                        
-//                         <div className='w-full'>
-
-//                             <legend className='text-lg font-bold mb-2 text-center'>Names
-//                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Bride's</Label>
-//                                         <Input name='bride' />
-//                                     </div>
-//                                     <div className='flex flex-col space-y-1.5'>
-//                                         <Label>Groom's</Label>
-//                                         <Input name='groom' type='groom'/>
-//                                     </div>
+//                     {formData.map((section) => (
+//                         <fieldset key={section.title}>
+//                         <legend className='text-lg font-bold mb-2 text-center'>{section.title}</legend>
+//                         <div className='grid grid-cols-2 gap-4'>
+//                             {section.fields.map((field) => (
+//                                 <div key={field.name} className='flex flex-col space-y-1.5 mb-5'>
+//                                 <Label>{field.label}</Label>
+//                                 {field.type === 'date' ? (<DatePicker />) 
+//                                 : (<Input name={field.name} type={field.type || 'text'} />)} 
 //                                 </div>
-//                             </legend>
-
-//                             <legend className='text-lg font-bold mb-2 text-center'>Event
-//                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Date</Label>
-//                                         <Input name='date' type='date'/>
-//                                     </div>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Time</Label>
-//                                         <Input name='time' type='number'/>
-//                                     </div>
-//                                 </div>
-//                             </legend>
-
-//                             <legend className='text-lg font-bold mb-2 text-center'>Ceremony
-//                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Place</Label>
-//                                         <Input name='ceremony_place' />
-//                                     </div>
-//                                     <div className='flex flex-col space-y-1.5'>
-//                                         <Label>Address</Label>
-//                                         <Input name='ceremony_address' type='address'/>
-//                                     </div>
-//                                 </div>
-//                             </legend>
-
-//                             <legend className='text-lg font-bold mb-2 text-center'>Reception
-//                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Place</Label>
-//                                         <Input name='reception_place' />
-//                                     </div>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>    
-//                                         <Label>Address</Label>
-//                                         <Input name='reception_address' type='address'/> 
-//                                     </div>
-//                                 </div>
-//                             </legend>
-
-//                             <legend className='text-lg font-bold mb-2 text-center'>Phone numbers
-//                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Bride's</Label>
-//                                         <Input name='bride_number' type='tel' />
-//                                     </div>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Groom's</Label>
-//                                         <Input name='groom_number' type='tel'/>
-//                                     </div>
-//                                 </div>
-//                             </legend>
-
-//                             <legend className='text-lg font-bold mb-2 text-center'>Other
-//                                 <div className='grid grid-cols-2 gap-4'>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Lead color</Label>
-//                                         <Input name='color' type='color'/>
-//                                     </div>
-//                                     <div className='flex flex-col space-y-1.5 mb-5'>
-//                                         <Label>Unique event code</Label>
-//                                         <div><p>Event code:</p></div>
-//                                     </div>
-//                                 </div>
-//                             </legend>
-
+//                             ))}
 //                         </div>
-//                     </fieldset>
+//                         </fieldset>
+//                     ))}
 //                 </form>
 //             </CardContent>
-//             <CardFooter className='grid grid-cols-2 gap-4'>
-//                 <Button className='w-full'>Cancel</Button>
-//                 <Button type='submit' className='w-full'>Add your event</Button>
+//             <CardFooter className='grid grid-cols-2 gap-4 p-5'>
+//                 <Button type='button' className='w-full'>Cancel</Button>
+//                 <Button type='submit' className='w-full' onClick={handleOnClick}>Add your event</Button>
 //             </CardFooter>
 //         </Card>
 //     );
 // };
-
-
 
