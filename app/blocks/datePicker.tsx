@@ -5,14 +5,14 @@ import { cn } from '~/lib/utils'
 import { Button } from '~/atoms/ui/button'
 import { Calendar } from '~/atoms/ui/calendar'
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from '~/atoms/ui/popover'
 
 interface DatePickerProps {
-    value: string;
-    onSelectDate: (date: string) => void;
+    value: Date | undefined;
+    onSelectDate: (date: Date) => void;
 }
 
 export function DatePicker({value, onSelectDate}: DatePickerProps) {
@@ -26,7 +26,7 @@ export function DatePicker({value, onSelectDate}: DatePickerProps) {
 
     const handleDateOnChange = (selectedDate: Date | undefined) => {
         if(selectedDate) {
-        onSelectDate(selectedDate.toString());
+        onSelectDate(selectedDate);
         setDate(selectedDate);
         }
     }
