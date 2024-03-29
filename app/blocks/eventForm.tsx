@@ -18,7 +18,7 @@ export const EventForm = (): React.ReactElement => {
 
     const [brideName, setBrideName] = useState<string>('');
     const [groomName, setGroomName] = useState<string>('');
-    const [eventDate, setEventDate] = useState<string>('');
+    const [eventDate, setEventDate] = useState<Date | undefined>();
     const [eventTime, setEventTime] = useState<string>('');
     const [ceremonyPlace, setCeremonyPlace] = useState<string>('');
     const [ceremonyAddress, setCeremonyAddress] = useState<string>('');
@@ -28,7 +28,14 @@ export const EventForm = (): React.ReactElement => {
     const [groomNumber, setGroomNumber] = useState<string>('');
     const [leadColor, setLeadColor] = useState<string>('');
 
-    console.log(brideName, groomName, eventDate, eventTime, ceremonyPlace, ceremonyAddress, receptionPlace, receptionAddress, brideNumber, groomNumber, leadColor)
+    // console.log(brideName, groomName, eventDate, eventTime, ceremonyPlace, ceremonyAddress, receptionPlace, receptionAddress, brideNumber, groomNumber, leadColor)
+
+    const today = new Date();
+    if(eventDate) {
+        const timeDifference = eventDate.getTime() - today.getTime();
+        const daysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
+        console.log(`Do ślubu pozostało: ${daysToEvent} dni`);
+    }
 
     return (
         <Card className='w-full max-w-screen-lg'>
