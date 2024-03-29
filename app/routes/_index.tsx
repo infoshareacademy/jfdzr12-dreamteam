@@ -3,6 +3,7 @@ import { Button } from "~/atoms/ui/button";
 import { Card } from "~/atoms/ui/card";
 import { EventForm } from "~/blocks/eventForm";
 import { GuestsForm } from "~/blocks/guestsForm";
+import { UserPage } from "~/blocks/userPage";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,6 +19,7 @@ export default function Index() {
         <GuestsForm onSubmit={(e)=>{console.log("Onsubmit", e)}}/>
       </Card>
       <EventForm/>
+      <UserPage />
     </div>
   );
 }
