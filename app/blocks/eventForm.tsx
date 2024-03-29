@@ -14,10 +14,6 @@ import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '~/atoms/ui/card';
 import { DatePicker } from './datePicker';
 
-function getRandomCode(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 export const EventForm = (): React.ReactElement => {
 
     const [brideName, setBrideName] = useState<string>('');
@@ -31,10 +27,6 @@ export const EventForm = (): React.ReactElement => {
     const [brideNumber, setBrideNumber] = useState<string>('');
     const [groomNumber, setGroomNumber] = useState<string>('');
     const [leadColor, setLeadColor] = useState<string>('');
-
-    const handleOnClick = () => {
-        console.log(getRandomCode(1000, 9000));
-    }
 
     console.log(brideName, groomName, eventDate, eventTime, ceremonyPlace, ceremonyAddress, receptionPlace, receptionAddress, brideNumber, groomNumber, leadColor)
 
@@ -129,7 +121,7 @@ export const EventForm = (): React.ReactElement => {
             </CardContent>
             <CardFooter className='grid grid-cols-2 gap-4'>
                 <Button className='w-full'>Cancel</Button>
-                <Button type='submit' className='w-full' onClick={handleOnClick}>Add your event</Button>
+                <Button type='submit' className='w-full'>Add your event</Button>
             </CardFooter>
         </Card>
     );
