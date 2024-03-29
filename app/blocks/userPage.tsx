@@ -40,6 +40,19 @@ function generateUniqueCode(manager: CodeManager): number {
 const codeManager = createCodeManager(1000, 9000);
 const eventCode = generateUniqueCode(codeManager);
 
+function* UniqueCodeGenerator() {
+    let code = 1000;
+
+    while (true) {
+        yield code++;
+    }
+}
+
+const uniqueCodeGenerator = UniqueCodeGenerator();
+console.log(uniqueCodeGenerator.next().value);
+console.log(uniqueCodeGenerator.next().value);
+console.log(uniqueCodeGenerator.next().value);
+
 
 export const UserPage = (): React.ReactElement => {
     return (
