@@ -107,6 +107,13 @@ export const EventForm = (): React.ReactElement => {
         }
         if (!formData.eventDate) {
             newErrors.eventDate = 'Select date';
+        } 
+        if(formData.eventDate) {
+            const today = new Date();
+            const timeDifference = formData.eventDate.getTime() - today.getTime();
+            const numberOfDaysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
+            console.log(`Do ślubu pozostało: ${numberOfDaysToEvent} dni`);
+            setFormData(data => ({...data, daysToEvent: numberOfDaysToEvent}))
         }
         if (!formData.eventTime.trim()) {
             newErrors.eventTime = 'Enter event time';
@@ -148,19 +155,23 @@ export const EventForm = (): React.ReactElement => {
             console.log('Errors:', inputsErrors);
             return;
         }
+
+        // const today = new Date();
+        // if(formData.eventDate) {
+        //     const timeDifference = formData.eventDate.getTime() - today.getTime();
+        //     const numberOfDaysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
+        //     // console.log(`Do ślubu pozostało: ${numberOfDaysToEvent} dni`);
     
-        console.log('Form submitted successfully')
+        //     setFormData(data => ({...data, daysToEvent: numberOfDaysToEvent}))
+        // }
+    
+        console.log('Form submitted successfully', formData)
     };
 
-    console.log(formData)
+    // console.log(formData)
 
-    // obliczenie lczby dni pozostałych do wydarzenia
-    const today = new Date();
-    if(formData.eventDate) {
-        const timeDifference = formData.eventDate.getTime() - today.getTime();
-        const daysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
-        console.log(`Do ślubu pozostało: ${daysToEvent} dni`);
-    }
+    // obliczenie lczby dni pozostałych do wydarzenia i dodawanie wyniku do obiektu formData pod nazwą daysToEvent
+   
 
     return (
         <Card className='w-full max-w-screen-lg'>
