@@ -14,25 +14,56 @@ import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '~/atoms/ui/card';
 import { DatePicker } from './datePicker';
 
+interface EventFormData {
+    brideName: string;
+    groomName: string;
+    eventDate: Date | undefined;
+    eventTime: string;
+    ceremonyPlace: string;
+    ceremonyAddress: string;
+    receptionPlace: string;
+    receptionAddress: string;
+    brideNumber: string;
+    groomNumber: string;
+    leadColor: string;
+}
+
+interface InputsErrors {
+    [key: string]: string | Date;
+}
+
 export const EventForm = (): React.ReactElement => {
 
-    const [brideName, setBrideName] = useState<string>('');
-    const [groomName, setGroomName] = useState<string>('');
-    const [eventDate, setEventDate] = useState<Date | undefined>();
-    const [eventTime, setEventTime] = useState<string>('');
-    const [ceremonyPlace, setCeremonyPlace] = useState<string>('');
-    const [ceremonyAddress, setCeremonyAddress] = useState<string>('');
-    const [receptionPlace, setReceptionPlace] = useState<string>('');
-    const [receptionAddress, setReceptionAddress] = useState<string>('');
-    const [brideNumber, setBrideNumber] = useState<string>('');
-    const [groomNumber, setGroomNumber] = useState<string>('');
-    const [leadColor, setLeadColor] = useState<string>('');
+    const [formData, setFormData] = useState<EventFormData>({
+        brideName: '',
+        groomName: '',
+        eventDate: undefined,
+        eventTime: '',
+        ceremonyPlace: '',
+        ceremonyAddress: '',
+        receptionPlace: '',
+        receptionAddress: '',
+        brideNumber: '',
+        groomNumber: '',
+        leadColor: '',
+    })
 
-    // console.log(brideName, groomName, eventDate, eventTime, ceremonyPlace, ceremonyAddress, receptionPlace, receptionAddress, brideNumber, groomNumber, leadColor)
+    const [errors, setErrors] = useState<InputsErrors>({});
 
+    const handleSubmit = (e: React.FormEvent) => {
+    
+        if (!formData.eventDate) {
+            alert('Please select a date.');
+            return;
+        }
+    
+
+    };
+
+    // obliczenie lczby dni pozostałych do wydarzenia
     const today = new Date();
-    if(eventDate) {
-        const timeDifference = eventDate.getTime() - today.getTime();
+    if(formData.eventDate) {
+        const timeDifference = formData.eventDate.getTime() - today.getTime();
         const daysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
         console.log(`Do ślubu pozostało: ${daysToEvent} dni`);
     }
@@ -52,11 +83,21 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Bride's</Label>
-                                        <Input name='bride_name' value={brideName} onChange={(e) => setBrideName(e.target.value)}/>
+                                        <Input 
+                                            name='bride_name' 
+                                            value={formData.brideName} 
+                                            onChange={(e) => setFormData(data => ({...data, brideName: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
                                         <Label>Groom's</Label>
-                                        <Input name='groom_name' value={groomName} onChange={(e) => setGroomName(e.target.value)}/>
+                                        <Input 
+                                            name='groom_name' 
+                                            value={formData.groomName} 
+                                            onChange={(e) => setFormData(data => ({...data, groomName: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </legend>
@@ -65,11 +106,19 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Date</Label>
-                                        <DatePicker value={eventDate} onSelectDate={setEventDate}/>
+                                        <DatePicker 
+                                            value={formData.eventDate} 
+                                            onSelectDate={(date) => setFormData (data => ({...data, eventDate: date}))}
+                                        />
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Time</Label>
-                                        <Input name='event_time' value={eventTime} onChange={(e) => setEventTime(e.target.value)}/>
+                                        <Input 
+                                            name='event_time' 
+                                            value={formData.eventTime} 
+                                            onChange={(e) => setFormData(data => ({...data, eventTime: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </legend>
@@ -78,11 +127,22 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Place</Label>
-                                        <Input name='ceremony_place' value={ceremonyPlace} onChange={(e) => setCeremonyPlace(e.target.value)}/>
+                                        <Input 
+                                            name='ceremony_place' 
+                                            value={formData.ceremonyPlace} 
+                                            onChange={(e) => setFormData(data => ({...data, ceremonyPlace: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
                                         <Label>Address</Label>
-                                        <Input name='ceremony_address' type='address' value={ceremonyAddress} onChange={(e) => setCeremonyAddress(e.target.value)}/>
+                                        <Input 
+                                            name='ceremony_address' 
+                                            type='address' 
+                                            value={formData.ceremonyAddress} 
+                                            onChange={(e) => setFormData(data => ({...data, ceremonyAddress: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </legend>
@@ -91,11 +151,22 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Place</Label>
-                                        <Input name='reception_place' value={receptionPlace} onChange={(e) => setReceptionPlace(e.target.value)}/>
+                                        <Input 
+                                            name='reception_place' 
+                                            value={formData.receptionPlace} 
+                                            onChange={(e) => setFormData(data => ({...data, receptionPlace: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>    
                                         <Label>Address</Label>
-                                        <Input name='reception_address' type='address' value={receptionAddress} onChange={(e) => setReceptionAddress(e.target.value)}/> 
+                                        <Input 
+                                            name='reception_address' 
+                                            type='address' 
+                                            value={formData.receptionAddress} 
+                                            onChange={(e) => setFormData(data => ({...data, receptionAddress: e.target.value}))}
+                                            required
+                                        /> 
                                     </div>
                                 </div>
                             </legend>
@@ -104,11 +175,23 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Bride's</Label>
-                                        <Input name='bride_number' type='tel' value={brideNumber} onChange={(e) => setBrideNumber(e.target.value)}/>
+                                        <Input 
+                                            name='bride_number' 
+                                            type='tel' 
+                                            value={formData.brideNumber} 
+                                            onChange={(e) => setFormData(data => ({...data, brideNumber: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Groom's</Label>
-                                        <Input name='groom_number' type='tel' value={groomNumber} onChange={(e) => setGroomNumber(e.target.value)}/>
+                                        <Input 
+                                            name='groom_number' 
+                                            type='tel' 
+                                            value={formData.groomNumber} 
+                                            onChange={(e) => setFormData(data => ({...data, groomNumber: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </legend>
@@ -117,7 +200,13 @@ export const EventForm = (): React.ReactElement => {
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
                                         <Label>Lead color</Label>
-                                        <Input name='lead_color' type='color' value={leadColor} onChange={(e) => setLeadColor(e.target.value)}/>
+                                        <Input 
+                                            name='lead_color' 
+                                            type='color' 
+                                            value={formData.leadColor} 
+                                            onChange={(e) => setFormData(data => ({...data, leadColor: e.target.value}))}
+                                            required
+                                        />
                                     </div>
                                 </div>
                             </legend>
@@ -128,7 +217,7 @@ export const EventForm = (): React.ReactElement => {
             </CardContent>
             <CardFooter className='grid grid-cols-2 gap-4'>
                 <Button className='w-full'>Cancel</Button>
-                <Button type='submit' className='w-full'>Add your event</Button>
+                <Button type='button' className='w-full'>Add your event</Button>
             </CardFooter>
         </Card>
     );
