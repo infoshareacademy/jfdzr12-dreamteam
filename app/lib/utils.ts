@@ -11,8 +11,8 @@ export function validateInputsStringValues(value: string): boolean {
     if (trimmedValue.length < 2) {
         return false;
     }
-    const onlyLettersRegex = /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+$/;
-    return onlyLettersRegex.test(trimmedValue);
+    const atLeastTwoLettersRegex = /[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ].*[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/;
+    return atLeastTwoLettersRegex.test(trimmedValue);
 }
 
 export function validateInputTimeFormat(value: string): boolean {
