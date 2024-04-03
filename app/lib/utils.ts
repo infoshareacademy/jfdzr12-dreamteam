@@ -20,7 +20,7 @@ export function validateInputTimeFormat(value: string): boolean {
   return timeRegex.test(value);
 }
 
-export function validateInputPhoneNumber(value: string): boolean {
+export function validateInputsPhoneNumbers(value: string): boolean {
   const digitsOnly = value.replace(/\D/g, '');
   return digitsOnly.length >= 6;
 }
