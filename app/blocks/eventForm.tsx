@@ -69,7 +69,7 @@ interface EventFormData {
 }
 
 interface InputsErrors {
-    [key: string]: string;
+    [key: string]: string | undefined;
 }
 
 export const EventForm = (): React.ReactElement => {
@@ -90,6 +90,52 @@ export const EventForm = (): React.ReactElement => {
 
     const [inputsErrors, setInputsErrors] = useState<InputsErrors>({});
 
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+        const {value} = e.target;
+        setInputsErrors(errors => ({...errors, [fieldName]: undefined}));
+        setFormData(data => ({...data, [fieldName]: value}));
+        let newErrors: InputsErrors = {};
+
+        if(fieldName === 'brideName' && (!validateInputsStringValues(value))) {
+            newErrors = {...newErrors, brideName: 'Use at least 2 letters'}
+        }
+        if(fieldName === 'groomName' && (!validateInputsStringValues(value))) {
+            newErrors = {...newErrors, groomName: 'Use at least 2 letters'}
+        }
+        // tutaj nie jestem pewna
+        // if (!formData.eventDate) {
+        //     newErrors = {...newErrors, eventDate: 'Select date'};
+        // } 
+        if(fieldName === 'eventTime' && (!validateInputTimeFormat(value))) {
+            newErrors = {...newErrors, eventTime: 'Time format is 00:00'}
+        }
+        if(fieldName === 'ceremonyPlace' && (!validateInputsStringValues(value))) {
+            newErrors = {...newErrors, ceremonyPlace: 'Use at least 2 letters'}
+        }
+        // walidacja adresu - niepewna
+        if(fieldName === 'ceremonyAddress' && (!validateInputsStringValues(value))) {
+            newErrors = {...newErrors, ceremonyAddress: 'Use at least 2 letters'}
+        }
+        if(fieldName === 'receptionPlace' && (!validateInputsStringValues(value))) {
+            newErrors = {...newErrors, receptionPlace: 'Use at least 2 letters'}
+        }
+        // walidacja adresu - niepewna
+        if(fieldName === 'receptionAddress' && (!validateInputsStringValues(value))) {
+            newErrors = {...newErrors, receptionAddress: 'Use at least 2 letters'}
+        }
+        if(fieldName === 'brideNumber' && (!validateInputsPhoneNumbers(value))) {
+            newErrors = {...newErrors, brideNumber: 'Use at least 6 digits'}
+        }
+        if(fieldName === 'groomNumber' && (!validateInputsPhoneNumbers(value))) {
+            newErrors = {...newErrors, groomNumber: 'Use at least 6 digits'}
+        }
+        // tutaj nie jestem pewna
+        if (!formData.leadColor) {
+            newErrors = {...newErrors, leadColor: 'Select lead color of your event'};
+        }      
+        setInputsErrors(errors => ({...errors, ...newErrors}));
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
     
@@ -97,14 +143,10 @@ export const EventForm = (): React.ReactElement => {
     
         if (!formData.brideName.trim()) {
             newErrors.brideName = "Enter bride's name";
-        } else if (!validateInputsStringValues(formData.brideName)) {
-            newErrors.brideName = 'Use at least two letters'
-        }
+        } 
         if (!formData.groomName.trim()) {
             newErrors.groomName = "Enter groom's name";
-        } else if (!validateInputsStringValues(formData.groomName)) {
-            newErrors.groomName = 'Use at least two letters'
-        }
+        } 
         if (!formData.eventDate) {
             newErrors.eventDate = 'Select date';
         } 
@@ -117,34 +159,24 @@ export const EventForm = (): React.ReactElement => {
         }
         if (!formData.eventTime.trim()) {
             newErrors.eventTime = 'Enter event time';
-        } else if (!validateInputTimeFormat(formData.eventTime)) {
-            newErrors.eventTime = 'Time format is 00:00'
-        }
+        } 
         if (!formData.ceremonyPlace.trim()) {
             newErrors.ceremonyPlace = 'Enter ceremony place';
-        } else if (!validateInputsStringValues(formData.ceremonyPlace)) {
-            newErrors.ceremonyPlace = 'Use at least two letters'
-        }
+        } 
         if (!formData.ceremonyAddress.trim()) {
             newErrors.ceremonyAddress = 'Enter ceremony address';
         }
         if (!formData.receptionPlace.trim()) {
             newErrors.receptionPlace = 'Enter reception place';
-        } else if (!validateInputsStringValues(formData.receptionPlace)) {
-            newErrors.receptionPlace = 'Use at least two letters'
         }
         if (!formData.receptionAddress.trim()) {
             newErrors.receptionAddress = 'Enter reception address';
         }
         if (!formData.brideNumber.trim()) {
             newErrors.brideNumber = "Enter bride's number";
-        } else if (!validateInputsPhoneNumbers(formData.brideNumber)) {
-            newErrors.brideNumber = 'Use at least 6 digits.'
-        }
+        } 
         if (!formData.groomNumber.trim()) {
             newErrors.groomNumber = "Enter groom's number";
-        } else if (!validateInputsPhoneNumbers(formData.groomNumber)) {
-            newErrors.groomNumber = 'Use at least 6 digits.'
         }
         if (!formData.leadColor.trim()) {
             newErrors.leadColor = 'Select lead color of your event';
@@ -156,22 +188,8 @@ export const EventForm = (): React.ReactElement => {
             return;
         }
 
-        // const today = new Date();
-        // if(formData.eventDate) {
-        //     const timeDifference = formData.eventDate.getTime() - today.getTime();
-        //     const numberOfDaysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
-        //     // console.log(`Do ślubu pozostało: ${numberOfDaysToEvent} dni`);
-    
-        //     setFormData(data => ({...data, daysToEvent: numberOfDaysToEvent}))
-        // }
-    
         console.log('Form submitted successfully', formData)
     };
-
-    // console.log(formData)
-
-    // obliczenie lczby dni pozostałych do wydarzenia i dodawanie wyniku do obiektu formData pod nazwą daysToEvent
-   
 
     return (
         <Card className='w-full max-w-screen-lg'>
@@ -191,7 +209,7 @@ export const EventForm = (): React.ReactElement => {
                                         <Input 
                                             name='bride_name' 
                                             value={formData.brideName} 
-                                            onChange={(e) => setFormData(data => ({...data, brideName: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'brideName')}
                                             required
                                         />
                                         {inputsErrors.brideName && <div className="text-red-500">{inputsErrors.brideName}</div>}
@@ -201,7 +219,7 @@ export const EventForm = (): React.ReactElement => {
                                         <Input 
                                             name='groom_name' 
                                             value={formData.groomName} 
-                                            onChange={(e) => setFormData(data => ({...data, groomName: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'groomName')}
                                             required
                                         />
                                         {inputsErrors.groomName && <div className="text-red-500">{inputsErrors.groomName}</div>}
@@ -215,7 +233,7 @@ export const EventForm = (): React.ReactElement => {
                                         <Label>Date</Label>
                                         <DatePicker 
                                             value={formData.eventDate} 
-                                            onSelectDate={(date) => setFormData (data => ({...data, eventDate: date}))}
+                                            onSelectDate={(date) => setFormData(data => ({...data, eventDate: date}))}
                                         />
                                         {inputsErrors.eventDate && <div className="text-red-500">{inputsErrors.eventDate}</div>}
                                     </div>
@@ -224,7 +242,7 @@ export const EventForm = (): React.ReactElement => {
                                         <Input 
                                             name='event_time' 
                                             value={formData.eventTime} 
-                                            onChange={(e) => setFormData(data => ({...data, eventTime: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'eventTime')}
                                             required
                                         />
                                         {inputsErrors.eventTime && <div className="text-red-500">{inputsErrors.eventTime}</div>}
@@ -239,7 +257,7 @@ export const EventForm = (): React.ReactElement => {
                                         <Input 
                                             name='ceremony_place' 
                                             value={formData.ceremonyPlace} 
-                                            onChange={(e) => setFormData(data => ({...data, ceremonyPlace: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'ceremonyPlace')}
                                             required
                                         />
                                         {inputsErrors.ceremonyPlace && <div className="text-red-500">{inputsErrors.ceremonyPlace}</div>}
@@ -250,7 +268,7 @@ export const EventForm = (): React.ReactElement => {
                                             name='ceremony_address' 
                                             type='address' 
                                             value={formData.ceremonyAddress} 
-                                            onChange={(e) => setFormData(data => ({...data, ceremonyAddress: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'ceremonyAddress')}
                                             required
                                         />
                                         {inputsErrors.ceremonyAddress && <div className="text-red-500">{inputsErrors.ceremonyAddress}</div>}
@@ -265,7 +283,7 @@ export const EventForm = (): React.ReactElement => {
                                         <Input 
                                             name='reception_place' 
                                             value={formData.receptionPlace} 
-                                            onChange={(e) => setFormData(data => ({...data, receptionPlace: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'receptionPlace')}
                                             required
                                         />
                                         {inputsErrors.receptionPlace && <div className="text-red-500">{inputsErrors.receptionPlace}</div>}
@@ -276,7 +294,7 @@ export const EventForm = (): React.ReactElement => {
                                             name='reception_address' 
                                             type='address' 
                                             value={formData.receptionAddress} 
-                                            onChange={(e) => setFormData(data => ({...data, receptionAddress: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'receptionAddress')}
                                             required
                                         /> 
                                         {inputsErrors.receptionAddress && <div className="text-red-500">{inputsErrors.receptionAddress}</div>}
@@ -292,7 +310,7 @@ export const EventForm = (): React.ReactElement => {
                                             name='bride_number' 
                                             type='tel' 
                                             value={formData.brideNumber} 
-                                            onChange={(e) => setFormData(data => ({...data, brideNumber: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'brideNumber')}
                                             required
                                         />
                                         {inputsErrors.brideNumber && <div className="text-red-500">{inputsErrors.brideNumber}</div>}
@@ -303,7 +321,7 @@ export const EventForm = (): React.ReactElement => {
                                             name='groom_number' 
                                             type='tel' 
                                             value={formData.groomNumber} 
-                                            onChange={(e) => setFormData(data => ({...data, groomNumber: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'groomNumber')}
                                             required
                                         />
                                         {inputsErrors.groomNumber && <div className="text-red-500">{inputsErrors.groomNumber}</div>}
@@ -319,7 +337,7 @@ export const EventForm = (): React.ReactElement => {
                                             name='lead_color' 
                                             type='color' 
                                             value={formData.leadColor} 
-                                            onChange={(e) => setFormData(data => ({...data, leadColor: e.target.value}))}
+                                            onChange={(e) => handleOnChange(e, 'leadColor')}
                                             required
                                         />
                                         {inputsErrors.leadColor && <div className="text-red-500">{inputsErrors.leadColor}</div>}
