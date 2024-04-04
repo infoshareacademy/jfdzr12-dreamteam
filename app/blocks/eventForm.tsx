@@ -7,7 +7,7 @@
 // kod wydarzenia
 // numery telefonów pary młodej
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '~/atoms/ui/button'
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
@@ -15,7 +15,8 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '~/atoms/ui
 import { DatePicker } from './datePicker';
 import errorsToRecord from '@hookform/resolvers/io-ts/dist/errorsToRecord.js';
 import { Alert } from '~/atoms/ui/alert';
-import { validateInputsPhoneNumbers, validateInputTimeFormat, validateInputsStringValues } from '~/lib/utils';
+import { validateInputsPhoneNumbers, validateInputTimeFormat, validateInputsStringValues, uniqueCodeGenerator } from '~/lib/utils';
+import { set } from 'date-fns';
 
 // const formField = {
 //     Names: {
@@ -85,10 +86,24 @@ export const EventForm = (): React.ReactElement => {
         receptionAddress: '',
         brideNumber: '',
         groomNumber: '',
-        leadColor: '',
+        leadColor: '#FFFFFF',
     })
 
     const [inputsErrors, setInputsErrors] = useState<InputsErrors>({});
+
+    useEffect(() => {
+        if(formData.eventDate) {
+            const today = new Date();
+            const timeDifference = formData.eventDate.getTime() - today.getTime();
+            const numberOfDaysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
+            console.log(`Do ślubu pozostało: ${numberOfDaysToEvent} dni`);
+            setFormData(data => ({...data, daysToEvent: numberOfDaysToEvent}));
+        }
+    }, [formData.eventDate]);
+
+    useEffect(() => {
+        setFormData(data => ({...data, uniqueEventCode: uniqueCodeGenerator.next().value}))
+    }, []);
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
         const {value} = e.target;
@@ -130,9 +145,9 @@ export const EventForm = (): React.ReactElement => {
             newErrors = {...newErrors, groomNumber: 'Use at least 6 digits'}
         }
         // tutaj nie jestem pewna
-        if (!formData.leadColor) {
-            newErrors = {...newErrors, leadColor: 'Select lead color of your event'};
-        }      
+        // if (!formData.leadColor) {
+        //     newErrors = {...newErrors, leadColor: 'Select lead color of your event'};
+        // }      
         setInputsErrors(errors => ({...errors, ...newErrors}));
     };
 
@@ -150,13 +165,6 @@ export const EventForm = (): React.ReactElement => {
         if (!formData.eventDate) {
             newErrors.eventDate = 'Select date';
         } 
-        if(formData.eventDate) {
-            const today = new Date();
-            const timeDifference = formData.eventDate.getTime() - today.getTime();
-            const numberOfDaysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
-            console.log(`Do ślubu pozostało: ${numberOfDaysToEvent} dni`);
-            setFormData(data => ({...data, daysToEvent: numberOfDaysToEvent}))
-        }
         if (!formData.eventTime.trim()) {
             newErrors.eventTime = 'Enter event time';
         } 
@@ -178,10 +186,10 @@ export const EventForm = (): React.ReactElement => {
         if (!formData.groomNumber.trim()) {
             newErrors.groomNumber = "Enter groom's number";
         }
-        if (!formData.leadColor.trim()) {
-            newErrors.leadColor = 'Select lead color of your event';
-        }
-    
+        // czy dodawać walidację inputu z kolorem, jesli wartość początkowa to white?
+        // if (!formData.leadColor.trim()) {
+        //     newErrors.leadColor = 'Select lead color of your event';
+        // }
         if (Object.keys(newErrors).length > 0) {
             setInputsErrors(newErrors);
             console.log('Errors:', inputsErrors);
@@ -189,7 +197,9 @@ export const EventForm = (): React.ReactElement => {
         }
 
         console.log('Form submitted successfully', formData)
+
     };
+
 
     return (
         <Card className='w-full max-w-screen-lg'>
@@ -356,7 +366,7 @@ export const EventForm = (): React.ReactElement => {
             </CardFooter>
         </Card>
     );
-};
+}
 
 
 
