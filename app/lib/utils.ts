@@ -68,7 +68,7 @@ export function validateInputsPhoneNumbers(value: string): boolean {
 // const codeManager = createCodeManager(1000, 9000);
 // const eventCode = generateUniqueCode(codeManager);
 
-export function* UniqueCodeGenerator() {
+function* UniqueCodeGenerator() {
   let code = 1000;
 
   while (true) {
@@ -76,7 +76,4 @@ export function* UniqueCodeGenerator() {
   }
 }
 
-const uniqueCodeGenerator = UniqueCodeGenerator();
-console.log(uniqueCodeGenerator.next().value);
-console.log(uniqueCodeGenerator.next().value);
-console.log(uniqueCodeGenerator.next().value);
+export const uniqueCodeGenerator = UniqueCodeGenerator();
