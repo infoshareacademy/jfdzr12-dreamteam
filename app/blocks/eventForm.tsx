@@ -207,6 +207,22 @@ export const EventForm = (): React.ReactElement => {
 
         console.log('Form submitted successfully', formData)
 
+        setFormData({
+            brideName: '',
+            groomName: '',
+            eventDate: undefined,
+            eventTime: '',
+            ceremonyPlace: '',
+            ceremonyAddress: '',
+            receptionPlace: '',
+            receptionAddress: '',
+            brideNumber: '',
+            groomNumber: '',
+            leadColor: '#FFFFFF',
+        });
+
+        setInputsErrors({});
+
     };
 
 
