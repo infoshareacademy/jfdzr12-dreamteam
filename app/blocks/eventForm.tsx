@@ -61,6 +61,7 @@ export const EventForm = (): React.ReactElement => {
             const numberOfDaysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
             console.log(`Do ślubu pozostało: ${numberOfDaysToEvent} dni`);
             setFormData(data => ({...data, daysToEvent: numberOfDaysToEvent}));
+            setInputsErrors(errors => ({...errors, eventDate: undefined}));
         }
     }, [formData.eventDate]);
 
@@ -80,13 +81,9 @@ export const EventForm = (): React.ReactElement => {
         if(fieldName === 'groomName' && (!validateInputsStringValues(value))) {
             newErrors = {...newErrors, groomName: 'Use at least 2 letters'}
         }
-        // tutaj nie jestem pewna
-        // if (!formData.eventDate) {
-        //     newErrors = {...newErrors, eventDate: 'Select date'};
-        // } 
-        if(fieldName === 'eventTime' && (!validateInputTimeFormat(value))) {
-            newErrors = {...newErrors, eventTime: 'Time format is 00:00'}
-        }
+        // if(fieldName === 'eventTime' && (!validateInputTimeFormat(value))) {
+        //     newErrors = {...newErrors, eventTime: 'Time format is 00:00'}
+        // }
         if(fieldName === 'ceremonyPlace' && (!validateInputsStringValues(value))) {
             newErrors = {...newErrors, ceremonyPlace: 'Use at least 2 letters'}
         }
