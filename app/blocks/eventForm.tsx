@@ -18,43 +18,6 @@ import { Alert } from '~/atoms/ui/alert';
 import { validateInputsPhoneNumbers, validateInputTimeFormat, validateInputsStringValues, uniqueCodeGenerator } from '~/lib/utils';
 import { set } from 'date-fns';
 
-// const formField = {
-//     Names: {
-//         brideNameLabel: "Bride's",
-//         brideNameInput: "brideName",
-//         groomNameLabel: "Groom's",
-//         groomNameInput: "groomName",
-//     },
-//     Event: {
-//         eventDateLabel: "Date",
-//         eventDateInput: "eventDate",
-//         eventTimeLabel: "Time",
-//         eventTimeInput: "eventTime",
-//     },
-//     Ceremony: {
-//         ceremonyPlaceLabel: "Place",
-//         ceremonyPlaceInput: "ceremonyPlace",
-//         ceremonyAddressLabel: "Address",
-//         ceremonyAddressInput: "ceremonyAddress",
-//     },
-//     Reception: {
-//         receptionPlaceLabel: "Place",
-//         receptionPlaceInput: "receptionPlace",
-//         receptionAddressLabel: "Address",
-//         receptionAddressInput: "receptionAddress",
-//     },
-//     PhoneNumbers: {  // Zmieniono na "PhoneNumbers"
-//         brideNumberLabel: "Bride's",
-//         brideNumberInput: "brideNumber",
-//         groomNumberLabel: "Groom's",
-//         groomNumberInput: "groomNumber",
-//     },
-//     Other: {
-//         leadColorLabel: "Lead color",
-//         leadColorInput: "leadColor",
-//     }
-// }
-
 interface EventFormData {
     brideName: string;
     groomName: string;
@@ -215,8 +178,9 @@ export const EventForm = (): React.ReactElement => {
                             <legend className='text-lg font-bold mb-2'>Names
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Bride's</Label>
+                                        <Label htmlFor='bride_name'>Bride's</Label>
                                         <Input 
+                                            id='bride_name'
                                             name='bride_name' 
                                             value={formData.brideName} 
                                             onChange={(e) => handleOnChange(e, 'brideName')}
@@ -225,8 +189,9 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.brideName && <div className="text-red-500">{inputsErrors.brideName}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
-                                        <Label>Groom's</Label>
+                                        <Label htmlFor='groom_name'>Groom's</Label>
                                         <Input 
+                                            id='groom_name'
                                             name='groom_name' 
                                             value={formData.groomName} 
                                             onChange={(e) => handleOnChange(e, 'groomName')}
@@ -240,16 +205,19 @@ export const EventForm = (): React.ReactElement => {
                             <legend className='text-lg font-bold mb-2'>Event
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Date</Label>
-                                        <DatePicker 
+                                        <Label /*htmlFor='event_date'*/>Date</Label>
+                                        <DatePicker
+                                            // id='event_date'
                                             value={formData.eventDate} 
                                             onSelectDate={(date) => setFormData(data => ({...data, eventDate: date}))}
                                         />
                                         {inputsErrors.eventDate && <div className="text-red-500">{inputsErrors.eventDate}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Time</Label>
+                                        <Label htmlFor='event_time'>Time</Label>
                                         <Input 
+                                            id='event_time'
+                                            type='time'
                                             name='event_time' 
                                             value={formData.eventTime} 
                                             onChange={(e) => handleOnChange(e, 'eventTime')}
@@ -263,8 +231,9 @@ export const EventForm = (): React.ReactElement => {
                             <legend className='text-lg font-bold mb-2'>Ceremony
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Place</Label>
+                                        <Label htmlFor='ceremony_place'>Place</Label>
                                         <Input 
+                                            id='ceremony_place'
                                             name='ceremony_place' 
                                             value={formData.ceremonyPlace} 
                                             onChange={(e) => handleOnChange(e, 'ceremonyPlace')}
@@ -273,10 +242,10 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.ceremonyPlace && <div className="text-red-500">{inputsErrors.ceremonyPlace}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
-                                        <Label>Address</Label>
+                                        <Label htmlFor='ceremony_address'>Address</Label>
                                         <Input 
+                                            id='ceremony_address'
                                             name='ceremony_address' 
-                                            type='address' 
                                             value={formData.ceremonyAddress} 
                                             onChange={(e) => handleOnChange(e, 'ceremonyAddress')}
                                             required
@@ -289,8 +258,9 @@ export const EventForm = (): React.ReactElement => {
                             <legend className='text-lg font-bold mb-2'>Reception
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Place</Label>
+                                        <Label htmlFor='reception_place'>Place</Label>
                                         <Input 
+                                            id='reception_place'
                                             name='reception_place' 
                                             value={formData.receptionPlace} 
                                             onChange={(e) => handleOnChange(e, 'receptionPlace')}
@@ -299,10 +269,10 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.receptionPlace && <div className="text-red-500">{inputsErrors.receptionPlace}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>    
-                                        <Label>Address</Label>
+                                        <Label htmlFor='reception_address'>Address</Label>
                                         <Input 
+                                            id='reception_address'
                                             name='reception_address' 
-                                            type='address' 
                                             value={formData.receptionAddress} 
                                             onChange={(e) => handleOnChange(e, 'receptionAddress')}
                                             required
@@ -315,8 +285,9 @@ export const EventForm = (): React.ReactElement => {
                             <legend className='text-lg font-bold mb-2'>Phone numbers
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Bride's</Label>
-                                        <Input 
+                                        <Label htmlFor='bride_number'>Bride's</Label>
+                                        <Input
+                                            id='bride_number'
                                             name='bride_number' 
                                             type='tel' 
                                             value={formData.brideNumber} 
@@ -326,8 +297,9 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.brideNumber && <div className="text-red-500">{inputsErrors.brideNumber}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Groom's</Label>
-                                        <Input 
+                                        <Label htmlFor='groom_number'>Groom's</Label>
+                                        <Input
+                                            id='groom_number'
                                             name='groom_number' 
                                             type='tel' 
                                             value={formData.groomNumber} 
@@ -342,8 +314,9 @@ export const EventForm = (): React.ReactElement => {
                             <legend className='text-lg font-bold mb-2'>Other
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label>Lead color</Label>
-                                        <Input 
+                                        <Label htmlFor='lead_color'>Lead color</Label>
+                                        <Input
+                                            id='lead_color'
                                             name='lead_color' 
                                             type='color' 
                                             value={formData.leadColor} 
