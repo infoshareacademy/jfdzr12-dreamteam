@@ -16,7 +16,56 @@ import { DatePicker } from './datePicker';
 import errorsToRecord from '@hookform/resolvers/io-ts/dist/errorsToRecord.js';
 import { Alert } from '~/atoms/ui/alert';
 import { validateInputsPhoneNumbers, validateInputTimeFormat, validateInputsStringValues, uniqueCodeGenerator } from '~/lib/utils';
-import { set } from 'date-fns';
+
+interface FormFields {
+    [key: string]: {
+        legend: string;
+        [key: string]: string;
+    }
+}
+
+const formFields: FormFields = {
+    Names: {
+            legend: 'Names',
+            brideNameLabel: "Bride's",
+            brideNameAttributes: 'brideName',
+            groomNameLabel: "Groom's",
+            groomNameAttributes: 'groomName',
+        },
+        Event: {
+            legend: 'Event',
+            eventDateLabel: 'Date',
+            eventDateAttributes: 'eventDate',
+            eventTimeLabel: 'Time',
+            eventTimeAttributes: 'eventTime',
+        },
+        Ceremony: {
+            legend: 'Ceremony',
+            ceremonyPlaceLabel: 'Place',
+            ceremonyPlaceAttributes: 'ceremonyPlace',
+            ceremonyAddressLabel: 'Address',
+            ceremonyAddressAttributes: 'ceremonyAddress',
+        },
+        Reception: {
+            legend: 'Reception',
+            receptionPlaceLabel: 'Place',
+            receptionPlaceAttributes: 'receptionPlace',
+            receptionAddressLabel: 'Address',
+            receptionAddressAttributes: 'receptionAddress',
+        },
+        PhoneNumbers: { 
+            legend: 'Phone numbers',
+            brideNumberLabel: "Bride's",
+            brideNumberAttributes: 'brideNumber',
+            groomNumberLabel: "Groom's",
+            groomNumberAttributes: 'groomNumber',
+        },
+        Other: {
+            legend: 'Other',
+            leadColorLabel: 'Lead color',
+            leadColorAttributes: 'leadColor',
+        }
+    }
 
 interface EventFormData {
     brideName: string;
@@ -172,13 +221,13 @@ export const EventForm = (): React.ReactElement => {
                         
                         <div className='w-full'>
 
-                            <legend className='text-lg font-bold mb-2'>Names
+                            <legend className='text-lg font-bold mb-2'>{formFields.Names.legend}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label htmlFor='bride_name'>Bride's</Label>
+                                        <Label htmlFor={formFields.Names.brideNameAttributes}>{formFields.Names.brideNameLabel}</Label>
                                         <Input 
-                                            id='bride_name'
-                                            name='bride_name' 
+                                            id={formFields.Names.brideNameAttributes}
+                                            name={formFields.Names.brideNameAttributes} 
                                             value={formData.brideName} 
                                             onChange={(e) => handleOnChange(e, 'brideName')}
                                             required
@@ -186,10 +235,10 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.brideName && <div className="text-red-500">{inputsErrors.brideName}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
-                                        <Label htmlFor='groom_name'>Groom's</Label>
+                                        <Label htmlFor={formFields.Names.groomNameAttributes}>{formFields.Names.groomNameLabel}</Label>
                                         <Input 
-                                            id='groom_name'
-                                            name='groom_name' 
+                                            id={formFields.Names.groomNameAttributes}
+                                            name={formFields.Names.groomNameAttributes} 
                                             value={formData.groomName} 
                                             onChange={(e) => handleOnChange(e, 'groomName')}
                                             required
@@ -199,10 +248,10 @@ export const EventForm = (): React.ReactElement => {
                                 </div>
                             </legend>
 
-                            <legend className='text-lg font-bold mb-2'>Event
+                            <legend className='text-lg font-bold mb-2'>{formFields.Event.legend}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label /*htmlFor='event_date'*/>Date</Label>
+                                        <Label /*htmlFor='event_date'*/>{formFields.Event.eventDateLabel}</Label>
                                         <DatePicker
                                             // id='event_date'
                                             value={formData.eventDate} 
@@ -211,11 +260,11 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.eventDate && <div className="text-red-500">{inputsErrors.eventDate}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label htmlFor='event_time'>Time</Label>
+                                        <Label htmlFor={formFields.Event.eventTimeAttributes}>{formFields.Event.eventTimeLabel}</Label>
                                         <Input 
-                                            id='event_time'
+                                            id={formFields.Event.eventTimeAttributes}
                                             type='time'
-                                            name='event_time' 
+                                            name={formFields.Event.eventTimeAttributes} 
                                             value={formData.eventTime} 
                                             onChange={(e) => handleOnChange(e, 'eventTime')}
                                             required
@@ -225,13 +274,13 @@ export const EventForm = (): React.ReactElement => {
                                 </div>
                             </legend>
 
-                            <legend className='text-lg font-bold mb-2'>Ceremony
+                            <legend className='text-lg font-bold mb-2'>{formFields.Ceremony.legend}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label htmlFor='ceremony_place'>Place</Label>
+                                        <Label htmlFor={formFields.Ceremony.ceremonyPlaceAttributes}>{formFields.Ceremony.ceremonyPlaceLabel}</Label>
                                         <Input 
-                                            id='ceremony_place'
-                                            name='ceremony_place' 
+                                            id={formFields.Ceremony.ceremonyPlaceAttributes}
+                                            name={formFields.Ceremony.ceremonyPlaceAttributes} 
                                             value={formData.ceremonyPlace} 
                                             onChange={(e) => handleOnChange(e, 'ceremonyPlace')}
                                             required
@@ -239,10 +288,10 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.ceremonyPlace && <div className="text-red-500">{inputsErrors.ceremonyPlace}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5'>
-                                        <Label htmlFor='ceremony_address'>Address</Label>
+                                        <Label htmlFor={formFields.Ceremony.ceremonyAddressAttributes}>{formFields.Ceremony.ceremonyAddressLabel}</Label>
                                         <Input 
-                                            id='ceremony_address'
-                                            name='ceremony_address' 
+                                            id={formFields.Ceremony.ceremonyAddressAttributes}
+                                            name={formFields.Ceremony.ceremonyAddressAttributes} 
                                             value={formData.ceremonyAddress} 
                                             onChange={(e) => handleOnChange(e, 'ceremonyAddress')}
                                             required
@@ -252,13 +301,13 @@ export const EventForm = (): React.ReactElement => {
                                 </div>
                             </legend>
 
-                            <legend className='text-lg font-bold mb-2'>Reception
+                            <legend className='text-lg font-bold mb-2'>{formFields.Reception.legend}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label htmlFor='reception_place'>Place</Label>
+                                        <Label htmlFor={formFields.Reception.receptionPlaceAttributes}>{formFields.Reception.receptionPlaceLabel}</Label>
                                         <Input 
-                                            id='reception_place'
-                                            name='reception_place' 
+                                            id={formFields.Reception.receptionPlaceAttributes}
+                                            name={formFields.Reception.receptionPlaceAttributes} 
                                             value={formData.receptionPlace} 
                                             onChange={(e) => handleOnChange(e, 'receptionPlace')}
                                             required
@@ -266,10 +315,10 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.receptionPlace && <div className="text-red-500">{inputsErrors.receptionPlace}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>    
-                                        <Label htmlFor='reception_address'>Address</Label>
+                                        <Label htmlFor={formFields.Reception.receptionAddressAttributes}>{formFields.Reception.receptionAddressLabel}</Label>
                                         <Input 
-                                            id='reception_address'
-                                            name='reception_address' 
+                                            id={formFields.Reception.receptionAddressAttributes}
+                                            name={formFields.Reception.receptionAddressAttributes} 
                                             value={formData.receptionAddress} 
                                             onChange={(e) => handleOnChange(e, 'receptionAddress')}
                                             required
@@ -279,13 +328,13 @@ export const EventForm = (): React.ReactElement => {
                                 </div>
                             </legend>
 
-                            <legend className='text-lg font-bold mb-2'>Phone numbers
+                            <legend className='text-lg font-bold mb-2'>{formFields.PhoneNumbers.legend}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label htmlFor='bride_number'>Bride's</Label>
+                                        <Label htmlFor={formFields.PhoneNumbers.brideNumberAttributes}>{formFields.PhoneNumbers.brideNumberLabel}</Label>
                                         <Input
-                                            id='bride_number'
-                                            name='bride_number' 
+                                            id={formFields.PhoneNumbers.brideNumberAttributes}
+                                            name={formFields.PhoneNumbers.brideNumberAttributes} 
                                             type='tel' 
                                             value={formData.brideNumber} 
                                             onChange={(e) => handleOnChange(e, 'brideNumber')}
@@ -294,10 +343,10 @@ export const EventForm = (): React.ReactElement => {
                                         {inputsErrors.brideNumber && <div className="text-red-500">{inputsErrors.brideNumber}</div>}
                                     </div>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label htmlFor='groom_number'>Groom's</Label>
+                                        <Label htmlFor={formFields.PhoneNumbers.groomNumberAttributes}>{formFields.PhoneNumbers.groomNumberLabel}</Label>
                                         <Input
-                                            id='groom_number'
-                                            name='groom_number' 
+                                            id={formFields.PhoneNumbers.groomNumberAttributes}
+                                            name={formFields.PhoneNumbers.groomNumberAttributes}
                                             type='tel' 
                                             value={formData.groomNumber} 
                                             onChange={(e) => handleOnChange(e, 'groomNumber')}
@@ -308,13 +357,13 @@ export const EventForm = (): React.ReactElement => {
                                 </div>
                             </legend>
 
-                            <legend className='text-lg font-bold mb-2'>Other
+                            <legend className='text-lg font-bold mb-2'>{formFields.Other.legend}
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div className='flex flex-col space-y-1.5 mb-5'>
-                                        <Label htmlFor='lead_color'>Lead color</Label>
+                                        <Label htmlFor={formFields.Other.leadColorAttributes}>{formFields.Other.leadColorLabel}</Label>
                                         <Input
-                                            id='lead_color'
-                                            name='lead_color' 
+                                            id={formFields.Other.leadColorAttributes}
+                                            name={formFields.Other.leadColorAttributes} 
                                             type='color' 
                                             value={formData.leadColor} 
                                             onChange={(e) => handleOnChange(e, 'leadColor')}
