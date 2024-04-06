@@ -26,6 +26,7 @@ export default function Index() {
  
    <SignUp/>
   
+
     </div>
       
    
