@@ -15,7 +15,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="grid place-items-center h-screen" /*style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}*/>
+    <div className="grid place-items-center h-screen">
       <Card>
         <GuestsForm onSubmit={(e) => { console.log("Onsubmit", e) }} />
         <FormForGuest onSubmit={(e) => { console.log(e) }} />
