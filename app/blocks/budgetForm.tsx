@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {Button} from "~/atoms/ui/button"
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
-import { Card } from '~/atoms/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
 import { Table, TableCell, TableFooter, TableHead, TableRow } from '~/atoms/ui/table';
 
 
@@ -25,11 +25,6 @@ export const BudgetForm: React.FC<NameFormProps> = ({ onSubmit }) => {
     setBudgetElInput('');
     setBudgetElAmount(updatedBudgetElAmount); 
     setIsFormSubmitted(true);
-
-
-    // // Aktualizacja totalAmount po dodaniu nowej pozycji
-    // const newTotalAmount = updatedBudgetElAmount.reduce((prev, next) => prev + next, 0);
-    // setTotalAmount(newTotalAmount);
   };
 
   
@@ -45,11 +40,6 @@ export const BudgetForm: React.FC<NameFormProps> = ({ onSubmit }) => {
 
     setBugetEl(updatedBudgetEl);
     setBudgetElAmount(updatedBudgetElAmount);
-
-    
-    // // Aktualizacja totalAmount po usunięciu pozycji
-    // const newTotalAmount = updatedBudgetElAmount.reduce((prev, next) => prev + next, 0);
-    // setTotalAmount(newTotalAmount);
   };
 
 
@@ -69,18 +59,23 @@ const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
   return (
 <div>
      <br/><br/>
-     <Card>
-     <div>
+     <Card className="w-[350px]">
+     <CardHeader>
+        <CardTitle>STWÓRZ PROJEKT SWOJEGO BUDŻETU</CardTitle>
+        <CardDescription>Wpisz  poszczególne elementy budżetu</CardDescription>
+      </CardHeader>
+      <CardContent>
+      <div className="grid w-full items-center gap-4">
     <form onSubmit={handleSubmit}>
       <Label>
-        Wpisz element budżetu:
+        Nazwa pozycji:
         <Input
           type="text"
           value={budgetElInput}
           onChange={(e) => setBudgetElInput(e.target.value)}
         />
       </Label>
-      <br /><br />
+      <br />
       <Label>
         Wycena:
         <Input
@@ -88,11 +83,13 @@ const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
           value={budgetElAmount[lastIndex] || 0}
           onChange={(e) => handleAmountChange(e, lastIndex)}/>
       </Label>
-      <br /><br />
-      <Button variant={"ghost"} type="submit">Dodaj</Button>
+      <br />
+      <Button variant={"ghost"} type="submit">Dodaj pozycję</Button> 
+      <Button variant={"ghost"} type="submit">Zapisz budżet</Button>
       <br /><br />
     </form>
     </div> 
+    </CardContent>
     </Card>
     <br/><br/>
     <Table>
