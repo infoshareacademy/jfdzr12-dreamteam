@@ -15,21 +15,27 @@ const routes = [
   },
   {
     label: 'About',
-    href: '/'
-  }
-  ,
+    href: '/about'
+  },
+  {
+    label: 'Young Couple',
+    href: '/young-couple'
+  },
+  {
+    label: 'Wedding Guest',
+    href: '/wedding-guest'
+  },
   {
     label: 'Sign in',
-    href: '/'
+    href: '/sign-in'
   },
-  {
-    label: 'Log in',
-    href: '/'
-  },
-  {
-    label: 'Guest',
-    href: '/'
-  }
+  // {
+  //   label: 'Sign up',
+  //   href: '/sign-up'
+  // },
+
+
+
 ]
 
 export const Header = () => {

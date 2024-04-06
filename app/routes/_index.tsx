@@ -20,7 +20,6 @@ export default function Index() {
         <GuestsForm onSubmit={(e) => { console.log("Onsubmit", e) }} />
         <FormForGuest onSubmit={(e) => { console.log(e) }} />
       </Card>
-      <EventForm />
       <UserPage />
     </div>
   );
