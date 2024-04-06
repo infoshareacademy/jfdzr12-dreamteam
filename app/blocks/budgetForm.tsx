@@ -25,7 +25,33 @@ export const BudgetForm: React.FC<NameFormProps> = ({ onSubmit }) => {
     setBudgetElInput('');
     setBudgetElAmount(updatedBudgetElAmount); 
     setIsFormSubmitted(true);
+
+
+    // // Aktualizacja totalAmount po dodaniu nowej pozycji
+    // const newTotalAmount = updatedBudgetElAmount.reduce((prev, next) => prev + next, 0);
+    // setTotalAmount(newTotalAmount);
   };
+
+  
+
+//  usuwanie pozycji z dodanych 
+
+  const handleDelete = (index: number) => {
+    const updatedBudgetEl = [...budgetEl];
+    updatedBudgetEl.splice(index, 1);
+
+    const updatedBudgetElAmount = [...budgetElAmount];
+    updatedBudgetElAmount.splice(index, 1);
+
+    setBugetEl(updatedBudgetEl);
+    setBudgetElAmount(updatedBudgetElAmount);
+
+    
+    // // Aktualizacja totalAmount po usunięciu pozycji
+    // const newTotalAmount = updatedBudgetElAmount.reduce((prev, next) => prev + next, 0);
+    // setTotalAmount(newTotalAmount);
+  };
+
 
   // ostatni element tablicy
   const lastIndex = budgetElAmount.length - 1;
@@ -60,11 +86,11 @@ const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
         <Input
            type="number"
           value={budgetElAmount[lastIndex] || 0}
-          onChange={handleAmountChange}
-/>
+          onChange={(e) => handleAmountChange(e, lastIndex)}/>
       </Label>
       <br /><br />
       <Button variant={"ghost"} type="submit">Dodaj</Button>
+      <br /><br />
     </form>
     </div> 
     </Card>
@@ -76,13 +102,17 @@ const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
             <TableRow key={index}>
               <TableCell>{`${index + 1}. ${el}`}</TableCell>
               <TableCell>{budgetElAmount[index]}</TableCell>
+              <TableCell>
+              <Button variant={"ghost"} onClick={() => handleDelete(index)}> X </Button>
+            </TableCell>
             </TableRow>
           ))}
         {/* </tbody><br/> */}
-        {isFormSubmitted && totalAmount>0 && <TableFooter>Suma:  {totalAmount} </TableFooter>}
+        {isFormSubmitted && totalAmount>0 && <TableFooter>
+          <TableCell>Suma:</TableCell>
+          <TableCell>{totalAmount}</TableCell>
+          </TableFooter>}
       </Table>
     </div>
   );
-};
-
-  
+          }
