@@ -21,8 +21,11 @@ export default function Index() {
       <Card>  
          <GuestsForm onSubmit={(e)=>{console.log("Onsubmit", e)}}/>
     </Card>
+  
    <SignIn/>
+ 
    <SignUp/>
+  
     </div>
       
    
