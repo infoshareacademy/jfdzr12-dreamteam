@@ -24,10 +24,7 @@ export default function Index() {
    <FormForGuest onSubmit={(e)=>{console.log(e)}} />
       </Card>
       <EventForm/>
-    
-   <UserPage />
-  
-
+      <UserPage />
     </div>
       
   );
