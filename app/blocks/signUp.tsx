@@ -9,26 +9,31 @@ export function SignUp() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Dodano confirmPassword
   const [emailError, setEmailError] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState(""); // Dodano confirmPasswordError
 
   const handleSignUp = () => {
     setFirstNameError("");
     setLastNameError("");
     setEmailError("");
     setPasswordError("");
+    setConfirmPasswordError(""); // Zerowanie błędu confirmPasswordError
 
     if (!firstName) {
       setFirstNameError("Name is required");
       setPassword("");
+      setConfirmPassword("");
       return;
     }
 
     if (!lastName) {
       setLastNameError("Surname is required");
       setPassword("");
+      setConfirmPassword("");
       return;
     }
 
@@ -39,6 +44,7 @@ export function SignUp() {
       setEmailError("Invalid email format");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
       return;
     }
 
@@ -47,10 +53,18 @@ export function SignUp() {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      setPassword("");
+      setConfirmPassword("");
+      return;
+    }
+
     setFirstName("");
     setLastName("");
     setEmail("");
     setPassword("");
+    setConfirmPassword("");
 
     console.log("Account created successfully!");
   };
@@ -112,6 +126,17 @@ export function SignUp() {
             />
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
+          <div className="grid gap-2">
+            <Label htmlFor="confirm-password">Confirm Password</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
+          </div>
           <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
             Create an account
           </Button>
@@ -126,4 +151,3 @@ export function SignUp() {
     </Card>
   );
 }
-
