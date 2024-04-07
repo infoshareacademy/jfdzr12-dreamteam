@@ -9,7 +9,7 @@ export function SignUp() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // Dodano confirmPassword
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
@@ -21,7 +21,7 @@ export function SignUp() {
     setLastNameError("");
     setEmailError("");
     setPasswordError("");
-    setConfirmPasswordError(""); // Zerowanie błędu confirmPasswordError
+    setConfirmPasswordError(""); 
 
     if (!firstName) {
       setFirstNameError("Name is required");
@@ -120,6 +120,7 @@ export function SignUp() {
             <Input
               id="password"
               type="password"
+              placeholder="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -131,6 +132,7 @@ export function SignUp() {
             <Input
               id="confirm-password"
               type="password"
+              placeholder="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
