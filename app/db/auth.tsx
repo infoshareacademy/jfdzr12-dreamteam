@@ -1,6 +1,9 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "~/firebase.config";
 
+
+//rejestracja użytkownika
+
 const auth = getAuth(app);
 export const registerWithEmailAndPassword = (email:string, password:string) => {
   return createUserWithEmailAndPassword(auth, email, password)
@@ -18,6 +21,7 @@ export const registerWithEmailAndPassword = (email:string, password:string) => {
 };
 
 
+//login 
 export const loginWithEmailAndPassword =(email:string, password:string) =>{
   return signInWithEmailAndPassword(auth, email, password)
   .then(() => {
@@ -34,25 +38,8 @@ export const loginWithEmailAndPassword =(email:string, password:string) =>{
 };
 
 
+//forgot password
 
-
-
-// Logowanie użytkownika
-// export const Login = () => {
-//     // const navigate = useNavigate()
-//     const handleSubmit = ({login, password}) => {
-//         signInWithEmailAndPassword(auth, login, password)
-//             .then((e) => console.log(e))
-//             // .then(() => navigate("/admin")) // nawiguje po zalogowaniu do admina, panel admina
-//     }
-
-// return <Form submitText="Zaloguj się" handleSubmit={handleSubmit}/>
-// }
-
-
-// //forgot password
-
-// //Challenge 5: Przypomnienie hasła
 // export const ForgotPassword = () => {
 
 //   const handleSubmit = ({login}) => {
