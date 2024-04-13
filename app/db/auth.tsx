@@ -1,24 +1,43 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "~/firebase.config";
 
 const auth = getAuth(app);
-export const signUpWithEmailAndPassword = async (email: string, password: string) => {
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    return { success: true };
-  } catch (error) {
-    if (error instanceof Error && error.code === "auth/email-already-in-use") {
-      return { success: false, error: "This email address is already in use." };
-    }
-    return { success: false, error: error.message };
-  }
+export const registerWithEmailAndPassword = (email:string, password:string) => {
+  return createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      return { success: true } as const;
+      // .then(() => navigate("/home))?????gdzieś nas musi przenieść po zarejetrowaniu
+    })
+
+    .catch((error) => {
+      if (error.message.includes("already in use")) {
+        return { success: false, error: "This email address is already in use." } as const;
+      }
+      return { success: false, error: error.message } as const;
+    });
 };
 
 
-// //login
+export const loginWithEmailAndPassword =(email:string, password:string) =>{
+  return signInWithEmailAndPassword(auth, email, password)
+  .then(() => {
+    return { success: true } as const;
+    // .then(() => navigate("/home))?????gdzieś nas musi przenieść po logowaniu
+  })
+
+  .catch((error) => {
+    if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+      return { success: false, error: "Invalid email or password." } as const;
+    }
+    return { success: false, error: error.message } as const;
+  });
+};
 
 
-// //Challenge 4: Logowanie użytkownika
+
+
+
+// Logowanie użytkownika
 // export const Login = () => {
 //     // const navigate = useNavigate()
 //     const handleSubmit = ({login, password}) => {

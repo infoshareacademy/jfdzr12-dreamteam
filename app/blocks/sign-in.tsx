@@ -3,6 +3,8 @@ import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
+import { loginWithEmailAndPassword } from "~/db/auth";
+
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -10,7 +12,7 @@ export function SignIn() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     setEmailError("");
     setPasswordError("");
 
@@ -28,11 +30,16 @@ export function SignIn() {
       setPasswordError("Password is required");
       return;
     }
+
+  const signInResult = await loginWithEmailAndPassword(email, password);
+  if (signInResult.success) {
+    console.log("Sign in successful!");
     setEmail("");
     setPassword("");
-    console.log("success!");
-  };
-
+  } else {
+    console.error("Sign in error:", signInResult.error);
+  }
+};
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
