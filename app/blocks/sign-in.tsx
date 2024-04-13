@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/ato
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { loginWithEmailAndPassword } from "~/db/auth";
-
+import { resetPassword } from "~/db/auth";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -38,6 +38,15 @@ export function SignIn() {
     setPassword("");
   } else {
     console.error("Sign in error:", signInResult.error);
+  }
+};
+
+const handleForgotPassword = async () => {
+  const resetResult = await resetPassword(email); 
+  if (resetResult.success) {
+    console.log("Password reset email sent successfully!");
+  } else {
+    console.error("Error sending password reset email:", resetResult.error);
   }
 };
   return (
@@ -76,10 +85,15 @@ export function SignIn() {
             />
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
+         
+          <p className="text-sm text-gray-500 cursor-pointer font-bold" onClick={handleForgotPassword}>
+              Forgot Password?
+            </p>
           <Button type="button" className="w-full" onClick={handleSignIn}>
             Sign In
           </Button>
         </div>
+        
         <div className="mt-4 text-center text-sm">
           Do not have an account? Sign up{" "}
 
