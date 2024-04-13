@@ -4,11 +4,16 @@ import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
 import { Table, TableCell, TableFooter, TableHead, TableRow } from '~/atoms/ui/table';
+import {db} from '../db/firebase';
+import { collection } from 'firebase/firestore';
+import { addBudget } from '~/db/users-budget';
 
 
 interface NameFormProps {
   onSubmit: (budgetEl: string[], budgetElAmount: number) => void;
+  // onclick: (budgetEl: string[], budgetElAmount: number) => void;
 }
+
 
 export const BudgetForm: React.FC<NameFormProps> = ({ onSubmit }) => {
   const [budgetEl, setBugetEl] = useState<string[]>([]);
@@ -56,6 +61,36 @@ const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
 
+
+const handleSaveBudget: ()=> void = () => {
+  const budgetData = {
+    elements: budgetEl,
+    amounts: budgetElAmount
+  };
+  addBudget(budgetData)
+  .then(() => {
+    console.log("Budżet zapisany pomyślnie!");
+  })
+  .catch((error) => {
+    console.error("Błąd podczas zapisywania budżetu: ", error);
+  });
+
+};
+
+
+
+
+//   db.collection('userBudgets').add({
+//     budgetItems: budgetEl.map((item, index) => ({
+//       name: item,
+//       amount: budgetElAmount[index]
+//     }))
+//   }).then(() => {
+//     console.log("Budżet zapisany pomyślnie!");
+//   }).catch((error) => {
+//     console.error("Błąd podczas zapisywania budżetu: ", error);
+//   });
+
   return (
 <div>
      <br/><br/>
@@ -85,9 +120,9 @@ const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
       </Label>
       <br />
       <Button variant={"ghost"} type="submit">Dodaj pozycję</Button> 
-      <Button variant={"ghost"} type="submit">Zapisz budżet</Button>
       <br /><br />
     </form>
+    <Button variant={"ghost"} onClick={handleSaveBudget}>Zapisz budżet</Button>
     </div> 
     </CardContent>
     </Card>
