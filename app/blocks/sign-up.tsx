@@ -1,10 +1,14 @@
-import { useState } from "react";
-import { Button } from "~/atoms/ui/button";
+// 
+
+
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
+import { Button } from "~/atoms/ui/button";
+import { signUpWithEmailAndPassword } from "~/db/auth";
 
-export function SignUp() {
+const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,9 +18,9 @@ export function SignUp() {
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState(""); // Dodano confirmPasswordError
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     setFirstNameError("");
     setLastNameError("");
     setEmailError("");
@@ -60,13 +64,18 @@ export function SignUp() {
       return;
     }
 
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-
-    console.log("Account created successfully!");
+    const signUpResult = await signUpWithEmailAndPassword(email, password);
+    if (signUpResult.success) {
+      console.log("Account created successfully!");
+      // Wyczyść formularz po pomyślnej rejestracji
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    } else {
+      console.error("Sign up error:", signUpResult.error);
+    }
   };
 
   return (
@@ -145,11 +154,10 @@ export function SignUp() {
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account? Sign in{" "}
-         {/* <Link to="#" className="underline"> 
-//             Sign in
-//           </Link> */}
         </div>
       </CardContent>
     </Card>
   );
-}
+};
+
+export default SignUp;
