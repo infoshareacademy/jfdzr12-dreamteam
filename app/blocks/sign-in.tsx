@@ -12,6 +12,7 @@ export function SignIn() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSignIn = async () => {
     setEmailError("");
@@ -32,24 +33,25 @@ export function SignIn() {
       return;
     }
 
-  const signInResult = await loginWithEmailAndPassword(email, password);
-  if (signInResult.success) {
-    console.log("Sign in successful!");
-    setEmail("");
-    setPassword("");
-  } else {
-    console.error("Sign in error:", signInResult.error);
-  }
-};
+    const signInResult = await loginWithEmailAndPassword(email, password);
+    if (signInResult.success) {
+      console.log("Sign in successful!");
+      setEmail("");
+      setPassword("");
+    } else {
+      console.error("Sign in error:", signInResult.error);
+    }
+  };
 
-const handleForgotPassword = async () => {
-  const resetResult = await resetPassword(email); 
-  if (resetResult.success) {
-    console.log("Password reset email sent successfully!");
-  } else {
-    console.error("Error sending password reset email:", resetResult.error);
-  }
-};
+  const handleForgotPassword = async () => {
+    const resetResult = await resetPassword(email); 
+    if (resetResult.success) {
+      console.log("Password reset email sent successfully!");
+    } else {
+      console.error("Error sending password reset email:", resetResult.error);
+    }
+  };
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -73,23 +75,30 @@ const handleForgotPassword = async () => {
             {emailError && <p className="text-red-500">{emailError}</p>}
           </div>
           <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password</Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 px-2 py-1 text-sm"
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
             </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
          
           <p className="text-sm text-gray-500 cursor-pointer font-bold" onClick={handleForgotPassword}>
-              Forgot Password?
-            </p>
+            Forgot Password?
+          </p>
           <Button type="button" className="w-full" onClick={handleSignIn}>
             Sign In
           </Button>
@@ -97,11 +106,9 @@ const handleForgotPassword = async () => {
         
         <div className="mt-4 text-center text-sm">
           Do not have an account?{" "}
-
           <Link to="/sign-up" className="underline">Sign up</Link>
         </div>
       </CardContent>
     </Card>
   );
 }
-
