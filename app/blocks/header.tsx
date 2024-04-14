@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react"
+import { NavLink, Link } from "@remix-run/react"
 import { Button } from "~/atoms/ui/button"
 import { Container } from "~/atoms/ui/container"
 import { Menu } from "lucide-react"
@@ -15,21 +15,15 @@ const routes = [
   },
   {
     label: 'About',
-    href: '/'
-  }
-  ,
+    href: '/about'
+  },
   {
     label: 'Sign in',
-    href: '/'
+    href: '/sign-in'
   },
-  {
-    label: 'Log in',
-    href: '/'
-  },
-  {
-    label: 'Guest',
-    href: '/'
-  }
+
+
+
 ]
 
 export const Header = () => {
@@ -46,9 +40,10 @@ export const Header = () => {
               <SheetContent side="left" className="w-[300px sm:w-[400px]">
                 <nav className="flex flex-col gap-4">
                   {routes.map((route, i) => (
-                    <Link key={i} to={route.href} className="block py-1 px-2 text-lg">
+                    <NavLink key={i} to={route.href}
+                      className="block py-1 px-2 text-lg">
                       {route.label}
-                    </Link>
+                    </NavLink>
                   ))}
                 </nav>
               </SheetContent>
