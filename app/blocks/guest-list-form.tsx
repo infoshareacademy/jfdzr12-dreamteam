@@ -9,14 +9,18 @@ import {
   CardHeader,
   CardTitle,
 } from "~/atoms/ui/card";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "~/db/firebase";
 
 interface NewGuest {
   firstname: string;
   lastname: string;
-  email?: string;
+  email: string;
 }
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
+
+const newGuestListData = collection(db, 'guest-list');
 
 export const GuestListForm = () => {
   const [error, setError] = useState<FormErrorData<NewGuest>>({});
@@ -41,10 +45,11 @@ export const GuestListForm = () => {
       errors.lastname = "Full last name is required";
     }
     if (!("email" in formData && typeof formData.email === "string" && formData.email.includes("@"))) {
-      errors.email = "Email address must contain @"
+      errors.email = "Email address must contain \"@\"";
     }
 
     setError(errors);
+    addDoc(newGuestListData, formData);
   }
 
   return (
@@ -59,19 +64,19 @@ export const GuestListForm = () => {
           <div className="space-y-1">
             <Label htmlFor="firstname">First name</Label>
             <Input name="firstname" type="text" placeholder="First name" />
-            {!!error?.firstname && <em>{error.firstname}</em>}
+            {!!error?.firstname && <em className="text-xs">{error.firstname}</em>}
           </div>
 
           <div className="space-y-1">
             <Label htmlFor="lastname">Last name</Label>
             <Input name="lastname" type="text" placeholder="Last name" />
-            {!!error?.lastname && <em>{error.lastname}</em>}
+            {!!error?.lastname && <em className="text-xs">{error.lastname}</em>}
           </div>
 
           <div className="space-y-1">
             <Label htmlFor="email">Email address</Label>
             <Input name="email" type="email" placeholder="Email" />
-            {!!error?.email && <em>{error.email}</em>}
+            {!!error?.email && <em className="text-xs">{error.email}</em>}
           </div>
 
         </CardContent>
