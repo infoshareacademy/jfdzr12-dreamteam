@@ -5,6 +5,7 @@ import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { loginWithEmailAndPassword } from "~/db/auth";
 import { resetPassword } from "~/db/auth";
+import { Link } from "@remix-run/react";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -95,9 +96,9 @@ const handleForgotPassword = async () => {
         </div>
         
         <div className="mt-4 text-center text-sm">
-          Do not have an account? Sign up{" "}
+          Do not have an account?{" "}
 
-          {/* <Link to="#" className="underline">  Sign up </Link> */}
+          <Link to="/sign-up" className="underline">Sign up</Link>
         </div>
       </CardContent>
     </Card>

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/ato
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { registerWithEmailAndPassword } from "~/db/auth";
+import { Link } from "@remix-run/react";
 
 
 export const SignUp = () => {
@@ -141,10 +142,8 @@ export const SignUp = () => {
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
-          Already have an account? Sign in{" "}
-         {/* <Link to="#" className="underline"> 
-//             Sign in
-//           </Link> */}
+          Already have an account?{" "}
+         <Link to="/sign-in" className="underline"> Sign in </Link>
         </div>
       </CardContent>
     </Card>
