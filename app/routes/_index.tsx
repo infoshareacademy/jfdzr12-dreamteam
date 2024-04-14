@@ -9,6 +9,7 @@ import { UserPage } from "~/blocks/userPage";
 
 
 
+
 // export const meta: MetaFunction = () => {
 //   return [
 //     { title: "New Remix App" },
@@ -20,6 +21,7 @@ export default function Index() {
   return (
    <>
          <BudgetForm onSubmit={(e)=>{console.log("Onsubmit", e)}}/>
+      
       {/* <Card>  
         // <GuestsForm onSubmit={(e)=>{console.log("Onsubmit", e)}}/>
         </Card>
