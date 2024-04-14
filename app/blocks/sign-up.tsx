@@ -3,32 +3,35 @@ import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
+import { registerWithEmailAndPassword } from "~/db/auth";
 
-export function SignUp() {
+
+export const SignUp = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [firstNameError, setFirstNameError] = useState("");
   const [lastNameError, setLastNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     setFirstNameError("");
     setLastNameError("");
     setEmailError("");
     setPasswordError("");
+    setConfirmPasswordError(""); 
 
     if (!firstName) {
       setFirstNameError("Name is required");
-      setPassword("");
       return;
     }
 
     if (!lastName) {
       setLastNameError("Surname is required");
-      setPassword("");
       return;
     }
 
@@ -37,8 +40,6 @@ export function SignUp() {
       return;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       setEmailError("Invalid email format");
-      setEmail("");
-      setPassword("");
       return;
     }
 
@@ -47,12 +48,22 @@ export function SignUp() {
       return;
     }
 
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    }
 
-    console.log("Account created successfully!");
+    const signUpResult = await registerWithEmailAndPassword(email, password);
+    if (signUpResult.success) {
+      console.log("Account created successfully!");
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    } else {
+      console.error("Sign up error:", signUpResult.error);
+    }
   };
 
   return (
@@ -106,11 +117,24 @@ export function SignUp() {
             <Input
               id="password"
               type="password"
+              placeholder="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
             {passwordError && <p className="text-red-500">{passwordError}</p>}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="confirm-password">Confirm Password</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              placeholder="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
           </div>
           <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
             Create an account
@@ -125,5 +149,6 @@ export function SignUp() {
       </CardContent>
     </Card>
   );
-}
+};
+
 
