@@ -9,6 +9,8 @@ import {
 import styles from "./globals.css?url";
 import { LinksFunction } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
+import { Header } from "~/blocks/header";
+import { ThemeProvider } from "~/blocks/theme-provider"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -34,5 +36,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <ThemeProvider storageKey="vite-ui-theme">
+      <Header />
+      <Outlet />
+    </ThemeProvider>
+  )
 }
