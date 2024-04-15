@@ -1,4 +1,4 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc } from "firebase/firestore";
 import { FormEvent, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -6,7 +6,8 @@ import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { Textarea } from "~/atoms/ui/textarea";
-import { db } from "~/db/firebase";
+import { eventRef } from "~/db/event-ref";
+import { uniqueCodeGenerator } from "~/lib/utils";
 
 
 interface NewEventFormData {
@@ -24,8 +25,6 @@ interface NewEventFormData {
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
 
-const newEventData = collection(db, 'event');
-
 export default function NewEventPage () {
 
     const [error, setError] = useState<FormErrorData<NewEventFormData>>();
@@ -41,6 +40,10 @@ export default function NewEventPage () {
         if(eventDate) {
             _formData.append('eventDate', eventDate.toString());
         }
+
+        const nextID = await uniqueCodeGenerator.next();
+        console.log('nextID', nextID.value);
+        _formData.append('eventID', String(nextID.value))
 
         const formData = Object.fromEntries(_formData.entries())
         console.log("submit", formData, event)
@@ -80,7 +83,7 @@ export default function NewEventPage () {
 
         setError(errors)
         
-        addDoc(newEventData, formData)
+        addDoc(eventRef, formData)
     
     }
 
