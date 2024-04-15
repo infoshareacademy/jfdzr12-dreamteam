@@ -96,7 +96,7 @@ export default function NewEventPage () {
     }
 
     return (
-        <Card className="w-full max-w-screen-lg">
+        <Card className="w-full max-w-screen-lg mx-auto my-8">
             <CardHeader>
                 <CardTitle className="text-center">Your dream event</CardTitle>
             </CardHeader>
