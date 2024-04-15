@@ -31,9 +31,7 @@ export const GuestListForm = () => {
     }
     e.preventDefault();
     const _formData = new FormData(e.target);
-    console.log("_formData", _formData);
     const formData = Object.fromEntries(_formData.entries());
-    console.log("formData", formData, e);
 
     const errors: FormErrorData<NewGuest> = {};
 
@@ -54,8 +52,6 @@ export const GuestListForm = () => {
     setFirstName('');
     setLastName('');
     setEmail('');
-
-    window.location.reload();
   }
 
   return (
