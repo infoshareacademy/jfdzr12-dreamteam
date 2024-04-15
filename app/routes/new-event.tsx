@@ -12,6 +12,7 @@ import { db } from "~/db/firebase";
 interface NewEventFormData {
     firstPerson: string,
     secondPerson: string,
+    eventDate: string,
     eventTime: string,
     ceremonyPlace: string,
     ceremonyAddress: string,
@@ -28,6 +29,7 @@ const newEventData = collection(db, 'event');
 export default function NewEventPage () {
 
     const [error, setError] = useState<FormErrorData<NewEventFormData>>();
+    const [eventDate, setEventDate] = useState<Date | undefined>();
 
     async function handleOnSubmit(event: FormEvent) {
         if(!(event.target instanceof HTMLFormElement)) {
@@ -36,6 +38,10 @@ export default function NewEventPage () {
         event.preventDefault();
         const _formData = new FormData(event.target)
         console.log("_formData", _formData)
+        if(eventDate) {
+            _formData.append('eventDate', eventDate.toString());
+        }
+
         const formData = Object.fromEntries(_formData.entries())
         console.log("submit", formData, event)
 
@@ -46,6 +52,9 @@ export default function NewEventPage () {
         }
         if(!("secondPerson" in formData && typeof formData.secondPerson === "string" && formData.secondPerson.length > 2)) {
             errors.secondPerson = 'Use at least 2 characters'
+        }
+        if(!("eventDate" in formData)) {
+            errors.eventDate = 'Enter event date'
         }
         if(!("eventTime" in formData && typeof formData.eventTime === "string" && formData.eventTime.length > 2)) {
             errors.eventTime = 'Enter event time'
@@ -105,10 +114,10 @@ export default function NewEventPage () {
                             <div className='grid grid-cols-2 gap-4'>
                                 <div className='flex flex-col space-y-1.5 mb-5'>
                                     <Label>Date 
-                                    {/* <DatePicker
-                                            value={formData.eventDate} 
-                                            onSelectDate={(date) => setFormData(data => ({...data, eventDate: date}))}
-                                        /> */}
+                                    <DatePicker 
+                                            value={eventDate}
+                                            onSelectDate={(date) => setEventDate(date)}
+                                        />
                                     </Label>
                                 </div>
                                 <div className='flex flex-col space-y-1.5 mb-5'>
@@ -175,13 +184,12 @@ export default function NewEventPage () {
                             <div className='grid grid-cols-2 gap-4'>
                                 <div className='flex flex-col space-y-1.5 mb-5'>
                                     <Label>Lead color 
-                                        <Input name='firstPersonPhone' type='color' />
+                                        <Input name='color' type='color' />
                                     </Label>
                                 </div>
                             </div>
                         </div>
 
-                        {/* <Button type='submit'>Add your event</Button> */}
                     </div>
                 </form>
             </CardContent>
