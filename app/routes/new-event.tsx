@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui
 import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
-import { eventRef } from "~/db/event-ref";
+import { eventIdref, eventRef } from "~/db/event-ref";
 import { uniqueCodeGenerator } from "~/lib/utils";
 
 
@@ -38,6 +38,7 @@ export default function NewEventPage() {
         event.preventDefault();
         const _formData = new FormData(event.target);
         console.log("_formData", _formData)
+
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
         };
@@ -49,34 +50,34 @@ export default function NewEventPage() {
 
         const errors: FormErrorData<NewEventFormData> = {};
 
-        if(!("firstPerson" in formData && typeof formData.firstPerson === "string" && formData.firstPerson.length > 2)) {
+        if(!("firstPerson" in formData && typeof formData.firstPerson === "string" && formData.firstPerson.length >= 2)) {
             errors.firstPerson = "Use at least 2 characters"
         };
-        if(!("secondPerson" in formData && typeof formData.secondPerson === "string" && formData.secondPerson.length > 2)) {
+        if(!("secondPerson" in formData && typeof formData.secondPerson === "string" && formData.secondPerson.length >= 2)) {
             errors.secondPerson = "Use at least 2 characters"
         };
-        if(!("eventDate" in formData)) {
+        if(!("eventDate" in formData && typeof formData.eventDate === "string" && formData.eventDate.length >= 4)) {
             errors.eventDate = "Choose event date"
         };
-        if(!("eventTime" in formData && typeof formData.eventTime === "string" && formData.eventTime.length > 2)) {
+        if(!("eventTime" in formData)) {
             errors.eventTime = "Enter event time"
         };
-        if(!("ceremonyPlace" in formData && typeof formData.ceremonyPlace === "string" && formData.ceremonyPlace.length > 2)) {
+        if(!("ceremonyPlace" in formData && typeof formData.ceremonyPlace === "string" && formData.ceremonyPlace.length >= 2)) {
             errors.ceremonyPlace = "Enter ceremony place, use at least 2 characters"
         };
-        if(!("ceremonyStreetAddress" in formData && typeof formData.ceremonyStreetAddress === "string" && formData.ceremonyStreetAddress.length > 2)) {
+        if(!("ceremonyStreetAddress" in formData && typeof formData.ceremonyStreetAddress === "string" && formData.ceremonyStreetAddress.length >= 2)) {
             errors.ceremonyStreetAddress = "Enter ceremony street address, use at least 2 characters"
         };
-        if(!("ceremonyCityAddress" in formData && typeof formData.ceremonyCityAddress === "string" && formData.ceremonyCityAddress.length > 2)) {
+        if(!("ceremonyCityAddress" in formData && typeof formData.ceremonyCityAddress === "string" && formData.ceremonyCityAddress.length >= 2)) {
             errors.ceremonyCityAddress = "Enter ceremony city address, use at least 2 characters"
         };
-        if(!("receptionPlace" in formData && typeof formData.receptionPlace === "string" && formData.receptionPlace.length > 2)) {
+        if(!("receptionPlace" in formData && typeof formData.receptionPlace === "string" && formData.receptionPlace.length >= 2)) {
             errors.receptionPlace = "Enter reception place, use at least 2 characters"
         };
-        if(!("receptionStreetAddress" in formData && typeof formData.receptionStreetAddress === "string" && formData.receptionStreetAddress.length > 2)) {
+        if(!("receptionStreetAddress" in formData && typeof formData.receptionStreetAddress === "string" && formData.receptionStreetAddress.length >= 2)) {
             errors.receptionStreetAddress = "Enter reception street address, use at least 2 characters"
         };
-        if(!("receptionCityAddress" in formData && typeof formData.receptionCityAddress === "string" && formData.receptionCityAddress.length > 2)) {
+        if(!("receptionCityAddress" in formData && typeof formData.receptionCityAddress === "string" && formData.receptionCityAddress.length >= 2)) {
             errors.receptionCityAddress = "Enter reception city address, use at least 2 characters"
         };
         if(!("firstPersonPhone" in formData && typeof formData.firstPersonPhone === "string" && formData.firstPersonPhone.length >= 6)) {
@@ -91,7 +92,8 @@ export default function NewEventPage() {
         if(Object.keys(errors).length !== 0) {
             return;
         } else {
-            addDoc(eventRef, formData);
+            await addDoc(eventIdref, {"ID": nextID.value});
+            await addDoc(eventRef, formData);
             event.target.reset();
         }
     }
