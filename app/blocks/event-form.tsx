@@ -12,7 +12,7 @@ import { Button } from '~/atoms/ui/button'
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '~/atoms/ui/card';
-import { DatePicker } from './datePicker';
+import { DatePicker } from '../atoms/ui/date-picker';
 import errorsToRecord from '@hookform/resolvers/io-ts/dist/errorsToRecord.js';
 import { Alert } from '~/atoms/ui/alert';
 import { validateInputsPhoneNumbers, validateInputTimeFormat, validateInputsStringValues, uniqueCodeGenerator } from '~/lib/utils';
