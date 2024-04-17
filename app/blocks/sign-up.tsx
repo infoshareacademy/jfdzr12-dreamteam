@@ -158,6 +158,7 @@ export const SignUp = () => {
           </div>
           <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
             Create an account
+          {/* <Link to="/main">Sign In</Link> */}
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
