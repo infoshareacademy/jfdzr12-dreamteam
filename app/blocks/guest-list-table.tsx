@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, onSnapshot, deleteDoc, doc } from 'firebase/firestore'
 import { db } from '~/db/firebase'
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableRow, TableCell, TableHead, TableHeader } from '~/atoms/ui/table';
@@ -12,16 +12,13 @@ export const GuestListTable = () => {
 
   const getGuestList = async () => {
     const guestListCollection = collection(db, 'guestlist');
-    try {
-      const querySnapshot = await getDocs(guestListCollection);
-      const guestList = querySnapshot.docs.map(doc => ({
+    onSnapshot(guestListCollection, res => {
+      const guestList = res.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
       setGuests(guestList);
-    } catch (error) {
-      console.error('Error getting guest list: ', error);
-    }
+    });
   };
 
   useEffect(() => {
@@ -29,13 +26,18 @@ export const GuestListTable = () => {
   }, []);
 
   const handleDelete = (id) => {
-    const updatedGuests = guests.filter(guest => guest.id !== id);
-    setGuests(updatedGuests);
+    const guestRef = doc(db, 'guestlist', id);
+    deleteDoc(guestRef)
+      .then(() => {
+        console.log("Document deleted successfully");
+      })
+      .catch(error => {
+        console.log("Error deleting document: ", error);
+      });
   }
 
-
   return (
-    <Card className="w-fit" x-chunk="dashboard-06-chunk-0">
+    <Card className="w-fit dashboard-06-chunk-0">
       <CardHeader>
         <CardTitle>Guest list</CardTitle>
         <CardDescription>Manage your guests and check their survey responses.</CardDescription>
@@ -82,12 +84,12 @@ export const GuestListTable = () => {
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         <div className="text-xs text-muted-foreground">
           Showing <strong>1-10</strong> of <strong>32</strong>{" "}
           products
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card >
   )
 
