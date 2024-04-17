@@ -20,6 +20,9 @@ import { Select } from '@radix-ui/react-select';
 import { MySelect } from '~/atoms/ui/my-select';
 import { NewGuest, addGuest } from '~/db/guest';
 
+
+const textLabelFirstName = "Enter your name:";
+const textLabelSecondName ="Enter your surname:";
 const textLabelPresence = "Do you confirm your arrival? ";
 const textLabelPartner = "Do you confirm the presence of accompanying person? ";
 const textButtonSubmit = "Send";
@@ -99,6 +102,20 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} id="IdFormForGuest" method="post" action="/guest">
+      <div>
+        <Label htmlFor="firstName">{textLabelFirstName}</Label>
+        <Input 
+        name="firstName"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor="lastName">{textLabelSecondName}</Label>
+        <Input 
+        name="lastName"
+        />
+      </div>
+
       <div>
       <Label htmlFor="presence">{textLabelPresence}</Label>
         <input 
