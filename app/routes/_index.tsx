@@ -3,7 +3,7 @@ import type { MetaFunction } from "@remix-run/node";
 import { Card } from "~/atoms/ui/card";
 import { EventForm } from "~/blocks/eventForm";
 import { GuestsForm } from "~/blocks/guestsForm";
-import { FormForGuest } from "~/blocks/formForGuest";
+import { FormForGuest } from "~/blocks/form-for-guest";
 import { UserPage } from "~/blocks/userPage";
 
 export const meta: MetaFunction = () => {

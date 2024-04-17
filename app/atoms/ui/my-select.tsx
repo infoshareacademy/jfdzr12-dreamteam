@@ -5,16 +5,16 @@ interface Option {
     label: string;
   }
   
-  interface SelectMenuProps {
+  interface SelectProps {
     options: Option[];
     name: string;
-    onChange: (value: string) => void;
+    onChange?: (value: string) => void;
   }
   
-export const SelectMenu: React.FC<SelectMenuProps> = ({ options, name, onChange }) => {
+export const MySelect: React.FC<SelectProps> = ({ options, name, onChange }) => {
     const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
       const selectedValue = e.target.value;
-      onChange(selectedValue);
+      onChange?.(selectedValue);
     };
   
     return (
