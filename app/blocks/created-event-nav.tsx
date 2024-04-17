@@ -24,8 +24,8 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '~/atoms/ui/button';
-// import { getYourEvent } from './event-api';; , jak Monia doda funkcję to ścieżka nowa będzie
-
+// import { getYourEvent } from '??';; , jak Monia doda funkcję to ścieżka nowa będzie
+// import { eventRef } from '??';; , jak Monia doda funkcję to ścieżka nowa będzie
 export const CreatedEventNav = () => {
     const [brideName, setBrideName] = useState('');
     const [groomName, setGroomName] = useState('');
