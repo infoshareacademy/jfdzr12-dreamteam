@@ -17,9 +17,11 @@ interface NewEventFormData {
     ceremonyPlace: string,
     ceremonyStreetAddress: string,
     ceremonyCityAddress: string,
+    ceremonyCountryAddress: string,
     receptionPlace: string,
     receptionStreetAddress: string,
     receptionCityAddress: string,
+    receptionCountryAddress: string,
     firstPersonPhone: string,
     secondPersonPhone: string,
 }
@@ -51,16 +53,16 @@ export default function NewEventPage() {
         const errors: FormErrorData<NewEventFormData> = {};
 
         if(!("firstPerson" in formData && typeof formData.firstPerson === "string" && formData.firstPerson.length >= 2)) {
-            errors.firstPerson = "Use at least 2 characters"
+            errors.firstPerson = "Enter name, use at least 2 characters"
         };
         if(!("secondPerson" in formData && typeof formData.secondPerson === "string" && formData.secondPerson.length >= 2)) {
-            errors.secondPerson = "Use at least 2 characters"
+            errors.secondPerson = "Enter name, use at least 2 characters"
         };
-        if(!("eventDate" in formData && typeof formData.eventDate === "string" && formData.eventDate.length >= 4)) {
+        if(!("eventDate" in formData)) {
             errors.eventDate = "Choose event date"
         };
-        if(!("eventTime" in formData)) {
-            errors.eventTime = "Enter event time"
+        if(!("eventTime" in formData && typeof formData.eventTime === "string" && formData.eventTime.length >= 4)) {
+            errors.eventTime = "Enter hours and minutes in 24-hour format"
         };
         if(!("ceremonyPlace" in formData && typeof formData.ceremonyPlace === "string" && formData.ceremonyPlace.length >= 2)) {
             errors.ceremonyPlace = "Enter ceremony place, use at least 2 characters"
@@ -71,6 +73,9 @@ export default function NewEventPage() {
         if(!("ceremonyCityAddress" in formData && typeof formData.ceremonyCityAddress === "string" && formData.ceremonyCityAddress.length >= 2)) {
             errors.ceremonyCityAddress = "Enter ceremony city address, use at least 2 characters"
         };
+        if(!("ceremonyCountryAddress" in formData && typeof formData.ceremonyCountryAddress === "string" && formData.ceremonyCountryAddress.length >= 2)) {
+            errors.ceremonyCountryAddress = "Enter ceremony country address, use at least 2 characters"
+        };
         if(!("receptionPlace" in formData && typeof formData.receptionPlace === "string" && formData.receptionPlace.length >= 2)) {
             errors.receptionPlace = "Enter reception place, use at least 2 characters"
         };
@@ -79,6 +84,9 @@ export default function NewEventPage() {
         };
         if(!("receptionCityAddress" in formData && typeof formData.receptionCityAddress === "string" && formData.receptionCityAddress.length >= 2)) {
             errors.receptionCityAddress = "Enter reception city address, use at least 2 characters"
+        };
+        if(!("receptionCountryAddress" in formData && typeof formData.ceremonyCountryAddress === "string" && formData.ceremonyCountryAddress.length >= 2)) {
+            errors.receptionCountryAddress = "Enter ceremony country address, use at least 2 characters"
         };
         if(!("firstPersonPhone" in formData && typeof formData.firstPersonPhone === "string" && formData.firstPersonPhone.length >= 6)) {
             errors.firstPersonPhone = "Enter first person's number. Use at least 6 numbers"
@@ -96,6 +104,7 @@ export default function NewEventPage() {
             await addDoc(eventRef, formData);
             event.target.reset();
         }
+        
     }
 
     return (
@@ -110,12 +119,12 @@ export default function NewEventPage() {
                         <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Names</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="firstPerson" >First person</Label> 
+                                    <Label htmlFor="firstPerson" >First person name</Label> 
                                     <Input name="firstPerson"/>
                                     {!!error?.firstPerson && <em className="text-xs">{error.firstPerson}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="secondPerson">Second person</Label> 
+                                    <Label htmlFor="secondPerson">Second person name</Label> 
                                     <Input name="secondPerson"/>
                                     {!!error?.secondPerson && <em className="text-xs">{error.secondPerson}</em>} 
                                 </div>
@@ -130,7 +139,7 @@ export default function NewEventPage() {
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="eventTime">Time</Label> 
+                                    <Label htmlFor="eventTime">{`Time (in 24-hour format)`}</Label> 
                                     <Input name="eventTime" type="time"/>
                                     {!!error?.eventTime && <em className="text-xs">{error.eventTime}</em>}
                                 </div>
@@ -140,7 +149,7 @@ export default function NewEventPage() {
                         <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Ceremony</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="ceremonyPlace">Place</Label> 
+                                    <Label htmlFor="ceremonyPlace">Place name</Label> 
                                     <Input name="ceremonyPlace" />
                                     {!!error?.ceremonyPlace && <em className="text-xs">{error.ceremonyPlace}</em>}
                                     
@@ -155,13 +164,18 @@ export default function NewEventPage() {
                                     <Input name="ceremonyCityAddress" />
                                     {!!error?.ceremonyCityAddress && <em className="text-xs">{error.ceremonyCityAddress}</em>}
                                 </div>
+                                <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
+                                    <Label htmlFor="ceremonyCountryAddress">Country</Label> 
+                                    <Input name="ceremonyCountryAddress" />
+                                    {!!error?.ceremonyCountryAddress && <em className="text-xs">{error.ceremonyCountryAddress}</em>}
+                                </div>
                             </div>
                         </div>
 
                         <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Reception</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="receptionPlace">Place</Label>
+                                    <Label htmlFor="receptionPlace">Place name</Label>
                                     <Input name="receptionPlace" />
                                     {!!error?.receptionPlace && <em className="text-xs">{error.receptionPlace}</em>}
                                 </div>
@@ -175,18 +189,23 @@ export default function NewEventPage() {
                                     <Input name="receptionCityAddress" />
                                     {!!error?.receptionCityAddress && <em className="text-xs">{error.receptionCityAddress}</em>}
                                 </div>
+                                <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
+                                    <Label htmlFor="receptionCountryAddress">Country</Label> 
+                                    <Input name="receptionCountryAddress" />
+                                    {!!error?.receptionCountryAddress && <em className="text-xs">{error.receptionCountryAddress}</em>}
+                                </div>
                             </div>
                         </div>
 
                         <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Phone numbers</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="firstPersonPhone">First person</Label>
+                                    <Label htmlFor="firstPersonPhone">First person phone number</Label>
                                     <Input name="firstPersonPhone" type="tel" />
                                     {!!error?.firstPersonPhone && <em className="text-xs">{error.firstPersonPhone}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="econdPersonPhone">Second person</Label>
+                                    <Label htmlFor="econdPersonPhone">Second person phone number</Label>
                                     <Input name="secondPersonPhone" type="tel" />
                                     {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
                                 </div>
