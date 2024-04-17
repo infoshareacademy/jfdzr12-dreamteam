@@ -1,7 +1,7 @@
 import { getDocs, query, where } from "firebase/firestore";
 import { eventRef } from "./event-ref";
 
-const eventIdQuery = query(eventRef, where("eventID", "==", "1013"));
+const eventIdQuery = query(eventRef, where("eventID", "==", "1016"));
 
 export async function getYourEvent() {
     const querySnapshot = await getDocs(eventIdQuery);
