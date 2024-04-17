@@ -1,6 +1,5 @@
 import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/atoms/ui/resizable";
 import { getYourEvent } from "~/db/get-your-event";
 
 interface EventData {
@@ -39,20 +38,28 @@ export default function YourEvent() {
 
     if(eventData) {
         const today: Date = new Date();
+        today.setHours(0, 0, 0, 0);
         const eventDate: Date = new Date(eventData.eventDate);
+        eventDate.setHours(0, 0, 0, 0);
         eventDateString = eventDate.toDateString();
         const timeDifference: number = eventDate.getTime() - today.getTime();
-        if(timeDifference < 0) {
-            content = "Wydarzenie już się odbyło";
-        } else {
-            const numberOfDaysToEvent = Math.floor(timeDifference / (1000 * 3600 * 24));
-            if(numberOfDaysToEvent > 1) {
-            content = `${numberOfDaysToEvent} days until ${eventData.firstPerson} and ${eventData.secondPerson}'s wedding`;
-            } else {
-                content = `${numberOfDaysToEvent} day until ${eventData.firstPerson} and ${eventData.secondPerson}'s wedding`;
-            }
+        const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24));
+        if(numberOfDays < 1) {
+            content = `You were married ${Math.abs(numberOfDays)} days ago`;
+        } 
+        if(numberOfDays === -1) {
+            content = "You were married yesterday";
         }
-    } 
+        if(numberOfDays === 0) {
+            content = "Your wedding is today!";
+        }
+        if(numberOfDays === 1) {
+            content = "Your wedding is tommorrow!";
+        } 
+        if(numberOfDays > 1) {
+            content = `${Math.abs(numberOfDays)} days until ${eventData.firstPerson} and ${eventData.secondPerson}'s wedding`;
+        } 
+    }
     
     return (
         <>
@@ -68,15 +75,15 @@ export default function YourEvent() {
                         <p>{eventData.eventTime}</p>
                     </div>
                     <div className="grid grid-cols-2 gap-4 justify-items-center">
-                        <div className="col-start-1">
-                            <h3>Ceremony</h3>
+                        <div className="grid col-start-1 justify-items-center">
+                            <h1>CEREMONY</h1>
                             <p>{`Place: ${eventData.ceremonyPlace}`}</p>
                             <p>{`Street: ${eventData.ceremonyStreetAddress}`}</p>
                             <p>{`City: ${eventData.ceremonyCityAddress}`}</p>
                             <p>{`Country: ${eventData.ceremonyCountryAddress}`}</p>
                         </div>
-                        <div>
-                            <h3>Reception</h3>
+                        <div className="grid justify-items-center">
+                            <h1>RECEPTION</h1>
                             <p>{`Place: ${eventData.receptionPlace}`}</p>
                             <p>{`Street: ${eventData.receptionStreetAddress}`}</p>
                             <p>{`City: ${eventData.receptionCityAddress}`}</p>
