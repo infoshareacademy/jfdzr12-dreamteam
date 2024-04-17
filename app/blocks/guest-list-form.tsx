@@ -31,21 +31,22 @@ export const GuestListForm = () => {
     console.log("submit", formData);
     const errors: FormErrorData<NewGuest> = {};
 
-    if (!("firstName" in formData && typeof formData.firstName !== "string" || formData.firstName.length >= 2)) {
+    if (!("firstName" in formData && typeof formData.firstName === "string" && formData.firstName.length >= 2)) {
       errors.firstName = 'First name is required and must be at least 2 characters';
     }
 
-    if (!("lastName" in formData && typeof formData.lastName !== "string" || formData.lastName.length >= 2)) {
+    if (!("lastName" in formData && typeof formData.lastName === "string" && formData.lastName.length >= 2)) {
       errors.lastName = 'Last name is required and must be at least 2 characters';
     }
 
-    if (!("email" in formData && typeof formData.email !== "string" && /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email))) {
+    if (!("email" in formData && typeof formData.email === "string" && /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i.test(formData.email))) {
       errors.email = 'Email is required';
     }
 
+    setErrors(errors);
+
     if (Object.keys(errors).length !== 0) {
       e.target.reset();
-      setErrors(errors);
       return;
     } else {
       addDoc(newGuestListData, formData);
