@@ -48,7 +48,8 @@ export const CreatedEventNav = () => {
 
     return (
         <div className="flex justify-center items-center h-64">
-            <NavLink to="/your-event">
+            {/* będzie przekierowywał do eventu */}
+            <NavLink to="/your-event"> 
                 <Button>{brideName} & {groomName}</Button>
             </NavLink>
         </div>
