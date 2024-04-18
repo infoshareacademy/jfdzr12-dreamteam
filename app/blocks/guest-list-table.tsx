@@ -84,7 +84,7 @@ export const GuestListTable = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
+                      {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
                       <DropdownMenuItem onClick={() => handleDelete(guest._id)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -94,11 +94,8 @@ export const GuestListTable = () => {
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
-        <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>32</strong>{" "}
-          products
-        </div>
+      <CardFooter className='grid justify-end'>
+        <Button >Send email to all guests</Button>
       </CardFooter>
     </Card >
   )
