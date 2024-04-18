@@ -7,16 +7,24 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Button } from '~/atoms/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 
-export const GuestListTable = () => {
-  const [guests, setGuests] = useState([{}]);
+interface Guest {
+  _id: string;
+  guestID: string
+  email: string;
+  firstName: string;
+  lastName: string;
+}
 
-  const getGuestList = async () => {
+export const GuestListTable = () => {
+  const [guests, setGuests] = useState<Guest[]>([]);
+
+  const getGuestList = () => {
     const guestListCollection = collection(db, 'guestlist');
     onSnapshot(guestListCollection, res => {
       const guestList = res.docs.map(doc => ({
-        id: doc.id,
+        _id: doc.id,
         ...doc.data()
-      }));
+      } as Guest));
       setGuests(guestList);
     });
   };
@@ -25,7 +33,7 @@ export const GuestListTable = () => {
     getGuestList();
   }, []);
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string) => {
     const guestRef = doc(db, 'guestlist', id);
     deleteDoc(guestRef)
       .then(() => {
@@ -37,7 +45,7 @@ export const GuestListTable = () => {
   }
 
   return (
-    <Card className="w-fit dashboard-06-chunk-0">
+    <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
       <CardHeader>
         <CardTitle>Guest list</CardTitle>
         <CardDescription>Manage your guests and check their survey responses.</CardDescription>
@@ -46,6 +54,7 @@ export const GuestListTable = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>ID</TableHead>
               <TableHead>First Name</TableHead>
               <TableHead>Last Name</TableHead>
               <TableHead>Email</TableHead>
@@ -56,7 +65,8 @@ export const GuestListTable = () => {
           </TableHeader>
           <TableBody>
             {guests.map(guest => (
-              <TableRow key={guest.id}>
+              <TableRow key={guest._id}>
+                <TableCell className="font-medium">{guest.guestID}</TableCell>
                 <TableCell className="font-medium">{guest.firstName}</TableCell>
                 <TableCell className="font-medium">{guest.lastName}</TableCell>
                 <TableCell className="font-medium">{guest.email}</TableCell>
@@ -75,7 +85,7 @@ export const GuestListTable = () => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDelete(guest.id)}>Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(guest._id)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
@@ -84,12 +94,12 @@ export const GuestListTable = () => {
           </TableBody>
         </Table>
       </CardContent>
-      {/* <CardFooter>
+      <CardFooter>
         <div className="text-xs text-muted-foreground">
           Showing <strong>1-10</strong> of <strong>32</strong>{" "}
           products
         </div>
-      </CardFooter> */}
+      </CardFooter>
     </Card >
   )
 
