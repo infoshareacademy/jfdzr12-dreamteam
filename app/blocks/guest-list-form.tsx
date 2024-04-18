@@ -5,6 +5,8 @@ import { Label } from "~/atoms/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "~/db/firebase";
+import { uniqueGuestCode } from "~/lib/generator";
+import { guestIdRef, guestRef } from "~/db/guest-list-ref";
 
 interface NewGuest {
   id: string;
@@ -15,7 +17,7 @@ interface NewGuest {
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
-const newGuestListData = collection(db, 'guestlist');
+// const newGuestListData = collection(db, 'guestlist');
 
 export const GuestListForm = () => {
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
@@ -27,16 +29,22 @@ export const GuestListForm = () => {
     e.preventDefault();
     const _formData = new FormData(e.target);
     console.log("_formData", _formData);
+
+    const guestID = await uniqueGuestCode.next();
+    _formData.append("guestID", String(guestID.value));
+
+
     const formData = Object.fromEntries(_formData.entries());
     console.log("submit", formData);
+
     const errors: FormErrorData<NewGuest> = {};
 
     if (!("firstName" in formData && typeof formData.firstName === "string" && formData.firstName.length >= 2)) {
-      errors.firstName = 'First name is required and must be at least 2 characters';
+      errors.firstName = 'First name is required, min 2 characters';
     }
 
     if (!("lastName" in formData && typeof formData.lastName === "string" && formData.lastName.length >= 2)) {
-      errors.lastName = 'Last name is required and must be at least 2 characters';
+      errors.lastName = 'Last name is required, min 2 characters';
     }
 
     if (!("email" in formData && typeof formData.email === "string" && /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i.test(formData.email))) {
@@ -49,14 +57,16 @@ export const GuestListForm = () => {
       e.target.reset();
       return;
     } else {
-      addDoc(newGuestListData, formData);
+      await addDoc(guestIdRef, { "ID": guestID.value });
+      // addDoc(newGuestListData, formData);
+      await addDoc(guestRef, formData);
       e.target.reset();
     }
   }
 
   return (
     <form onSubmit={handleOnSubmit} id="GuestListForm">
-      <Card className="w-fit">
+      <Card className="w-9/12 mt-5 mb-6 mx-auto">
         <CardHeader>
           <CardTitle className="text-base">Add your new guest</CardTitle>
         </CardHeader>
