@@ -3,8 +3,8 @@ import { Button } from "~/atoms/ui/button";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "~/db/firebase";
+import { addDoc, query, where, getDocs } from "firebase/firestore";
+// import { db } from "~/db/firebase";
 import { uniqueGuestCode } from "~/lib/generator";
 import { guestIdRef, guestRef } from "~/db/guest-list-ref";
 
@@ -13,6 +13,7 @@ interface NewGuest {
   firstName: string;
   lastName: string;
   email: string;
+  exists: boolean
 }
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
@@ -33,7 +34,6 @@ export const GuestListForm = () => {
     const guestID = await uniqueGuestCode.next();
     _formData.append("guestID", String(guestID.value));
 
-
     const formData = Object.fromEntries(_formData.entries());
     console.log("submit", formData);
 
@@ -49,6 +49,18 @@ export const GuestListForm = () => {
 
     if (!("email" in formData && typeof formData.email === "string" && /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i.test(formData.email))) {
       errors.email = 'Email is required';
+    }
+
+    const q = query(guestRef,
+      where('firstName', '==', formData.firstName),
+      where('lastName', '==', formData.lastName),
+      where('email', '==', formData.email)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.size > 0) {
+      errors.exists = 'Guest already exists';
     }
 
     setErrors(errors);
@@ -75,6 +87,7 @@ export const GuestListForm = () => {
             <Label htmlFor="firstName">First name</Label>
             <Input name="firstName" type="text" placeholder="First name" />
             {!!errors?.firstName && <em className="text-xs">{errors.firstName}</em>}
+            {errors.exists && <em className="text-xs">{errors.exists}</em>}
           </div>
           <div className="space-y-1">
             <Label htmlFor="lastName">Last name</Label>
@@ -87,7 +100,7 @@ export const GuestListForm = () => {
             {!!errors?.email && <em className="text-xs">{errors.email}</em>}
           </div>
         </CardContent>
-        <CardFooter className='grid grid-cols-2 gap-4'>
+        <CardFooter className='grid grid-cols-2 gap-4 '>
           <Button variant='outline' className='w-full' >Cancel</Button>
           <Button type='submit' form='GuestListForm' className='w-full' >Add your guest</Button>
         </CardFooter>
