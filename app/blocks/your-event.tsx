@@ -1,76 +1,42 @@
 import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import { useCurrentUser } from "~/db/auth";
 import { getYourEvent } from "~/db/get-your-event";
-
-interface EventData {
-    firstPerson: string,
-    secondPerson: string,
-    eventDate: string,
-    eventTime: string,
-    ceremonyPlace: string,
-    ceremonyStreetAddress: string,
-    ceremonyCityAddress: string,
-    ceremonyCountryAddress: string,
-    receptionPlace: string,
-    receptionStreetAddress: string,
-    receptionCityAddress: string,
-    receptionCountryAddress: string,
-    firstPersonPhone: string,
-    secondPersonPhone: string,
-    eventID: string,
-    color: string,
-}
+import { EventData, calculateEventContent } from "~/lib/utils";
 
 export default function YourEvent() {
-    const [eventData, setEventData] = useState<EventData>();
+    const [eventData, setEventData] = useState<EventData | null>();
 
-    async function getEventData() {
-        const data = await getYourEvent();
-        setEventData(data as EventData);
-    }
+    const user = useCurrentUser();
+    const loading = user.status === 'loading';
 
     useEffect(() => {
-        getEventData();
-    }, []);
-
-    let content;
-    let eventDateString;
-
-    if(eventData) {
-        const today: Date = new Date();
-        today.setHours(0, 0, 0, 0);
-        const eventDate: Date = new Date(eventData.eventDate);
-        eventDate.setHours(0, 0, 0, 0);
-        eventDateString = eventDate.toDateString();
-        const timeDifference: number = eventDate.getTime() - today.getTime();
-        const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24));
-        if(numberOfDays < 1) {
-            content = `You were married ${Math.abs(numberOfDays)} days ago`;
-        } 
-        if(numberOfDays === -1) {
-            content = "You were married yesterday";
+        if(user.status === 'authenticated') {
+            getYourEvent()
+            .then(res => setEventData(res as EventData))
+        } else {
+            setEventData(null)
         }
-        if(numberOfDays === 0) {
-            content = "Your wedding is today!";
-        }
-        if(numberOfDays === 1) {
-            content = "Your wedding is tommorrow!";
-        } 
-        if(numberOfDays > 1) {
-            content = `${Math.abs(numberOfDays)} days until ${eventData.firstPerson} and ${eventData.secondPerson}'s wedding`;
-        } 
-    }
+    }, [user.status])
+
+    const contentData = calculateEventContent(eventData, loading);
+    const content = contentData?.content;
+    const eventDate = contentData?.eventDate;
     
     return (
         <>
             {eventData && (
                 <>
-                    <div className="flex items-center justify-center p-6">
-                        <p>{content}</p>
-                    </div>
-                    <div className="flex items-center justify-center p-6">
-                        <p>{eventDateString}</p>
-                    </div>
+                    {content && (
+                        <>
+                            <div className="flex items-center justify-center p-6">
+                                <p>{content}</p>
+                            </div>
+                            <div className="flex items-center justify-center p-6">
+                                <p>{eventDate}</p>
+                            </div>
+                        </>
+                    )}
                     <div className="flex items-center justify-center p-6">
                         <p>{eventData.eventTime}</p>
                     </div>
