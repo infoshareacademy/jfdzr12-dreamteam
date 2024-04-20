@@ -1,4 +1,5 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, User } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { app } from "~/firebase.config";
 
 
@@ -46,3 +47,26 @@ export const resetPassword = async (email:string) => {
     return { success: false, error: error.message } as const;
   }
 };
+
+export function useCurrentUser() {
+  const [currentUser, setCurrentUser] = useState<User | null>();
+  useEffect(() => {
+    auth.onAuthStateChanged((authState) => {
+      setCurrentUser(authState)
+    })
+  }, [])
+  if(currentUser === undefined) {
+    return {
+      status: 'loading',
+    } as const;
+  }
+  if(currentUser) {
+    return {
+      status: 'authenticated',
+      value: currentUser,
+    } as const;
+  } 
+  return {
+    status: 'unauthenticated',
+  } as const;
+}

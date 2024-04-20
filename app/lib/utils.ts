@@ -1,79 +1,63 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { getLastEventID } from "~/db/last-event-id";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-
-export function validateInputsStringValues(value: string): boolean {
-    const trimmedValue = value.trim();
-    if (trimmedValue.length < 2) {
-        return false;
-    }
-    const atLeastTwoLettersRegex = /[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ].*[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/;
-    return atLeastTwoLettersRegex.test(trimmedValue);
-}
-
-export function validateInputTimeFormat(value: string): boolean {
-  const timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
-  return timeRegex.test(value);
-}
-
-export function validateInputsPhoneNumbers(value: string): boolean {
-  const digitsOnly = value.replace(/\D/g, '');
-  return digitsOnly.length >= 6;
-}
-
-
-// interface CodeManager {
-//   codes: number[];
-//   min: number;
-//   max: number;
-// }
-
-// function createCodeManager(min: number, max: number): CodeManager {
-//   return {
-//       codes: [],
-//       min,
-//       max,
-//   }
-// }
-
-// function getRandomCode(min: number, max: number): number {
-//   return Math.floor(Math.random() * (max - min + 1)) + min;
-// }
-
-// function generateUniqueCode(manager: CodeManager): number {
-//   let code: number;
-  
-//   while(true) {
-//       code = getRandomCode(manager.min, manager.max);
-//       if(!manager.codes.includes(code)) {
-//           break;
-//       }
-//   }
-
-//   manager.codes.push(code);
-
-//   if(manager.codes.length === manager.max - manager.min + 1) {
-//       manager.codes = [];
-//   }
-
-//   console.log(manager.codes);
-
-//   return code;
-// }
-
-// const codeManager = createCodeManager(1000, 9000);
-// const eventCode = generateUniqueCode(codeManager);
-
-function* UniqueCodeGenerator() {
-  let code = 1000;
-
+async function* UniqueCodeGenerator() {
   while (true) {
-      yield code++;
+      const lastEventID = await getLastEventID();
+      const nextEventID = lastEventID + 1;
+      yield nextEventID;
   }
 }
 
 export const uniqueCodeGenerator = UniqueCodeGenerator();
+
+
+export interface EventData {
+  firstPerson: string,
+  secondPerson: string,
+  eventDate: string,
+  eventTime: string,
+  ceremonyPlace: string,
+  ceremonyStreetAddress: string,
+  ceremonyCityAddress: string,
+  ceremonyCountryAddress: string,
+  receptionPlace: string,
+  receptionStreetAddress: string,
+  receptionCityAddress: string,
+  receptionCountryAddress: string,
+  firstPersonPhone: string,
+  secondPersonPhone: string,
+  eventID: string,
+  color: string,
+  userUID: string,
+}
+
+
+export function calculateEventContent(eventData: EventData | null | undefined, loading: boolean): { content: string, eventType?: string, eventDate: string } | undefined {
+  if (!loading && eventData) {
+      const today: Date = new Date();
+      today.setHours(0, 0, 0, 0);
+      const eventDate: Date = new Date(eventData.eventDate);
+      eventDate.setHours(0, 0, 0, 0);
+      const timeDifference: number = eventDate.getTime() - today.getTime();
+      const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24));
+      const eventDateString: string = eventDate.toLocaleDateString("en-GB");
+
+      if (numberOfDays < 0) {
+          return { content: `You were married ${Math.abs(numberOfDays)} days ago`, eventDate: eventDateString };
+      } else if (numberOfDays === 0) {
+          return { content: "Your wedding is today!", eventDate: eventDateString };
+      } else if (numberOfDays === 1) {
+          return { content: "Your wedding is tomorrow!", eventDate: eventDateString };
+      } else {
+          return { content: `${numberOfDays} days until ${eventData.firstPerson} and ${eventData.secondPerson}'s wedding`, eventDate: eventDateString };
+      }
+  }
+
+  return undefined;
+}
