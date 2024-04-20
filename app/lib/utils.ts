@@ -37,6 +37,18 @@ export interface EventData {
   userUID: string,
 }
 
+export interface RelatedEventData {
+  eventName: string,
+  eventDate: string,
+  eventTime: string,
+  eventPlace: string,
+  eventStreetAddress: string,
+  eventCityAddress: string,
+  eventCountryAddress: string,
+  eventID: string,
+  userUID: string,
+}
+
 
 export function calculateEventContent(eventData: EventData | null | undefined, loading: boolean): { content: string, eventType?: string, eventDate: string } | undefined {
   if (!loading && eventData) {
@@ -60,4 +72,14 @@ export function calculateEventContent(eventData: EventData | null | undefined, l
   }
 
   return undefined;
+}
+
+
+export function relatedEventDate(eventData: RelatedEventData | null | undefined, loading: boolean) {
+  if(!loading && eventData) {
+    const eventDate: Date = new Date(eventData.eventDate);
+    eventDate.setHours(0, 0, 0, 0);
+    const eventDateString: string = eventDate.toLocaleDateString("en-GB");
+    return eventDateString;
+  }
 }
