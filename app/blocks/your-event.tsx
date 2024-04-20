@@ -6,6 +6,7 @@ import { EventData, calculateEventContent } from "~/lib/utils";
 
 export default function YourEvent() {
     const [eventData, setEventData] = useState<EventData | null>();
+    console.log('your event data', eventData)
 
     const user = useCurrentUser();
     const loading = user.status === 'loading';
@@ -59,12 +60,19 @@ export default function YourEvent() {
                     <div className="flex h-[200px] items-center justify-center p-6">
                         <p>{`Event code for your guests: ${eventData.eventID}`}</p>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 justify-items-center">
+                    <div className="grid grid-cols-4 gap-4 justify-items-center">
                         <div className="col-start-1">
-                            <Link to="/guestlist">Add your guests list</Link>
+                            <Link to="/guestlist" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Add your guests list</Link>
                         </div>
                         <div>
-                            <Link to="/budget">Add your budget</Link>
+                            <Link to="/budget" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Add your budget</Link>
+                        </div>
+                        <div>
+                            {/* tutaj chyba powinna być dynamiczna ruta */}
+                            <Link to={"/edit-your-event"}/*${eventData.eventID}*/ className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Edit your event</Link>
+                        </div>
+                        <div>
+                            <Link to="/add-event" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Back to your events</Link>
                         </div>
                     </div>
                 </>
