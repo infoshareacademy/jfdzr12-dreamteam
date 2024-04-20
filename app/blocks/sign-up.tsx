@@ -156,9 +156,11 @@ export const SignUp = () => {
             </div>
             {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
           </div>
+          <Link to="/add-event">
           <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
-            Create an account
+            Create an account 
           </Button>
+          </Link>
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}

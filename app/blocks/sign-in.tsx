@@ -99,9 +99,11 @@ export function SignIn() {
           <p className="text-sm text-gray-500 cursor-pointer font-bold" onClick={handleForgotPassword}>
             Forgot Password?
           </p>
+          <Link to="/add-event">
           <Button type="button" className="w-full" onClick={handleSignIn}>
             Sign In
           </Button>
+          </Link> 
         </div>
         
         <div className="mt-4 text-center text-sm">
