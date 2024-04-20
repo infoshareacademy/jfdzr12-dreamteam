@@ -1,34 +1,13 @@
-import { collection } from "firebase/firestore";
-import { db } from "~/db/firebase";
-export const eventRef = collection(db, 'event');
-
-export const eventIdref = collection(db, 'eventID');
-
-import { getDocs, query, where } from "firebase/firestore";
-
-const eventIdQuery = query(eventRef, where("eventID", "==", "1016"));
-
-export async function getYourEvent() {
-    const querySnapshot = await getDocs(eventIdQuery);
-    if(querySnapshot.empty) {
-        console.log("No events");
-    } else {
-        const lastEvent = querySnapshot.docs[0];
-        const lastEventData = lastEvent.data();
-        console.log("event data", lastEventData)
-        return lastEventData;
-    }
-}
-
-
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button } from '~/atoms/ui/button';
-// import { getYourEvent } from '??';; , jak Monia doda funkcję to ścieżka nowa będzie
-// import { eventRef } from '??';; , jak Monia doda funkcję to ścieżka nowa będzie
+import { getYourEvent } from '~/db/get-your-event';
+import { eventRef } from '~/db/event-ref';
+
 export const CreatedEventNav = () => {
     const [brideName, setBrideName] = useState('');
     const [groomName, setGroomName] = useState('');
+    const [eventExists, setEventExists] = useState(false);
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -37,9 +16,10 @@ export const CreatedEventNav = () => {
                 if (eventData) {
                     setBrideName(eventData.firstPerson);
                     setGroomName(eventData.secondPerson);
+                    setEventExists(true); 
                 }
             } catch (error) {
-                console.error('Error fetching event data:', error);
+                console.error('Error retrieving event data:', error);
             }
         };
 
@@ -50,31 +30,28 @@ export const CreatedEventNav = () => {
         const createdEventNav = document.getElementById('created-event-nav');
         if (createdEventNav) {
             createdEventNav.remove();
-
-        //     setIsVisible(false);
-        // };
-    
-        // if (!isVisible) {
-        //     return null; // Jeśli kafelekma być niewidoczny
-        // }
         }
     };
 
     return (
-        <div className="flex justify-center items-center h-64">
-            <div className="flex items-center">
-            {/* będzie przekierowywał do eventu, */}
-            <NavLink to="/your-event"> 
-                <Button>{brideName} & {groomName}</Button>
-            </NavLink>
-            <button
-                    className="ml-2 p-1 text-gray-700 rounded-full"
-                    onClick={handleDelete}
-                >
-                    X
-                </button>
-            </div>
+        <div className="flex justify-center items-center h-64" id="created-event-nav">
+            {eventExists ? ( 
+                <div className="flex items-center">
+                    
+                    <NavLink to="/your-event">
+                        <Button>{brideName} & {groomName}</Button>
+                    </NavLink>
+                    
+                    <button
+                        className="ml-2 p-1 text-gray-700 rounded-full"
+                        onClick={handleDelete}
+                    >
+                        X
+                    </button>
+                </div>
+            ) : (
+                <p>No events</p>
+            )}
         </div>
     );
 };
-
