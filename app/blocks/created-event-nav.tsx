@@ -1,24 +1,24 @@
-// import { collection } from "firebase/firestore";
-// import { db } from "~/db/firebase";
-// export const eventRef = collection(db, 'event');
+import { collection } from "firebase/firestore";
+import { db } from "~/db/firebase";
+export const eventRef = collection(db, 'event');
 
-// export const eventIdref = collection(db, 'eventID');
+export const eventIdref = collection(db, 'eventID');
 
-// import { getDocs, query, where } from "firebase/firestore";
+import { getDocs, query, where } from "firebase/firestore";
 
-// const eventIdQuery = query(eventRef, where("eventID", "==", "1016"));
+const eventIdQuery = query(eventRef, where("eventID", "==", "1016"));
 
-// export async function getYourEvent() {
-//     const querySnapshot = await getDocs(eventIdQuery);
-//     if(querySnapshot.empty) {
-//         console.log("No events");
-//     } else {
-//         const lastEvent = querySnapshot.docs[0];
-//         const lastEventData = lastEvent.data();
-//         console.log("event data", lastEventData)
-//         return lastEventData;
-//     }
-// }
+export async function getYourEvent() {
+    const querySnapshot = await getDocs(eventIdQuery);
+    if(querySnapshot.empty) {
+        console.log("No events");
+    } else {
+        const lastEvent = querySnapshot.docs[0];
+        const lastEventData = lastEvent.data();
+        console.log("event data", lastEventData)
+        return lastEventData;
+    }
+}
 
 
 import React, { useEffect, useState } from 'react';
@@ -46,12 +46,34 @@ export const CreatedEventNav = () => {
         fetchEvent();
     }, []);
 
+    const handleDelete = () => {
+        const createdEventNav = document.getElementById('created-event-nav');
+        if (createdEventNav) {
+            createdEventNav.remove();
+
+        //     setIsVisible(false);
+        // };
+    
+        // if (!isVisible) {
+        //     return null; // Jeśli kafelekma być niewidoczny
+        // }
+        }
+    };
+
     return (
         <div className="flex justify-center items-center h-64">
+            <div className="flex items-center">
             {/* będzie przekierowywał do eventu, */}
             <NavLink to="/your-event"> 
                 <Button>{brideName} & {groomName}</Button>
             </NavLink>
+            <button
+                    className="ml-2 p-1 text-gray-700 rounded-full"
+                    onClick={handleDelete}
+                >
+                    X
+                </button>
+            </div>
         </div>
     );
 };
