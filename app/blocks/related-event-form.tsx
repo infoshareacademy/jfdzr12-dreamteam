@@ -7,22 +7,10 @@ import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { useCurrentUser } from "~/db/auth";
-import { eventIdref, eventRef } from "~/db/event-ref";
+import { eventIdref, relatedEventRef } from "~/db/event-ref";
 import { getUserUID } from "~/db/get-user-uid";
-import { uniqueCodeGenerator } from "~/lib/utils";
+import { RelatedEventData, uniqueCodeGenerator } from "~/lib/utils";
 
-
-export interface RelatedEventData {
-    eventName: string,
-    eventDate: string,
-    eventTime: string,
-    eventPlace: string,
-    eventStreetAddress: string,
-    eventCityAddress: string,
-    eventCountryAddress: string,
-    eventID: string,
-    userUID: string,
-}
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
 
@@ -76,13 +64,13 @@ export default function RelatedEvent() {
             errors.eventTime = "Enter hours and minutes in 24-hour format"
         };
         if(!("eventPlace" in formData && typeof formData.eventPlace === "string" && formData.eventPlace.length >= 2)) {
-            errors.eventPlace = "Enter  event place, use at least 2 characters"
+            errors.eventPlace = "Enter event place, use at least 2 characters"
         };
         if(!("eventStreetAddress" in formData && typeof formData.eventStreetAddress === "string" && formData.eventStreetAddress.length >= 2)) {
-            errors.eventStreetAddress = "Enter  event street address, use at least 2 characters"
+            errors.eventStreetAddress = "Enter event street address, use at least 2 characters"
         };
         if(!("eventCityAddress" in formData && typeof formData.eventCityAddress === "string" && formData.eventCityAddress.length >= 2)) {
-            errors.eventCityAddress = "Enter  event city address, use at least 2 characters"
+            errors.eventCityAddress = "Enter event city address, use at least 2 characters"
         };
         if(!("eventCountryAddress" in formData && typeof formData.eventCountryAddress === "string" && formData.eventCountryAddress.length >= 2)) {
             errors.eventCountryAddress = "Enter event country address, use at least 2 characters"
@@ -94,7 +82,7 @@ export default function RelatedEvent() {
             return;
         } else {
             await addDoc(eventIdref, {"ID": nextID.value});
-            await addDoc(eventRef, formData);
+            await addDoc(relatedEventRef, formData);
             event.target.reset();
         }
     }
