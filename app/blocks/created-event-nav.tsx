@@ -9,6 +9,7 @@ import { getUserUID } from '~/db/get-user-uid';
 export const CreatedEventNav = () => {
     const [brideName, setBrideName] = useState('');
     const [groomName, setGroomName] = useState('');
+    const [eventID, setEventID] = useState('');
     const [eventExists, setEventExists] = useState(false);
     const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ export const CreatedEventNav = () => {
                 if (eventData) {
                     setBrideName(eventData.firstPerson);
                     setGroomName(eventData.secondPerson);
+                    setEventID(eventData.id); 
                     setEventExists(true); 
                 }
             })
@@ -26,28 +28,24 @@ export const CreatedEventNav = () => {
             });
     }, []);
 
-    const handleDelete = async () => {
+    const handleDelete = async (eventID: string) => {
         const createdEventNav = document.getElementById('created-event-nav');
         if (createdEventNav) {
             createdEventNav.remove();
-            getUserUID()
-                .then(async (currentUserUID) => {
-                    if (currentUserUID) {
-                        await deleteEventData(currentUserUID);
-                        console.log('The event data has been successfully deleted');
-                        navigate('/add-event');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error deleting event data', error);
-                });
+            try {
+                await deleteEventData(eventID);
+                console.log('The event data has been successfully deleted');
+                navigate('/add-event');
+            } catch (error) {
+                console.error('Error deleting event data', error);
+            }
         }
     };
-
-    const deleteEventData = async (currentUserUID: string): Promise<void> => {
-        await deleteDoc(doc(eventRef, currentUserUID));
+    
+    const deleteEventData = async (eventID: string): Promise<void> => {
+        await deleteDoc(doc(eventRef, eventID));
     };
-
+    
     return (
         <div className="flex justify-center items-center h-64" id="created-event-nav">
             {eventExists ? ( 
@@ -55,7 +53,8 @@ export const CreatedEventNav = () => {
                     <NavLink to="/your-event">
                         <Button>{brideName} & {groomName}</Button>
                     </NavLink>
-                    <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={handleDelete}> X </button>
+                    <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(eventID)}> X </button>
+
                 </div>
             ) : (
                 <p>No events</p>
