@@ -1,5 +1,4 @@
 import { Link, useParams } from "@remix-run/react";
-import { addDoc } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -7,10 +6,9 @@ import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { useCurrentUser } from "~/db/auth";
-import { eventIdref, eventRef } from "~/db/event-ref";
-import { getUserUID } from "~/db/get-user-uid";
 import { getYourEvent } from "~/db/get-your-event";
-import { EventData, uniqueCodeGenerator } from "~/lib/utils";
+import { updateYourEvent } from "~/db/update-your-event";
+import { EventData } from "~/lib/utils";
 
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
@@ -48,16 +46,9 @@ export default function EditEventPage() {
         const _formData = new FormData(event.target);
         console.log("_formData", _formData)
 
-        // if(userUID) {
-        // _formData.append('userUID', userUID)
-        // }
-
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
         };
-
-        // const nextID = await uniqueCodeGenerator.next();
-        // _formData.append("eventID", String(nextID.value));
 
         const formData = Object.fromEntries(_formData.entries());
 
@@ -111,16 +102,14 @@ export default function EditEventPage() {
         if(Object.keys(errors).length !== 0) {
             return;
         } else {
-            // await addDoc(eventIdref, {"ID": nextID.value});
-            await addDoc(eventRef, formData);
-            event.target.reset();
+            await updateYourEvent(eventData?.eventID, formData);
         }
     }
 
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
             <CardHeader>
-                <CardTitle className="text-center">{`Edit your event`}</CardTitle>
+                <CardTitle className="text-center">{`Edit your event number ${eventData?.eventID}`}</CardTitle>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
@@ -215,7 +204,7 @@ export default function EditEventPage() {
                                     {!!error?.firstPersonPhone && <em className="text-xs">{error.firstPersonPhone}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="econdPersonPhone">Second person phone number</Label>
+                                    <Label htmlFor="secondPersonPhone">Second person phone number</Label>
                                     <Input name="secondPersonPhone" type="tel" defaultValue={eventData?.secondPersonPhone}/>
                                     {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
                                 </div>
@@ -241,7 +230,7 @@ export default function EditEventPage() {
                 <Link to="/your-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
                     Cancel
                 </Link>
-                {/* nie wiem jak po kliknięciu i wysłaniu formularza przekierować użytkownika na stronę z wydarzeniami */}
+                {/* nie wiem jak po kliknięciu i wysłaniu formularza przekierować użytkownika na inną  stronę */}
                 <Button type="submit" form="EventForm" >Update event</Button>
             </CardFooter>
         </Card>
