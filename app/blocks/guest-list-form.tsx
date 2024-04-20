@@ -2,30 +2,28 @@ import { FormEvent, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/atoms/ui/card";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "~/db/firebase";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
+import { addDoc, query, where, getDocs } from "firebase/firestore";
+// import { db } from "~/db/firebase";
+import { uniqueGuestCode } from "~/lib/generator";
+import { guestIdRef, guestRef } from "~/db/guest-list-ref";
 
 interface NewGuest {
-  firstname: string;
-  lastname: string;
+  id: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  exists: boolean
 }
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
-const newGuestListData = collection(db, 'guest-list');
+// const newGuestListData = collection(db, 'guestlist');
 
 export const GuestListForm = () => {
-  const [error, setError] = useState<FormErrorData<NewGuest>>({});
+  const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
 
-  function handleOnSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleOnSubmit(e: FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
       return;
     }
@@ -33,57 +31,79 @@ export const GuestListForm = () => {
     const _formData = new FormData(e.target);
     console.log("_formData", _formData);
 
-    const formData = Object.fromEntries(new FormData(e.target));
-    console.log("formData", formData, e);
+    const guestID = await uniqueGuestCode.next();
+    _formData.append("guestID", String(guestID.value));
+
+    const formData = Object.fromEntries(_formData.entries());
+    console.log("submit", formData);
 
     const errors: FormErrorData<NewGuest> = {};
 
-    if (!("firstname" in formData && typeof formData.firstname === "string" && formData.firstname.length > 2)) {
-      errors.firstname = "Full first name is required";
-    }
-    if (!("lastname" in formData && typeof formData.lastname === "string" && formData.lastname.length > 2)) {
-      errors.lastname = "Full last name is required";
-    }
-    if (!("email" in formData && typeof formData.email === "string" && formData.email.includes("@"))) {
-      errors.email = "Email address must contain \"@\"";
+    if (!("firstName" in formData && typeof formData.firstName === "string" && formData.firstName.length >= 2)) {
+      errors.firstName = 'First name is required, min 2 characters';
     }
 
-    setError(errors);
-    addDoc(newGuestListData, formData);
+    if (!("lastName" in formData && typeof formData.lastName === "string" && formData.lastName.length >= 2)) {
+      errors.lastName = 'Last name is required, min 2 characters';
+    }
+
+    if (!("email" in formData && typeof formData.email === "string" && /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i.test(formData.email))) {
+      errors.email = 'Email is required';
+    }
+
+    const q = query(guestRef,
+      where('firstName', '==', formData.firstName),
+      where('lastName', '==', formData.lastName),
+      where('email', '==', formData.email)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (snapshot.size > 0) {
+      errors.exists = 'Guest already exists';
+    }
+
+    setErrors(errors);
+
+    if (Object.keys(errors).length !== 0) {
+      e.target.reset();
+      return;
+    } else {
+      await addDoc(guestIdRef, { "ID": guestID.value });
+      // addDoc(newGuestListData, formData);
+      await addDoc(guestRef, formData);
+      e.target.reset();
+    }
   }
 
   return (
-    <form onSubmit={handleOnSubmit}>
-      <Card className="w-fit">
-
+    <form onSubmit={handleOnSubmit} id="GuestListForm">
+      <Card className="w-9/12 mt-5 mb-6 mx-auto">
         <CardHeader>
           <CardTitle className="text-base">Add your new guest</CardTitle>
         </CardHeader>
-
         <CardContent className=" grid grid-cols-3 gap-6 items-top">
           <div className="space-y-1">
-            <Label htmlFor="firstname">First name</Label>
-            <Input name="firstname" type="text" placeholder="First name" />
-            {!!error?.firstname && <em className="text-xs">{error.firstname}</em>}
+            <Label htmlFor="firstName">First name</Label>
+            <Input name="firstName" type="text" placeholder="First name" />
+            {!!errors?.firstName && <em className="text-xs">{errors.firstName}</em>}
+            {errors.exists && <em className="text-xs">{errors.exists}</em>}
           </div>
-
           <div className="space-y-1">
-            <Label htmlFor="lastname">Last name</Label>
-            <Input name="lastname" type="text" placeholder="Last name" />
-            {!!error?.lastname && <em className="text-xs">{error.lastname}</em>}
+            <Label htmlFor="lastName">Last name</Label>
+            <Input name="lastName" type="text" placeholder="Last name" />
+            {!!errors?.lastName && <em className="text-xs">{errors.lastName}</em>}
           </div>
-
           <div className="space-y-1">
             <Label htmlFor="email">Email address</Label>
-            <Input name="email" type="email" placeholder="Email" />
-            {!!error?.email && <em className="text-xs">{error.email}</em>}
+            <Input name="email" type="text" placeholder="Email" />
+            {!!errors?.email && <em className="text-xs">{errors.email}</em>}
           </div>
-
         </CardContent>
-        <CardFooter className="grid">
-          <Button type='submit' className="justify-self-end">Add your guest</Button>
+        <CardFooter className='grid grid-cols-2 gap-4 '>
+          <Button variant='outline' className='w-full' >Cancel</Button>
+          <Button type='submit' form='GuestListForm' className='w-full' >Add your guest</Button>
         </CardFooter>
-
       </Card>
     </form>
   )

@@ -1,45 +1,48 @@
+import { Link } from "@remix-run/react";
 import { addDoc } from "firebase/firestore";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
+import { useCurrentUser } from "~/db/auth";
 import { eventIdref, eventRef } from "~/db/event-ref";
-import { uniqueCodeGenerator } from "~/lib/utils";
+import { getUserUID } from "~/db/get-user-uid";
+import { EventData, uniqueCodeGenerator } from "~/lib/utils";
 
-
-interface NewEventFormData {
-    firstPerson: string,
-    secondPerson: string,
-    eventDate: string,
-    eventTime: string,
-    ceremonyPlace: string,
-    ceremonyStreetAddress: string,
-    ceremonyCityAddress: string,
-    ceremonyCountryAddress: string,
-    receptionPlace: string,
-    receptionStreetAddress: string,
-    receptionCityAddress: string,
-    receptionCountryAddress: string,
-    firstPersonPhone: string,
-    secondPersonPhone: string,
-}
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
 
 export default function NewEventPage() {
 
-    const [error, setError] = useState<FormErrorData<NewEventFormData>>();
+    const [error, setError] = useState<FormErrorData<EventData> | null>();
     const [eventDate, setEventDate] = useState<Date | undefined>();
+    const [userUID, setUserUID] = useState<string | null>();
+
+    const user = useCurrentUser();
+
+    useEffect(() => {
+        if(user.status === 'authenticated') {
+            getUserUID()
+                .then(res => setUserUID(res))
+        } else {
+            setUserUID(null)
+        }
+    }, [user.status])
 
     async function handleOnSubmit(event: FormEvent) {
         if(!(event.target instanceof HTMLFormElement)) {
             return
         }
         event.preventDefault();
+
         const _formData = new FormData(event.target);
         console.log("_formData", _formData)
+
+        if(userUID) {
+        _formData.append('userUID', userUID)
+        }
 
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
@@ -50,7 +53,7 @@ export default function NewEventPage() {
 
         const formData = Object.fromEntries(_formData.entries());
 
-        const errors: FormErrorData<NewEventFormData> = {};
+        const errors: FormErrorData<EventData> = {};
 
         if(!("firstPerson" in formData && typeof formData.firstPerson === "string" && formData.firstPerson.length >= 2)) {
             errors.firstPerson = "Enter name, use at least 2 characters"
@@ -104,7 +107,6 @@ export default function NewEventPage() {
             await addDoc(eventRef, formData);
             event.target.reset();
         }
-        
     }
 
     return (
@@ -225,7 +227,9 @@ export default function NewEventPage() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Button className="col-start-2" variant="outline">Cancel</Button>
+                <Button className="col-start-2" variant="outline">
+                    <Link to="/add-event">Cancel</Link>
+                </Button>
                 <Button type="submit" form="EventForm" >Add your event</Button>
             </CardFooter>
         </Card>
