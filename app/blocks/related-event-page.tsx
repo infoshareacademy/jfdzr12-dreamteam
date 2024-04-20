@@ -28,6 +28,9 @@ export default function YourRelatedEvent() {
             {eventData && (
                 <>
                     <div className="flex items-center justify-center p-6">
+                        <p>{eventData.eventName}</p>
+                    </div>
+                    <div className="flex items-center justify-center p-6">
                         <p>{eventDateString}</p>
                     </div>
                     <div className="flex items-center justify-center p-6">
@@ -54,7 +57,7 @@ export default function YourRelatedEvent() {
                         </div>
                         <div>
                             {/* tutaj chyba powinna być dynamiczna ruta */}
-                            <Link to={"/edit-your-event"}/*${eventData.eventID}*/ className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Edit your event</Link>
+                            <Link to={"/edit-your-related-event"}/*${eventData.eventID}*/ className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Edit your event</Link>
                         </div>
                         <div>
                             <Link to="/add-event" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Back to your events</Link>
