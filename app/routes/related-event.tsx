@@ -1,8 +1,9 @@
-import RelatedEvent from "~/blocks/related-event-form";
+import YourRelatedEvent from "~/blocks/related-event-page";
+
 
 
 export default function RelatedEventPage() {
     return (
-        <RelatedEvent />
+        <YourRelatedEvent />
     )
 }
