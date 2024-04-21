@@ -24,9 +24,24 @@ interface Budget {
 
 const budgetsCollection = collection(db, "budget");
 
-export function addBudget(budgetData: Budget[]) {
+// export function addBudget(budgetData: Budget[]) {
+//   // Tworzymy dokument do dodania
+//   const newDoc = doc(budgetsCollection);
+
+//   // Ustawiamy dokument z budżetem w kolekcji
+//   return setDoc(newDoc, { budget: budgetData }).then(() => {
+//     console.log('Budżet zapisany pomyślnie!');
+//     alert('Budżet zapisany pomyślnie!');
+//   }).catch((error) => {
+//     console.error('Błąd podczas zapisywania budżetu: ', error);
+//     throw error;
+//   });
+// }
+
+
+export function addBudget(budgetData: Budget[], documentName: string) {
   // Tworzymy dokument do dodania
-  const newDoc = doc(budgetsCollection);
+  const newDoc = doc(budgetsCollection, documentName);
 
   // Ustawiamy dokument z budżetem w kolekcji
   return setDoc(newDoc, { budget: budgetData }).then(() => {
