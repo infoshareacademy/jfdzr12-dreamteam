@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { Button } from "~/atoms/ui/button";
 import { Label } from "~/atoms/ui/label";
 // import { MySelect } from '../atoms/ui/my-select';
@@ -20,7 +20,8 @@ import { Select, SelectContent, SelectItem, SelectPortal, SelectTrigger, SelectV
 import { MySelect } from '~/atoms/ui/my-select';
 import { NewGuest, addGuest } from '~/db/guest';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/atoms/ui/card';
-import { FieldPath } from 'firebase/firestore';
+import { FieldPath, collection, onSnapshot } from 'firebase/firestore';
+import { db } from '~/db/firebase';
 
 
 const textLabelFirstName = "First name";
@@ -56,8 +57,17 @@ const alcoholOptions = [
   {value: "gin", label: "Gin"}, 
 ] as const
 
+const guestFromDataBase = collection(db, 'guestlist');
+
+
 type AlcoholKind = typeof alcoholOptions[number]['value']
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
+interface Guest {
+  id: string;
+  guestID: string;
+  firstName: string;
+  lastName: string;
+}
 // interface FormValues {
 //   isAlcoholCheckedGuest?: string[];
 //   alcohols?: string[];
@@ -80,6 +90,24 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     }
   }, {});
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
+  const [guests, setGuests] = useState<Guest[]>([]);
+
+  const getGuestList = () => {
+    const guestListCollection = collection(db, 'guestlist');
+    onSnapshot(guestListCollection, res => {
+      const guestList = res.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      } as Guest));
+      setGuests(guestList);
+    });
+  };
+  
+  useEffect(() => {
+    getGuestList();
+  }, []);
+
+  const guestId =
 
   async function handleSubmit (e: React.FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
@@ -108,14 +136,19 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       errors.lastName = 'Last name is required, min 2 characters';
     }
 
+    if (!("guestUniqueId" in formData && typeof formData.guestUniqueId === "string" && formData.guestUniqueId.length === 4)) {
+      errors.guestUniqueId = 'Your four-digit code is required';
+    }
+
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
-      console.log('Names errors')
-    }
+      console.log('Names errors');
+      return;
+    } else {e.target.reset();}
 
     console.log('handleSubmit', formData)
     // addGuest(formData);
-    e.target.reset();
+    // e.target.reset();
   };
 
   return (
@@ -146,6 +179,16 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   />
                   {!!errors?.lastName && <em className="text-xs">{errors.lastName}</em>}
                 </div>
+              </div>
+
+              <div>
+                <Label htmlFor="guestUniqueId">Your four-digit code</Label>
+                  <Input
+                  name="guestUniqueId"
+                  // type="number"
+                  // pattern="[0-9]{4}"
+                  />
+                  {!!errors?.guestUniqueId && <em className="text-xs">{errors.guestUniqueId}</em>}
               </div>
               
               <div>

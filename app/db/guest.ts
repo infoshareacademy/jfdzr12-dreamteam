@@ -6,6 +6,7 @@ const guestRef = collection(db, 'guest');
 export interface NewGuest {
     firstName: string;
     lastName: string;
+    guestUniqueId: string;
     presence: string;
     partner?: string;
     child?: string;
