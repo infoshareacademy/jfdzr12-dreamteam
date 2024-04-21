@@ -1,5 +1,5 @@
-// import type { MetaFunction } from "@remix-run/node";
-
+import type { MetaFunction } from "@remix-run/node";
+import { Button } from "~/atoms/ui/button";
 import { Card } from "~/atoms/ui/card";
 import { BudgetForm } from "~/blocks/budgetForm";
 import { EventForm } from "~/blocks/eventForm";
@@ -19,18 +19,12 @@ import { UserPage } from "~/blocks/userPage";
 
 export default function Index() {
   return (
-   <>
-         <BudgetForm onSubmit={(e)=>{console.log("Onsubmit", e)}}/>
-      
-      {/* <Card>  
-        // <GuestsForm onSubmit={(e)=>{console.log("Onsubmit", e)}}/>
-        </Card>
-      <Card>  
-        <FormForGuest onSubmit={(e)=>{console.log(e)}} />
+    <div className="grid place-items-center h-screen" /*style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}*/>
+      <Card>
+        <GuestsForm onSubmit={(e) => { console.log("Onsubmit", e) }} />
+        <FormForGuest onSubmit={(e) => { console.log(e) }} />
       </Card>
-      <EventForm/>
-      <UserPage /> */}
-    </>
-  )
-   
+      <UserPage />
+    </div>
+  );
 }
