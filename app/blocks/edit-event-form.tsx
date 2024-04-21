@@ -211,15 +211,6 @@ export default function EditEventPage() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Other</p>
-                            <div className="grid grid-cols-3 gap-4">
-                                <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="color">You can choose lead color of your event</Label> 
-                                    <Input name="color" type="color" defaultValue={eventData?.color}/>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </form>
             </CardContent>
