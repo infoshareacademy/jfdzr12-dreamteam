@@ -7,7 +7,6 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { getUserUID } from '~/db/get-user-uid';
 
 export const CreatedEventNav = () => {
-
     const [brideName, setBrideName] = useState('');
     const [groomName, setGroomName] = useState('');
     const [eventID, setEventID] = useState('');
@@ -29,24 +28,28 @@ export const CreatedEventNav = () => {
             });
     }, []);
 
-    const handleDelete = (eventID: string) => {
-        const createdEventNav = document.getElementById('created-event-nav');
-        if (createdEventNav) {
-            createdEventNav.remove();
-            deleteEventData(eventID)
-                .then(() => {
-                    console.log('The event data has been successfully deleted');
-                    navigate('/add-event');
-                })
-                .catch((error) => {
-                    console.error('Error deleting event data', error);
-                });
-        }
-    };
-    
-    const deleteEventData = async (eventID: string): Promise<void> => {
+    const deleteEventData = (eventID: string): Promise<void> => {
         const eventDoc = doc(eventRef, eventID);
-        await deleteDoc(eventDoc);
+        return deleteDoc(eventDoc)
+            .then(() => {
+                console.log("The document has been successfully deleted.");
+            })
+            .catch(error => {
+                console.error('Error deleting document:', error);
+                throw error; 
+            });
+    };
+
+    const handleDelete = (eventID: string) => {
+        deleteEventData(eventID)
+            .then(() => {
+                console.log('The event data has been successfully deleted');
+                setEventExists(false); 
+                navigate('/add-event');
+            })
+            .catch((error) => {
+                console.error('Error deleting event data', error);
+            });
     };
     
     return (
