@@ -31,6 +31,7 @@ export function addBudget(budgetData: Budget[]) {
   // Ustawiamy dokument z budżetem w kolekcji
   return setDoc(newDoc, { budget: budgetData }).then(() => {
     console.log('Budżet zapisany pomyślnie!');
+    alert('Budżet zapisany pomyślnie!');
   }).catch((error) => {
     console.error('Błąd podczas zapisywania budżetu: ', error);
     throw error;
