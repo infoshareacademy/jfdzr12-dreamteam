@@ -110,12 +110,12 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
 
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
-      console.log('Errorssss')
+      console.log('Names errors')
     }
 
     console.log('handleSubmit', formData)
     // addGuest(formData);
-    
+    e.target.reset();
   };
 
   return (
@@ -124,7 +124,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
         <CardTitle className='text-center'>Guest Form</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} id="GuestForm" method="post" 
+        <form onSubmit={handleSubmit} id="GuestForm" method="post"  
         // action="/guest"
         >
           <div className="grid w-full items-center gap-4">
@@ -136,7 +136,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   <Input 
                   name="firstName"
                   />
-                  {!!errors?.firstName && <em className="text-xs text-red-500">{errors.firstName}</em>}
+                  {!!errors?.firstName && <em className="text-xs">{errors.firstName}</em>}
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
@@ -144,7 +144,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   <Input 
                   name="lastName"
                   />
-                  {!!errors?.lastName && <em className="text-xs text-red-500">{errors.lastName}</em>}
+                  {!!errors?.lastName && <em className="text-xs">{errors.lastName}</em>}
                 </div>
               </div>
               
@@ -298,9 +298,8 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
           </div>
         </form>
         </CardContent>
-        {/* Cancel key not working */}
         <CardFooter className='grid grid-cols-2 gap-4'>
-          <Button variant='outline' className='w-full'>{textButtonCancel}</Button>
+          <Button form="GuestForm" variant='outline' type="reset" className='w-full'>{textButtonCancel}</Button>
           <Button type="submit" form="GuestForm">{textButtonSubmit}</Button>
         </CardFooter>
     </Card>
