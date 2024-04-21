@@ -1,5 +1,4 @@
-import { Link } from "@remix-run/react";
-import { addDoc } from "firebase/firestore";
+import { Link, useParams } from "@remix-run/react";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -7,27 +6,34 @@ import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { useCurrentUser } from "~/db/auth";
-import { eventIdref, eventRef } from "~/db/event-ref";
-import { getUserUID } from "~/db/get-user-uid";
-import { EventData, uniqueCodeGenerator } from "~/lib/utils";
+import { getYourEvent } from "~/db/get-your-event";
+import { updateYourEvent } from "~/db/update-your-event";
+import { EventData } from "~/lib/utils";
 
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
 
-export default function NewEventPage() {
+export default function EditEventPage() {
 
     const [error, setError] = useState<FormErrorData<EventData> | null>();
     const [eventDate, setEventDate] = useState<Date | undefined>();
-    const [userUID, setUserUID] = useState<string | null>();
+    const [eventData, setEventData] = useState<EventData | null>();
+
+    // const params = useParams();
+    // const eventId = params.eventID;
 
     const user = useCurrentUser();
 
     useEffect(() => {
         if(user.status === 'authenticated') {
-            getUserUID()
-                .then(res => setUserUID(res))
+            getYourEvent()
+            .then(res => {
+                const eventData = res as EventData;
+                setEventData(eventData);
+                setEventDate(new Date(eventData.eventDate))});
         } else {
-            setUserUID(null)
+            setEventData(null);
+            setEventDate(undefined);
         }
     }, [user.status])
 
@@ -40,16 +46,9 @@ export default function NewEventPage() {
         const _formData = new FormData(event.target);
         console.log("_formData", _formData)
 
-        if(userUID) {
-        _formData.append('userUID', userUID)
-        }
-
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
         };
-
-        const nextID = await uniqueCodeGenerator.next();
-        _formData.append("eventID", String(nextID.value));
 
         const formData = Object.fromEntries(_formData.entries());
 
@@ -103,16 +102,14 @@ export default function NewEventPage() {
         if(Object.keys(errors).length !== 0) {
             return;
         } else {
-            await addDoc(eventIdref, {"ID": nextID.value});
-            await addDoc(eventRef, formData);
-            event.target.reset();
+            await updateYourEvent(eventData?.eventID, formData);
         }
     }
 
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
             <CardHeader>
-                <CardTitle className="text-center">Your dream event</CardTitle>
+                <CardTitle className="text-center">{`Edit your event number ${eventData?.eventID}`}</CardTitle>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
@@ -122,12 +119,12 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="firstPerson" >First person name</Label> 
-                                    <Input name="firstPerson"/>
+                                    <Input name="firstPerson" defaultValue={eventData?.firstPerson}/>
                                     {!!error?.firstPerson && <em className="text-xs">{error.firstPerson}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="secondPerson">Second person name</Label> 
-                                    <Input name="secondPerson"/>
+                                    <Input name="secondPerson" defaultValue={eventData?.secondPerson}/>
                                     {!!error?.secondPerson && <em className="text-xs">{error.secondPerson}</em>} 
                                 </div>
                             </div>
@@ -142,7 +139,7 @@ export default function NewEventPage() {
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventTime">{`Time (in 24-hour format)`}</Label> 
-                                    <Input name="eventTime" type="time"/>
+                                    <Input name="eventTime" type="time" defaultValue={eventData?.eventTime}/>
                                     {!!error?.eventTime && <em className="text-xs">{error.eventTime}</em>}
                                 </div>
                             </div>
@@ -152,23 +149,23 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyPlace">Place name</Label> 
-                                    <Input name="ceremonyPlace" />
+                                    <Input name="ceremonyPlace" defaultValue={eventData?.ceremonyPlace}/>
                                     {!!error?.ceremonyPlace && <em className="text-xs">{error.ceremonyPlace}</em>}
                                     
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyStreetAddress">Street</Label> 
-                                    <Input name="ceremonyStreetAddress" />
+                                    <Input name="ceremonyStreetAddress" defaultValue={eventData?.ceremonyStreetAddress}/>
                                     {!!error?.ceremonyStreetAddress && <em className="text-xs">{error.ceremonyStreetAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyCityAddress">City</Label> 
-                                    <Input name="ceremonyCityAddress" />
+                                    <Input name="ceremonyCityAddress" defaultValue={eventData?.ceremonyCityAddress}/>
                                     {!!error?.ceremonyCityAddress && <em className="text-xs">{error.ceremonyCityAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyCountryAddress">Country</Label> 
-                                    <Input name="ceremonyCountryAddress" />
+                                    <Input name="ceremonyCountryAddress" defaultValue={eventData?.ceremonyCountryAddress}/>
                                     {!!error?.ceremonyCountryAddress && <em className="text-xs">{error.ceremonyCountryAddress}</em>}
                                 </div>
                             </div>
@@ -178,22 +175,22 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionPlace">Place name</Label>
-                                    <Input name="receptionPlace" />
+                                    <Input name="receptionPlace" defaultValue={eventData?.receptionPlace}/>
                                     {!!error?.receptionPlace && <em className="text-xs">{error.receptionPlace}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionStreetAddress">Street</Label> 
-                                    <Input name="receptionStreetAddress" />
+                                    <Input name="receptionStreetAddress" defaultValue={eventData?.receptionStreetAddress}/>
                                     {!!error?.receptionStreetAddress && <em className="text-xs">{error.receptionStreetAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionCityAddress">City</Label> 
-                                    <Input name="receptionCityAddress" />
+                                    <Input name="receptionCityAddress" defaultValue={eventData?.receptionCityAddress}/>
                                     {!!error?.receptionCityAddress && <em className="text-xs">{error.receptionCityAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionCountryAddress">Country</Label> 
-                                    <Input name="receptionCountryAddress" />
+                                    <Input name="receptionCountryAddress" defaultValue={eventData?.receptionCountryAddress}/>
                                     {!!error?.receptionCountryAddress && <em className="text-xs">{error.receptionCountryAddress}</em>}
                                 </div>
                             </div>
@@ -203,12 +200,12 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="firstPersonPhone">First person phone number</Label>
-                                    <Input name="firstPersonPhone" type="tel" />
+                                    <Input name="firstPersonPhone" type="tel" defaultValue={eventData?.firstPersonPhone}/>
                                     {!!error?.firstPersonPhone && <em className="text-xs">{error.firstPersonPhone}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="econdPersonPhone">Second person phone number</Label>
-                                    <Input name="secondPersonPhone" type="tel" />
+                                    <Label htmlFor="secondPersonPhone">Second person phone number</Label>
+                                    <Input name="secondPersonPhone" type="tel" defaultValue={eventData?.secondPersonPhone}/>
                                     {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
                                 </div>
                             </div>
@@ -218,7 +215,7 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="color">You can choose lead color of your event</Label> 
-                                    <Input name="color" type="color" />
+                                    <Input name="color" type="color" defaultValue={eventData?.color}/>
                                 </div>
                             </div>
                         </div>
@@ -230,11 +227,11 @@ export default function NewEventPage() {
                 {/* <Button className="col-start-2" variant="outline">
                     <Link to="/add-event">Cancel</Link>
                 </Button> */}
-                <Link to="/add-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
+                <Link to="/your-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
                     Cancel
                 </Link>
-                {/* nie wiem jak po kliknięciu i wysłaniu formularza przekierować użytkownika na stronę z wydarzeniami */}
-                <Button type="submit" form="EventForm" >Add your event</Button>
+                {/* nie wiem jak po kliknięciu i wysłaniu formularza przekierować użytkownika na inną  stronę */}
+                <Button type="submit" form="EventForm" >Update event</Button>
             </CardFooter>
         </Card>
     )
