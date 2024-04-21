@@ -25,6 +25,7 @@ export const GuestListTable = () => {
         _id: doc.id,
         ...doc.data()
       } as Guest));
+      console.log("tuturutu", guestList);
       setGuests(guestList);
     });
   };

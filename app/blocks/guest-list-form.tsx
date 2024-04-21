@@ -7,13 +7,16 @@ import { addDoc, query, where, getDocs } from "firebase/firestore";
 // import { db } from "~/db/firebase";
 import { uniqueGuestCode } from "~/lib/generator";
 import { guestIdRef, guestRef } from "~/db/guest-list-ref";
+import { GuestListTable } from '~/blocks/guest-list-table';
+import { Link } from "@remix-run/react";
 
 interface NewGuest {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
-  exists: boolean
+  exists: boolean;
+  timestump: string;
 }
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
@@ -31,8 +34,12 @@ export const GuestListForm = () => {
     const _formData = new FormData(e.target);
     console.log("_formData", _formData);
 
-    const guestID = await uniqueGuestCode.next();
+    const guestID = uniqueGuestCode.next();
     _formData.append("guestID", String(guestID.value));
+
+    const currentDate = new Date();
+    const addTimes = currentDate.getTime();
+    _formData.append("timestamp", addTimes.toString());
 
     const formData = Object.fromEntries(_formData.entries());
     console.log("submit", formData);
@@ -66,13 +73,13 @@ export const GuestListForm = () => {
     setErrors(errors);
 
     if (Object.keys(errors).length !== 0) {
-      e.target.reset();
+      // e.target.reset();
       return;
     } else {
-      await addDoc(guestIdRef, { "ID": guestID.value });
-      // addDoc(newGuestListData, formData);
-      await addDoc(guestRef, formData);
+      addDoc(guestIdRef, { "ID": guestID.value });
+      addDoc(guestRef, formData);
       e.target.reset();
+      GuestListTable.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
     }
   }
 
@@ -101,7 +108,8 @@ export const GuestListForm = () => {
           </div>
         </CardContent>
         <CardFooter className='grid grid-cols-2 gap-4 '>
-          <Button variant='outline' className='w-full' >Cancel</Button>
+          <Button type='reset' variant='outline' className='w-full'>
+            <Link to='/add-event/new-event'>Cancel</Link></Button>
           <Button type='submit' form='GuestListForm' className='w-full' >Add your guest</Button>
         </CardFooter>
       </Card>
