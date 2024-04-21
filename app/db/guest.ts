@@ -18,7 +18,7 @@ export interface NewGuest {
     alcohols?: string[];
     accommodation?: string;
     transport?: string; 
-
+    exists: boolean;
 }
 
 export function addGuest (guest: NewGuest) {

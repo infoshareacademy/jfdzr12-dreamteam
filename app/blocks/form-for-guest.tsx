@@ -20,8 +20,12 @@ import { Select, SelectContent, SelectItem, SelectPortal, SelectTrigger, SelectV
 import { MySelect } from '~/atoms/ui/my-select';
 import { NewGuest, addGuest } from '~/db/guest';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/atoms/ui/card';
-import { FieldPath, collection, onSnapshot } from 'firebase/firestore';
+import { FieldPath, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '~/db/firebase';
+import { guestRef } from '~/db/guest-list-ref';
+import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
+
+
 
 
 const textLabelFirstName = "First name";
@@ -40,6 +44,10 @@ const textLabelTransport = "Will you require transportation? ";
 const textButtonSubmit = "Send";
 const textButtonCancel = "Cancel";
 
+const basicAnswer = [
+  {value: 'yes', label: 'Yes'},
+  {value: 'no', label: 'No'},
+]
 
 const menuOptions = [
   {value: 'standard', label: 'Standard'},
@@ -57,7 +65,7 @@ const alcoholOptions = [
   {value: "gin", label: "Gin"}, 
 ] as const
 
-const guestFromDataBase = collection(db, 'guestlist');
+// const guestFromDataBase = collection(db, 'guestlist');
 
 
 type AlcoholKind = typeof alcoholOptions[number]['value']
@@ -78,6 +86,7 @@ interface NameFormProps {
 }
 
 export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
+  const [show, setShow] = useState<string>('')
   const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean | 'indeterminate'>(false);
   const [showQuestionAboutChild, setShowQuestionAboutChild] = useState<boolean | 'indeterminate'>(false);
   const [showQuestionAboutPartner, setShowQuestionAboutPartner] = useState<boolean | 'indeterminate'>(false);
@@ -107,7 +116,11 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     getGuestList();
   }, []);
 
-  const guestId =
+
+const handleValueChange = (value:any) => {
+  setShow(value);
+}
+  
 
   async function handleSubmit (e: React.FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
@@ -140,6 +153,16 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       errors.guestUniqueId = 'Your four-digit code is required';
     }
 
+    const guestId = query(guestRef,
+      where('guestID', '==', formData.guestUniqueId)
+    )
+
+    const snapshot = await getDocs(guestId);
+
+    if (snapshot.size === 0) {
+      errors.exists = "Wrong code";
+    } else {}
+    
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
       console.log('Names errors');
@@ -147,7 +170,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     } else {e.target.reset();}
 
     console.log('handleSubmit', formData)
-    // addGuest(formData);
+    addGuest(formData);
     // e.target.reset();
   };
 
@@ -170,6 +193,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   name="firstName"
                   />
                   {!!errors?.firstName && <em className="text-xs">{errors.firstName}</em>}
+                  
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
@@ -189,8 +213,22 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   // pattern="[0-9]{4}"
                   />
                   {!!errors?.guestUniqueId && <em className="text-xs">{errors.guestUniqueId}</em>}
+                  {!!errors?.exists && <em className="text-xs">{errors.exists}</em>}
               </div>
               
+              <div>
+              <RadioGroup value={show} onChange={handleValueChange}>{textLabelPresence}
+                <div className="flex items-center space-x-2">
+                {basicAnswer.map((element)=>{
+                          return <div key={element.value}>
+                                  <RadioGroupItem value={element.value} id={element.value} checked={show === element.value} onChange={() => handleValueChange(element.value)} />
+                                  <Label htmlFor={element.value}>{element.label}</Label>
+                                </div>
+                        })}
+                 </div>
+              </RadioGroup>
+              </div>
+
               <div>
                 <Label htmlFor="presence">{textLabelPresence}</Label>
                 <Checkbox 
@@ -341,8 +379,9 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
           </div>
         </form>
         </CardContent>
-        <CardFooter className='grid grid-cols-2 gap-4'>
+        <CardFooter className='grid grid-cols-3 gap-4'>
           <Button form="GuestForm" variant='outline' type="reset" className='w-full'>{textButtonCancel}</Button>
+          {/* <Button form="GuestForm">OK</Button> */}
           <Button type="submit" form="GuestForm">{textButtonSubmit}</Button>
         </CardFooter>
     </Card>
