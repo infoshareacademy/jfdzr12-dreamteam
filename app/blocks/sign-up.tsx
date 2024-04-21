@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/ato
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { registerWithEmailAndPassword } from "~/db/auth";
-
+import { Link } from "@remix-run/react";
 
 export const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -17,6 +17,8 @@ export const SignUp = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSignUp = async () => {
     setFirstNameError("");
@@ -114,41 +116,57 @@ export const SignUp = () => {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 px-2 py-1 text-sm"
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="confirm-password">Confirm Password</Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              placeholder="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="confirm-password"
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-0 px-2 py-1 text-sm"
+              >
+                {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
             {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
           </div>
+          <Link to="/add-event">
           <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
-            Create an account
+            Create an account 
           </Button>
+          </Link>
         </div>
         <div className="mt-4 text-center text-sm">
-          Already have an account? Sign in{" "}
-         {/* <Link to="#" className="underline"> 
-//             Sign in
-//           </Link> */}
+          Already have an account?{" "}
+         <Link to="/sign-in" className="underline"> Sign in </Link>
         </div>
       </CardContent>
     </Card>
   );
 };
-
-
