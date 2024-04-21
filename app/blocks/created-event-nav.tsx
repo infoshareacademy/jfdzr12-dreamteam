@@ -1,13 +1,16 @@
+
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from '@remix-run/react';
 import { Button } from '~/atoms/ui/button';
 import { eventRef } from '~/db/event-ref';
 import { deleteDoc, doc, onSnapshot, collection } from "firebase/firestore";
 import { db } from '~/db/firebase';
+import React from 'react';
+
 export const CreatedEventNav = () => {
-    const [event, setEvent] = useState<Event[]>([]);
+    const [events, setEvents] = useState<Event[]>([]);
     const [eventExists, setEventExists] = useState(false);
-    const navigate = useNavigate();
+
 
     interface Event {
         firstPerson: string;
@@ -15,60 +18,51 @@ export const CreatedEventNav = () => {
         _id: string;
         eventID: string;
     }
-    const getEventList = ()=>{
+
+    const getEventList = () => {
         const eventCollection = collection(db, 'event');
         onSnapshot(eventCollection, res => {
-          const eventList = res.docs.map(doc => ({
-            _id: doc.id,
-            ...doc.data()
-          } as Event));
-          setEvent(eventList);
-          setEventExists(true); 
+            const eventList = res.docs.map(doc => ({
+                _id: doc.id,
+                ...doc.data()
+            } as Event));
+            setEvents(eventList);
+            setEventExists(true); 
         });
-      };
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         getEventList();
-        
-      }, []);
+    }, []);
 
     const handleDelete = (eventID: string) => {
-        const createdEventNav = document.getElementById('created-event-nav');
-        if (createdEventNav) {
-            createdEventNav.remove();
-            deleteEventData(eventID)
-                .then(() => {
-                    console.log('The event data has been successfully deleted');
-                    navigate('/add-event');
-                })
-                .catch((error) => {
-                    console.error('Error deleting event data', error);
-                });
-        }
-    };
-    
-    const deleteEventData = async (eventID: string): Promise<void> => {
         const eventDoc = doc(eventRef, eventID);
-        await deleteDoc(eventDoc);
+        deleteDoc(eventDoc)
+            .then(() => {
+                setEvents(prevEvents => prevEvents.filter(event => event._id !== eventID));
+                console.log('The event data has been successfully deleted');
+            })
+            .catch(error => {
+                console.error('Error deleting event data', error);
+            });
     };
     
     return (
         <div className="flex justify-center items-center h-64" id="created-event-nav">
             {eventExists ? ( 
                 <div className="flex items-center">
-                    <Link to="/your-event">
-                        {event.map((doc)=>(
-                        <>
-                        <Button key={doc._id} >{doc.firstPerson} & {doc.secondPerson}
-                        </Button> 
-                        <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(doc._id)}> X </button>
-                        </>
-                        ))}
-                    </Link>
+                    {events.map((event) => (
+                        <React.Fragment key={event._id}>
+                            <Link to="/your-event">
+                                <Button>{event.firstPerson} & {event.secondPerson}</Button>
+                            </Link>
+                            <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}> X </button>
+                        </React.Fragment>
+                    ))}
                 </div>
             ) : (
                 <p>No events</p>
             )}
         </div>
     );
-}
-
+};
