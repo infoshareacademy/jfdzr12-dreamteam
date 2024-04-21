@@ -1,10 +1,11 @@
+
 import { useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { registerWithEmailAndPassword } from "~/db/auth";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 
 export const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -19,7 +20,7 @@ export const SignUp = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const navigate = useNavigate(); 
   const handleSignUp = async () => {
     setFirstNameError("");
     setLastNameError("");
@@ -63,6 +64,7 @@ export const SignUp = () => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      navigate("/add-event"); 
     } else {
       console.error("Sign up error:", signUpResult.error);
     }
@@ -157,7 +159,7 @@ export const SignUp = () => {
             {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
           </div>
           <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
-            Create an account
+            Create an account 
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
