@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
@@ -9,6 +9,8 @@ import { uniqueGuestCode } from "~/lib/generator";
 import { guestIdRef, guestRef } from "~/db/guest-list-ref";
 import { GuestListTable } from '~/blocks/guest-list-table';
 import { Link } from "@remix-run/react";
+import { useCurrentUser } from "~/db/auth";
+import { getUserUID } from "~/db/get-user-uid";
 
 interface NewGuest {
   id: string;
@@ -25,6 +27,18 @@ type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
 export const GuestListForm = () => {
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
+  const [userUID, setUserUID] = useState<string | null>();
+
+  const user = useCurrentUser();
+
+  useEffect(() => {
+    if (user.status === 'authenticated') {
+      getUserUID()
+        .then(res => setUserUID(res))
+    } else {
+      setUserUID(null)
+    }
+  }, [user.status])
 
   async function handleOnSubmit(e: FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
@@ -33,6 +47,10 @@ export const GuestListForm = () => {
     e.preventDefault();
     const _formData = new FormData(e.target);
     console.log("_formData", _formData);
+
+    if (userUID) {
+      _formData.append('userUID', userUID)
+    }
 
     const guestID = uniqueGuestCode.next();
     _formData.append("guestID", String(guestID.value));
