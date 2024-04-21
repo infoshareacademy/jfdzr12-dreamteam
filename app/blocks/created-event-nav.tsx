@@ -9,8 +9,6 @@ import React from 'react';
 
 export const CreatedEventNav = () => {
     const [events, setEvents] = useState<Event[]>([]);
-    const [eventExists, setEventExists] = useState(false);
-
 
     interface Event {
         firstPerson: string;
@@ -27,7 +25,6 @@ export const CreatedEventNav = () => {
                 ...doc.data()
             } as Event));
             setEvents(eventList);
-            setEventExists(true); 
         });
     };
 
@@ -49,20 +46,16 @@ export const CreatedEventNav = () => {
     
     return (
         <div className="flex justify-center items-center h-64" id="created-event-nav">
-            {eventExists ? ( 
-                <div className="flex items-center">
-                    {events.map((event) => (
-                        <React.Fragment key={event._id}>
-                            <Link to="/your-event">
-                                <Button>{event.firstPerson} & {event.secondPerson}</Button>
-                            </Link>
-                            <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}> X </button>
-                        </React.Fragment>
-                    ))}
-                </div>
-            ) : (
-                <p>No events</p>
-            )}
+            <div className="flex items-center">
+                {events.map((event) => (
+                    <React.Fragment key={event._id}>
+                        <Link to="/your-event">
+                            <Button>{event.firstPerson} & {event.secondPerson}</Button>
+                        </Link>
+                        <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}> X </button>
+                    </React.Fragment>
+                ))}
+            </div>
         </div>
     );
 };
