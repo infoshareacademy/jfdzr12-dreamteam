@@ -57,7 +57,7 @@ const alcoholOptions = [
 ] as const
 
 type AlcoholKind = typeof alcoholOptions[number]['value']
-
+type FormErrorData<T> = Partial<Record<keyof T, string>>;
 // interface FormValues {
 //   isAlcoholCheckedGuest?: string[];
 //   alcohols?: string[];
@@ -79,8 +79,9 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       [alcoholKind]: !prev[alcoholKind]
     }
   }, {});
+  const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit (e: React.FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
       return;
     }
@@ -97,6 +98,20 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       }
     }
     formData.alcohols = alcoholValues
+
+    const errors: FormErrorData<NewGuest> = {};
+    if (!("firstName" in formData && typeof formData.firstName === "string" && formData.firstName.length >= 2)) {
+      errors.firstName = 'First name is required, min 2 characters';
+    }
+
+    if (!("lastName" in formData && typeof formData.lastName === "string" && formData.lastName.length >= 2)) {
+      errors.lastName = 'Last name is required, min 2 characters';
+    }
+
+    setErrors(errors);
+    if (Object.keys(errors).length !== 0) {
+      console.log('Errorssss')
+    }
 
     console.log('handleSubmit', formData)
     // addGuest(formData);
@@ -121,6 +136,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   <Input 
                   name="firstName"
                   />
+                  {!!errors?.firstName && <em className="text-xs text-red-500">{errors.firstName}</em>}
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
@@ -128,6 +144,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   <Input 
                   name="lastName"
                   />
+                  {!!errors?.lastName && <em className="text-xs text-red-500">{errors.lastName}</em>}
                 </div>
               </div>
               
