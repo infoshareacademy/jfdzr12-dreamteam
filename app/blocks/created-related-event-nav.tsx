@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { Link } from '@remix-run/react';
 import { Button } from '~/atoms/ui/button';
@@ -14,7 +15,6 @@ interface RelatedEvent {
 
 export const CreatedRelatedEventNav = () => {
     const [relatedEvents, setRelatedEvents] = useState<RelatedEvent[]>([]);
-    const [eventExists, setEventExists] = useState(false);
 
     useEffect(() => {
         const unsubscribe = getRelatedEventList();
@@ -32,7 +32,6 @@ export const CreatedRelatedEventNav = () => {
                 ...doc.data()
             } as RelatedEvent));
             setRelatedEvents(relatedEventList);
-            setEventExists(true);
         });
     };
 
@@ -50,18 +49,14 @@ export const CreatedRelatedEventNav = () => {
     
     return (
         <div className="flex justify-center items-center h-64" id="created-related-event-nav">
-            {eventExists ? (
-                <div className="flex items-center">
-                    {relatedEvents.map((event) => (
-                        <React.Fragment key={event._id}>
-                            <Link to="/related-event"><Button>{event.eventName}</Button></Link>
-                            <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}>X</button>
-                        </React.Fragment>
-                    ))}
-                </div>
-            ) : (
-                <p>No events</p>
-            )}
+            <div className="flex items-center">
+                {relatedEvents.map((event) => (
+                    <React.Fragment key={event._id}>
+                        <Link to="/related-event"><Button>{event.eventName}</Button></Link>
+                        <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}>X</button>
+                    </React.Fragment>
+                ))}
+            </div>
         </div>
     );
 };
