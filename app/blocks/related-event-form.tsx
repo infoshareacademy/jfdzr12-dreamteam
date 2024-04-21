@@ -109,7 +109,7 @@ export default function RelatedEvent() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
-                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} />
+                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} resetDate={!!error}/>
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">

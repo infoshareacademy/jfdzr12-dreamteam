@@ -137,7 +137,7 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
-                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} />
+                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} resetDate={!!error}/>
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
@@ -210,15 +210,6 @@ export default function NewEventPage() {
                                     <Label htmlFor="econdPersonPhone">Second person phone number</Label>
                                     <Input name="secondPersonPhone" type="tel" />
                                     {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Other</p>
-                            <div className="grid grid-cols-3 gap-4">
-                                <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="color">You can choose lead color of your event</Label> 
-                                    <Input name="color" type="color" />
                                 </div>
                             </div>
                         </div>
