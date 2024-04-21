@@ -37,7 +37,7 @@ export function SignIn() {
       console.log("Sign in successful!");
       setEmail("");
       setPassword("");
-      navigate("/add-event"); // Przekierowanie do następnej strony po zalogowaniu
+      navigate("/add-event");
     } else {
       console.error("Sign in error:", signInResult.error);
     }
