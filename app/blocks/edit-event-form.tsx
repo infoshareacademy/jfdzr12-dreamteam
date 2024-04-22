@@ -1,4 +1,4 @@
-import { Link, useParams } from "@remix-run/react";
+import { Link, useNavigate, useParams } from "@remix-run/react";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -21,6 +21,8 @@ export default function EditEventPage() {
 
     // const params = useParams();
     // const eventId = params.eventID;
+
+    const navigate = useNavigate();
 
     const user = useCurrentUser();
 
@@ -103,6 +105,7 @@ export default function EditEventPage() {
             return;
         } else {
             await updateYourEvent(eventData?.eventID, formData);
+            navigate('/your-event');
         }
     }
 

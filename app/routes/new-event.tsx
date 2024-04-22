@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { addDoc } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
@@ -19,6 +19,8 @@ export default function NewEventPage() {
     const [error, setError] = useState<FormErrorData<EventData> | null>();
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [userUID, setUserUID] = useState<string | null>();
+
+    const navigate = useNavigate();
 
     const user = useCurrentUser();
 
@@ -106,6 +108,7 @@ export default function NewEventPage() {
             await addDoc(eventIdref, {"ID": nextID.value});
             await addDoc(eventRef, formData);
             event.target.reset();
+            navigate('/add-event')
         }
     }
 
@@ -137,7 +140,7 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
-                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} resetDate={!!error}/>
+                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)}/>
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">

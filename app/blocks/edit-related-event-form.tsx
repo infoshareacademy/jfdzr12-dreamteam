@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -17,6 +17,8 @@ export default function EditRelatedEvent() {
     const [error, setError] = useState<FormErrorData<RelatedEventData> | null>();
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [eventData, setEventData] = useState<RelatedEventData | null>();
+
+    const navigate = useNavigate();
 
     const user = useCurrentUser();
 
@@ -78,6 +80,7 @@ export default function EditRelatedEvent() {
             return;
         } else {
             await updateYourRelatedEvent(eventData?.eventID, formData);
+            navigate('/related-event')
         }
     }
 
