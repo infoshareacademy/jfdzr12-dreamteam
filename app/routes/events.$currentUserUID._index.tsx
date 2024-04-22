@@ -6,11 +6,13 @@ import { CreatedRelatedEventNav } from '~/blocks/created-related-event-nav';
 
 export default function SignInPage() {
   return (
-   <div> 
-      <AddEvent />
-      <CreatedEventNav />
-      <CreatedRelatedEventNav />
-    </div>
+    <>
+      <div> 
+        <AddEvent />
+        <CreatedEventNav />
+        <CreatedRelatedEventNav />
+      </div>
+    </>
   );
 }
 

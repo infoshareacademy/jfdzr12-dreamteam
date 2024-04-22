@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@remix-run/react";
+import { Link, useNavigate, useParams } from "@remix-run/react";
 import { addDoc } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
@@ -32,6 +32,8 @@ export default function NewEventPage() {
             setUserUID(null)
         }
     }, [user.status])
+
+    const {currentUserUID} = useParams();
 
     async function handleOnSubmit(event: FormEvent) {
         if(!(event.target instanceof HTMLFormElement)) {
@@ -108,7 +110,7 @@ export default function NewEventPage() {
             await addDoc(eventIdref, {"ID": nextID.value});
             await addDoc(eventRef, formData);
             event.target.reset();
-            navigate('/add-event')
+            navigate(`/events/${currentUserUID}`);
         }
     }
 
@@ -221,13 +223,9 @@ export default function NewEventPage() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                {/* <Button className="col-start-2" variant="outline">
-                    <Link to="/add-event">Cancel</Link>
-                </Button> */}
-                <Link to="/add-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
+                <Link to={`/events/${currentUserUID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
                     Cancel
                 </Link>
-                {/* nie wiem jak po kliknięciu i wysłaniu formularza przekierować użytkownika na stronę z wydarzeniami */}
                 <Button type="submit" form="EventForm" >Add your event</Button>
             </CardFooter>
         </Card>
