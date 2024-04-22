@@ -1,8 +1,8 @@
-import { collection } from "firebase/firestore";
+import { CollectionReference, collection } from "firebase/firestore";
 import { db } from "./firebase";
 
-export const eventRef = collection(db, 'event');
+export const eventRef: CollectionReference = collection(db, 'event');
 
-export const eventIdref = collection(db, 'eventID');
+export const eventIdref: CollectionReference = collection(db, 'eventID');
 
-export const relatedEventRef = collection(db, 'relatedEvent');
+export const relatedEventRef: CollectionReference = collection(db, 'relatedEvent');

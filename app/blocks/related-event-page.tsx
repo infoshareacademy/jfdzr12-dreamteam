@@ -1,27 +1,32 @@
 import { Link, useParams } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { useCurrentUser } from "~/db/auth";
-import { getYourRelatedEvent } from "~/db/get-your-related-event";
+import { relatedEventRef } from "~/db/event-ref";
+import { getYourEvent } from "~/db/get-your-event";
 import { RelatedEventData, relatedEventDate } from "~/lib/utils";
-
 
 export default function YourRelatedEvent() {
     const [eventData, setEventData] = useState<RelatedEventData | null>();
-    console.log('your event data', eventData)
+
+    const {currentUserUID, eventID} = useParams();
 
     const user = useCurrentUser();
     const loading = user.status === 'loading';
 
     useEffect(() => {
         if(user.status === 'authenticated') {
-            getYourRelatedEvent()
-            .then(res => setEventData(res as RelatedEventData))
+            getYourEvent(eventID, relatedEventRef)
+            .then(res => {
+                if (res) {
+                    setEventData(res as RelatedEventData);
+                } else {
+                    setEventData(null);
+                }
+            })
         } else {
             setEventData(null)
         }
     }, [user.status])
-
-    const {currentUserUID, eventID} = useParams();
 
     const eventDateString = relatedEventDate(eventData, loading);
     

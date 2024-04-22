@@ -1,27 +1,8 @@
-import { getDocs, query, where } from "firebase/firestore";
-import { eventRef } from "./event-ref";
-import { getUserUID } from "./get-user-uid";
-import { auth } from "./firebase";
+import { CollectionReference, getDocs, query, where } from "firebase/firestore";
 
-export async function getYourEvent() {
-        const currentUserUID = await getUserUID();
-        if (!currentUserUID) {
-        console.log('Użytkownik nie jest zalogowany');
-        return;
-    } else {   
-        const eventQuery = query(eventRef, where("userUID", "==", currentUserUID));
-        console.log('current uid from get your event', currentUserUID)
-        const querySnapshot = await getDocs(eventQuery);
-        if(querySnapshot.empty) {
-            console.log("No events");
-        } else {
-            const lastEventData = querySnapshot.docs[0].data();
-            console.log("event data", lastEventData)
-            return lastEventData;
-        }
-    }
+export async function getYourEvent(id: string | undefined, ref: CollectionReference) { 
+    const eventQuery = query(ref, where("eventID", "==", id));
+    const querySnapshot = await getDocs(eventQuery);
+    const eventData = querySnapshot.docs[0].data();
+    return eventData;
 }
-
-console.log(auth)
-
-
