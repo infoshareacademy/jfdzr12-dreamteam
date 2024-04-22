@@ -11,19 +11,9 @@ import { GuestListTable } from '~/blocks/guest-list-table';
 import { Link } from "@remix-run/react";
 import { useCurrentUser } from "~/db/auth";
 import { getUserUID } from "~/db/get-user-uid";
-
-interface NewGuest {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  exists: boolean;
-  timestump: string;
-}
+import { NewGuest } from "~/type/new-guest";
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
-
-// const newGuestListData = collection(db, 'guestlist');
 
 export const GuestListForm = () => {
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
@@ -97,7 +87,7 @@ export const GuestListForm = () => {
       addDoc(guestIdRef, { "ID": guestID.value });
       addDoc(guestRef, formData);
       e.target.reset();
-      GuestListTable.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+      // GuestListTable.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
   }
 

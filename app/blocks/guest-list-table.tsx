@@ -1,4 +1,4 @@
-import { collection, onSnapshot, deleteDoc, doc } from 'firebase/firestore'
+import { onSnapshot, deleteDoc, doc, orderBy, query } from 'firebase/firestore'
 import { db } from '~/db/firebase'
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableRow, TableCell, TableHead, TableHeader } from '~/atoms/ui/table';
@@ -6,25 +6,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '~/atoms/ui/dropdown-menu';
 import { Button } from '~/atoms/ui/button';
 import { MoreHorizontal } from 'lucide-react';
-
-interface Guest {
-  _id: string;
-  guestID: string
-  email: string;
-  firstName: string;
-  lastName: string;
-}
+import { NewGuest } from '~/type/new-guest';
+import { guestRef } from '~/db/guest-list-ref';
 
 export const GuestListTable = () => {
-  const [guests, setGuests] = useState<Guest[]>([]);
+  const [guests, setGuests] = useState<NewGuest[]>([]);
 
   const getGuestList = () => {
-    const guestListCollection = collection(db, 'guestlist');
-    onSnapshot(guestListCollection, res => {
+    const guestRefOrder = query(guestRef, orderBy('timestamp', 'desc'));
+    onSnapshot(guestRefOrder, res => {
       const guestList = res.docs.map(doc => ({
-        _id: doc.id,
+        id: doc.id,
         ...doc.data()
-      } as Guest));
+      } as NewGuest));
       console.log("tuturutu", guestList);
       setGuests(guestList);
     });
@@ -34,9 +28,9 @@ export const GuestListTable = () => {
     getGuestList();
   }, []);
 
-  const handleDelete = (id: string) => {
-    const guestRef = doc(db, 'guestlist', id);
-    deleteDoc(guestRef)
+  const handleDelete = (gId: string) => {
+    const guestRefDel = doc(db, 'guestlist', gId);
+    deleteDoc(guestRefDel)
       .then(() => {
         console.log("Document deleted successfully");
       })
@@ -66,7 +60,7 @@ export const GuestListTable = () => {
           </TableHeader>
           <TableBody>
             {guests.map(guest => (
-              <TableRow key={guest._id}>
+              <TableRow key={guest.id}>
                 <TableCell className="font-medium">{guest.guestID}</TableCell>
                 <TableCell className="font-medium">{guest.firstName}</TableCell>
                 <TableCell className="font-medium">{guest.lastName}</TableCell>
@@ -86,7 +80,7 @@ export const GuestListTable = () => {
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
-                      <DropdownMenuItem onClick={() => handleDelete(guest._id)}>Delete</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(guest.id)}>Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>
