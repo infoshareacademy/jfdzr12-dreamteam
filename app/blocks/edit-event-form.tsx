@@ -104,7 +104,7 @@ export default function EditEventPage() {
             return;
         } else {
             await updateYourEvent(eventData?.eventID, formData);
-            navigate(`/events/${currentUserUID}/your-event/${eventID}`);
+            navigate(`/${currentUserUID}/events/your-event/${eventID}`);
         }
     }
 
@@ -217,7 +217,7 @@ export default function EditEventPage() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to={`/events/${currentUserUID}/your-event/${eventID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
+                <Link to={`/${currentUserUID}/events/your-event/${eventID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
                     Cancel
                 </Link>
                 <Button type="submit" form="EventForm" >Update event</Button>
