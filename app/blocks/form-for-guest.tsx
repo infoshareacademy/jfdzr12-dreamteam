@@ -1,23 +1,10 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Button } from "~/atoms/ui/button";
 import { Label } from "~/atoms/ui/label";
-// import { MySelect } from '../atoms/ui/my-select';
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/atoms/ui/dropdown-menu"
- 
-type Checked = DropdownMenuCheckboxItemProps["checked"]
 import { Input } from '~/atoms/ui/input';
 import { Checkbox } from '~/atoms/ui/checkbox';
 import { Textarea } from '~/atoms/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectPortal, SelectTrigger, SelectValue } from '@radix-ui/react-select';
-import { MySelect } from '~/atoms/ui/my-select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/atoms/ui/select';
 import { NewGuest, addGuest } from '~/db/guest';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/atoms/ui/card';
 import { FieldPath, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
@@ -26,17 +13,15 @@ import { guestRef } from '~/db/guest-list-ref';
 import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
 
 
-
-
 const textLabelFirstName = "First name";
 const textLabelSecondName ="Last name";
 const textLabelPresence = "Do you confirm your arrival? ";
 const textLabelPartner = "Will you be accompanied by a partner or another person? ";
 const textLabelChild = "Will you be accompanied by a child? ";
 const textLabelNumberOfChildren = "Specify the number of children accompanying you";
-const textLabelMenuGuest = "Select your preferred menu option";
-const textLabelMenuPartner = "Select the preferred menu option for the accompanying person";
-const textLabelMenuChild = "Select the preferred menu option for the child/children";
+const textLabelMenuGuest = "Select your preferred menu option :";
+const textLabelMenuPartner = "Select menu for your partner :";
+const textLabelMenuChild = "Select menu for child :";
 const textLabelAdditionalInfo = "Please feel free to provide any additional information regarding the menu (e.g., any food allergies or dietary restrictions)"
 const textLabelAlcoholGuest = "Select your preferred alcohol(s)"; 
 const textLabelAccommodation = "Will accommodation be needed? ";
@@ -65,9 +50,6 @@ const alcoholOptions = [
   {value: "gin", label: "Gin"}, 
 ] as const
 
-// const guestFromDataBase = collection(db, 'guestlist');
-
-
 type AlcoholKind = typeof alcoholOptions[number]['value']
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 interface Guest {
@@ -86,11 +68,10 @@ interface NameFormProps {
 }
 
 export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
-  const [show, setShow] = useState<string>('')
-  const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean | 'indeterminate'>(false);
+  const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean>(false);
   const [showQuestionAboutChild, setShowQuestionAboutChild] = useState<boolean | 'indeterminate'>(false);
   const [showQuestionAboutPartner, setShowQuestionAboutPartner] = useState<boolean | 'indeterminate'>(false);
-  const [selectMenuOptionGuest, setSelectMenuOptionGuest] = useState<string>()
+  // const [selectMenuOptionGuest, setSelectMenuOptionGuest] = useState<string>()
   // const [isAlcoholCheckedGuest, setIsAlcoholCheckedGuest] = useState<string[] | undefined>([]);
   const [alcohols, toggleAlcohol] = useReducer((prev: Partial<Record<AlcoholKind, boolean>>, alcoholKind: AlcoholKind) => {
     return {
@@ -116,10 +97,22 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     getGuestList();
   }, []);
 
+// ????
+// const handleValueChange = (e: React.FormEvent<HTMLInputElement>) => {
+//   const yesAnswer = basicAnswer.find(answer => answer.value === 'yes');
+//   const noAnswer = basicAnswer.find(answer => answer.value === 'no');
+//     if (yesAnswer) {
+//       setShow('yes');
+//     } 
+//     if (noAnswer) {
+//       setShow('no');
+//     }
+// }
 
-const handleValueChange = (value:any) => {
-  setShow(value);
-}
+// const handleValueChange = () => {
+//   setShow(e.currentTarget.value);
+// }
+
   
 
   async function handleSubmit (e: React.FormEvent) {
@@ -153,6 +146,10 @@ const handleValueChange = (value:any) => {
       errors.guestUniqueId = 'Your four-digit code is required';
     }
 
+    if (!("presence" in formData && typeof formData.guestUniqueId === "string")) {
+      errors.presence = 'Please indicate your attendance status';
+    }
+
     const guestId = query(guestRef,
       where('guestID', '==', formData.guestUniqueId)
     )
@@ -161,13 +158,13 @@ const handleValueChange = (value:any) => {
 
     if (snapshot.size === 0) {
       errors.exists = "Wrong code";
-    } else {}
+    } 
     
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
       console.log('Names errors');
       return;
-    } else {e.target.reset();}
+    } else {e.target.reset()}
 
     console.log('handleSubmit', formData)
     addGuest(formData);
@@ -180,9 +177,7 @@ const handleValueChange = (value:any) => {
         <CardTitle className='text-center'>Guest Form</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} id="GuestForm" method="post"  
-        // action="/guest"
-        >
+        <form onSubmit={handleSubmit} id="GuestForm" method="post" action="/guest">
           <div className="grid w-full items-center gap-4">
             <div className="space-y-1.5">
               <p className="text-lg font-bold">Your presence</p>
@@ -216,20 +211,23 @@ const handleValueChange = (value:any) => {
                   {!!errors?.exists && <em className="text-xs">{errors.exists}</em>}
               </div>
               
-              <div>
-              <RadioGroup value={show} onChange={handleValueChange}>{textLabelPresence}
+              <div className="flex flex-col space-y-1.5">
+              <RadioGroup name="presence" onValueChange={(value) => setShowAdditionalQuestions(value === 'yes')}>
+                <div><Label>{textLabelPresence}</Label></div>
+                
                 <div className="flex items-center space-x-2">
                 {basicAnswer.map((element)=>{
                           return <div key={element.value}>
-                                  <RadioGroupItem value={element.value} id={element.value} checked={show === element.value} onChange={() => handleValueChange(element.value)} />
-                                  <Label htmlFor={element.value}>{element.label}</Label>
+                                  <RadioGroupItem value={element.value}/>
+                                  <Label htmlFor={element.value}>{" " + element.label}</Label>
                                 </div>
                         })}
-                 </div>
+                </div>
               </RadioGroup>
+              {!!errors?.presence && <em className="text-xs">{errors.presence}</em>}
               </div>
 
-              <div>
+              {/* <div>
                 <Label htmlFor="presence">{textLabelPresence}</Label>
                 <Checkbox 
                   name="presence"
@@ -237,7 +235,7 @@ const handleValueChange = (value:any) => {
                   onCheckedChange={setShowAdditionalQuestions}
                   />
 
-              </div>
+              </div> */}
             </div>
 
               {showAdditionalQuestions && (
@@ -283,50 +281,66 @@ const handleValueChange = (value:any) => {
 
                 <div className="flex flex-col space-y-1.5">
                   <p className="text-lg font-bold">Dinning and alcohol preferences</p>
-                      {/* <Label>{textLabelMenuGuest} */}
-                      <div>
-                          {/* <MySelect 
-                          options={menuOptions} 
-                          name="selectedMenuGuest" 
-                          /> */}
-                          {/* POPRAWIĆ Selecty */}
-                        
-                        
-                          <Select name="selectedMenuGuest" value={selectMenuOptionGuest} onValueChange={setSelectMenuOptionGuest}>
+                      <div className='grid grid-cols-4 gap-4'>
+                        {/* <div className='grid-flow-row'> */}
+                          <Label htmlFor="selectedMenuGuest">{textLabelMenuGuest}</Label>
+                        {/* </div> */}
+                          <div>
+                          <Select name="selectedMenuGuest" defaultValue={menuOptions[0].value} /*value={selectMenuOptionGuest} onValueChange={setSelectMenuOptionGuest}*/ >
                             <SelectTrigger>
-                              <SelectValue placeholder="Select your preferred menu option"/>
+                              <SelectValue /*placeholder="Select your preferred menu option"*/ />
                             </SelectTrigger>
-                            <SelectPortal>
                               <SelectContent position="popper">
-                                
                                 {menuOptions.map((option) => (
                                   <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                                 ))}
                               </SelectContent>
-                            </SelectPortal>
                           </Select>
-                        
+                          </div>
                       </div>
-                      {/* </Label> */}
+
                       {showQuestionAboutPartner && (
-                          <Label>{textLabelMenuPartner}
-                          <div>
-                              <MySelect 
-                              options={menuOptions} 
-                              name="selectedMenuPartner" 
-                              />
+                        <>
+                          <div className='grid grid-cols-4 gap-4'>
+                          {/* <div className='grid-flow-row'> */}
+                            <Label htmlFor="selectedMenuPartner">{textLabelMenuPartner}</Label>
+                          {/* </div> */}
+                            <div>
+                            <Select name="selectedMenuPartner" defaultValue={menuOptions[0].value} >
+                              <SelectTrigger>
+                                <SelectValue/>
+                              </SelectTrigger>
+                                <SelectContent position="popper">
+                                  {menuOptions.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                            </Select>
+                            </div>
                           </div>
-                          </Label>
+                        </>
                       )}
+
                       {showQuestionAboutChild && (
-                          <Label>{textLabelMenuChild}
-                          <div>
-                              <MySelect 
-                              options={menuOptions} 
-                              name="selectedMenuChild" 
-                          />
+                        <>
+                          <div className='grid grid-cols-4 gap-4'>
+                          {/* <div className='grid-flow-row'> */}
+                            <Label htmlFor="selectedMenuPartner">{textLabelMenuChild}</Label>
+                          {/* </div> */}
+                            <div>
+                            <Select name="selectedMenuChild" defaultValue={menuOptions[0].value} >
+                              <SelectTrigger>
+                                <SelectValue/>
+                              </SelectTrigger>
+                                <SelectContent position="popper">
+                                  {menuOptions.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                            </Select>
+                            </div>
                           </div>
-                          </Label>
+                        </>
                       )}
                 
                 
