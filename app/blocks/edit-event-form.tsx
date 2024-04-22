@@ -6,6 +6,7 @@ import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { useCurrentUser } from "~/db/auth";
+import { eventRef } from "~/db/event-ref";
 import { getYourEvent } from "~/db/get-your-event";
 import { updateYourEvent } from "~/db/update-your-event";
 import { EventData } from "~/lib/utils";
@@ -27,7 +28,7 @@ export default function EditEventPage() {
 
     useEffect(() => {
         if(user.status === 'authenticated') {
-            getYourEvent()
+            getYourEvent(eventID, eventRef)
             .then(res => {
                 const eventData = res as EventData;
                 setEventData(eventData);
@@ -45,7 +46,6 @@ export default function EditEventPage() {
         event.preventDefault();
 
         const _formData = new FormData(event.target);
-        console.log("_formData", _formData)
 
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
@@ -103,7 +103,7 @@ export default function EditEventPage() {
         if(Object.keys(errors).length !== 0) {
             return;
         } else {
-            await updateYourEvent(eventData?.eventID, formData);
+            await updateYourEvent(eventID, formData, eventRef);
             navigate(`/${currentUserUID}/events/your-event/${eventID}`);
         }
     }
