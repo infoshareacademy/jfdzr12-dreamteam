@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@remix-run/react";
+import { Link, useNavigate, useParams } from "@remix-run/react";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -17,6 +17,8 @@ export default function EditRelatedEvent() {
     const [error, setError] = useState<FormErrorData<RelatedEventData> | null>();
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [eventData, setEventData] = useState<RelatedEventData | null>();
+
+    const {currentUserUID, eventID} = useParams();
 
     const navigate = useNavigate();
 
@@ -80,14 +82,14 @@ export default function EditRelatedEvent() {
             return;
         } else {
             await updateYourRelatedEvent(eventData?.eventID, formData);
-            navigate('/related-event')
+            navigate(`/events/${currentUserUID}/related-event/${eventID}`)
         }
     }
 
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
             <CardHeader>
-                <CardTitle className="text-center">{`Edit your related event number ${eventData?.eventID}`}</CardTitle>
+                <CardTitle className="text-center">{`Edit your related event number ${eventID}`}</CardTitle>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
@@ -146,7 +148,7 @@ export default function EditRelatedEvent() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to="/related-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">Cancel</Link>
+                <Link to={`/events/${currentUserUID}/related-event/${eventID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">Cancel</Link>
                 <Button type="submit" form="EventForm">Update event</Button>
             </CardFooter>
         </Card>

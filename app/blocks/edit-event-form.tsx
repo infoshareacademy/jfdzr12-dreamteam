@@ -19,8 +19,7 @@ export default function EditEventPage() {
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [eventData, setEventData] = useState<EventData | null>();
 
-    // const params = useParams();
-    // const eventId = params.eventID;
+    const {currentUserUID, eventID} = useParams();
 
     const navigate = useNavigate();
 
@@ -105,14 +104,14 @@ export default function EditEventPage() {
             return;
         } else {
             await updateYourEvent(eventData?.eventID, formData);
-            navigate('/your-event');
+            navigate(`/events/${currentUserUID}/your-event/${eventID}`);
         }
     }
 
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
             <CardHeader>
-                <CardTitle className="text-center">{`Edit your event number ${eventData?.eventID}`}</CardTitle>
+                <CardTitle className="text-center">{`Edit your event number ${eventID}`}</CardTitle>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
@@ -218,13 +217,9 @@ export default function EditEventPage() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                {/* <Button className="col-start-2" variant="outline">
-                    <Link to="/add-event">Cancel</Link>
-                </Button> */}
-                <Link to="/your-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
+                <Link to={`/events/${currentUserUID}/your-event/${eventID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
                     Cancel
                 </Link>
-                {/* nie wiem jak po kliknięciu i wysłaniu formularza przekierować użytkownika na inną  stronę */}
                 <Button type="submit" form="EventForm" >Update event</Button>
             </CardFooter>
         </Card>
