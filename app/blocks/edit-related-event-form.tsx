@@ -6,8 +6,9 @@ import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { useCurrentUser } from "~/db/auth";
-import { getYourRelatedEvent } from "~/db/get-your-related-event";
-import { updateYourRelatedEvent } from "~/db/update-your-related-event";
+import { relatedEventRef } from "~/db/event-ref";
+import { getYourEvent } from "~/db/get-your-event";
+import { updateYourEvent } from "~/db/update-your-event";
 import { RelatedEventData } from "~/lib/utils";
 
 
@@ -26,7 +27,7 @@ export default function EditRelatedEvent() {
 
     useEffect(() => {
         if(user.status === 'authenticated') {
-            getYourRelatedEvent()
+            getYourEvent(eventID, relatedEventRef)
             .then(res => {
                 const eventData = res as RelatedEventData;
                 setEventData(eventData);
@@ -44,7 +45,6 @@ export default function EditRelatedEvent() {
         event.preventDefault();
 
         const _formData = new FormData(event.target);
-        console.log("_formData", _formData)
 
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
@@ -81,7 +81,7 @@ export default function EditRelatedEvent() {
         if(Object.keys(errors).length !== 0) {
             return;
         } else {
-            await updateYourRelatedEvent(eventData?.eventID, formData);
+            await updateYourEvent(eventID, formData, relatedEventRef);
             navigate(`/${currentUserUID}/events/related-event/${eventID}`)
         }
     }
