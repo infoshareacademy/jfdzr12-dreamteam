@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate, useParams } from "@remix-run/react";
 import { addDoc } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
@@ -20,6 +20,8 @@ export default function NewEventPage() {
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [userUID, setUserUID] = useState<string | null>();
 
+    const navigate = useNavigate();
+
     const user = useCurrentUser();
 
     useEffect(() => {
@@ -30,6 +32,8 @@ export default function NewEventPage() {
             setUserUID(null)
         }
     }, [user.status])
+
+    const {currentUserUID} = useParams();
 
     async function handleOnSubmit(event: FormEvent) {
         if(!(event.target instanceof HTMLFormElement)) {
@@ -106,6 +110,7 @@ export default function NewEventPage() {
             await addDoc(eventIdref, {"ID": nextID.value});
             await addDoc(eventRef, formData);
             event.target.reset();
+            navigate(`/events/${currentUserUID}`);
         }
     }
 
@@ -137,7 +142,7 @@ export default function NewEventPage() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
-                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} />
+                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)}/>
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
@@ -214,26 +219,13 @@ export default function NewEventPage() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Other</p>
-                            <div className="grid grid-cols-3 gap-4">
-                                <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="color">You can choose lead color of your event</Label> 
-                                    <Input name="color" type="color" />
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                {/* <Button className="col-start-2" variant="outline">
-                    <Link to="/add-event">Cancel</Link>
-                </Button> */}
-                <Link to="/add-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
+                <Link to={`/events/${currentUserUID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
                     Cancel
                 </Link>
-                {/* nie wiem jak po kliknięciu i wysłaniu formularza przekierować użytkownika na stronę z wydarzeniami */}
                 <Button type="submit" form="EventForm" >Add your event</Button>
             </CardFooter>
         </Card>

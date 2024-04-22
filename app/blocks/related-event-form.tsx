@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate, useParams } from "@remix-run/react";
 import { addDoc } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
@@ -19,6 +19,8 @@ export default function RelatedEvent() {
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [userUID, setUserUID] = useState<string | null>();
 
+    const navigate = useNavigate();
+    
     const user = useCurrentUser();
 
     useEffect(() => {
@@ -29,6 +31,8 @@ export default function RelatedEvent() {
             setUserUID(null)
         }
     }, [user.status])
+
+    const {currentUserUID} = useParams();
 
     async function handleOnSubmit(event: FormEvent) {
         if(!(event.target instanceof HTMLFormElement)) {
@@ -84,6 +88,7 @@ export default function RelatedEvent() {
             await addDoc(eventIdref, {"ID": nextID.value});
             await addDoc(relatedEventRef, formData);
             event.target.reset();
+            navigate(`/events/${currentUserUID}`);
         }
     }
 
@@ -109,7 +114,7 @@ export default function RelatedEvent() {
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
-                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} />
+                                    <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)}/>
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
@@ -149,7 +154,7 @@ export default function RelatedEvent() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to="/add-event" className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">Cancel</Link>
+                <Link to={`/events/${currentUserUID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">Cancel</Link>
                 <Button type="submit" form="EventForm">Add your event</Button>
             </CardFooter>
         </Card>
