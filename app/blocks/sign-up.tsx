@@ -6,6 +6,7 @@ import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { registerWithEmailAndPassword } from "~/db/auth";
 import { Link, useNavigate } from "@remix-run/react";
+import { getUserUID } from "~/db/get-user-uid";
 
 export const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -64,7 +65,8 @@ export const SignUp = () => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-      navigate("/add-event"); 
+      const currentUserUID = await getUserUID();
+      navigate(`/${currentUserUID}/events`);
     } else {
       console.error("Sign up error:", signUpResult.error);
     }
