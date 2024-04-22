@@ -97,7 +97,7 @@ export const GuestListForm = () => {
       addDoc(guestIdRef, { "ID": guestID.value });
       addDoc(guestRef, formData);
       e.target.reset();
-      GuestListTable.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+      GuestListTable.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
   }
 
@@ -125,8 +125,8 @@ export const GuestListForm = () => {
             {!!errors?.email && <em className="text-xs">{errors.email}</em>}
           </div>
         </CardContent>
-        <CardFooter className='grid grid-cols-2 gap-4 '>
-          <Button type='reset' variant='outline' className='w-full'>
+        <CardFooter className='grid grid-cols-3 gap-6 '>
+          <Button type='reset' variant='outline' className='w-full col-start-2'>
             <Link to='/add-event/new-event'>Cancel</Link></Button>
           <Button type='submit' form='GuestListForm' className='w-full' >Add your guest</Button>
         </CardFooter>
