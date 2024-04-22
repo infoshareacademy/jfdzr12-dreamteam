@@ -1,4 +1,4 @@
-import YourEvent from "~/blocks/your-event";
+import YourEvent from "~/blocks/your-event-page";
 
 export default function YourEventPage() {
     return (
