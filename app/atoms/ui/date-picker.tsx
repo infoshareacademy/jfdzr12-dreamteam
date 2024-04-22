@@ -26,8 +26,8 @@ export function DatePicker({value, onSelectDate}: DatePickerProps) {
 
     const handleDateOnChange = (selectedDate: Date | undefined) => {
         if(selectedDate) {
-        onSelectDate(selectedDate);
-        setDate(selectedDate);
+            onSelectDate(selectedDate);
+            setDate(selectedDate);
         }
     }
 
