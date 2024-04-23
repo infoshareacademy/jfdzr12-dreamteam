@@ -64,7 +64,7 @@ export const CreatedRelatedEventNav = () => {
                 {relatedEvents.map((event) => (
                     userUID === event.userUID && ( 
                         <React.Fragment key={event._id}>
-                            <Link to={`/related-event/${event.eventID}`}><Button>{event.eventName}</Button></Link>
+                            <Link to={`related-event/${event.eventID}`}><Button>{event.eventName}</Button></Link>
                             <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}>X</button>
                         </React.Fragment>
                     )
