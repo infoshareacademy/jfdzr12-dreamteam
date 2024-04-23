@@ -11,7 +11,7 @@ export interface NewGuest {
     partner?: string;
     child?: string;
     numberOfChildren?: number;
-    selectedMenuGuest?: string[];
+    selectedMenuGuest?: string;
     selectedMenuPartner?: string;
     selectedMenuChild?: string;
     additionalInfo?: string; 
