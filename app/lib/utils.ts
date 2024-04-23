@@ -32,8 +32,8 @@ export interface EventData {
   receptionCountryAddress: string,
   firstPersonPhone: string,
   secondPersonPhone: string,
+  other?: string,
   eventID: string,
-  color: string,
   userUID: string,
 }
 
@@ -45,6 +45,7 @@ export interface RelatedEventData {
   eventStreetAddress: string,
   eventCityAddress: string,
   eventCountryAddress: string,
+  other?: string,
   eventID: string,
   userUID: string,
 }

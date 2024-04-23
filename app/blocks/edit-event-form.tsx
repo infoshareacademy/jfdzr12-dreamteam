@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui
 import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
+import { Textarea } from "~/atoms/ui/textarea";
 import { useCurrentUser } from "~/db/auth";
 import { eventRef } from "~/db/event-ref";
 import { getYourEvent } from "~/db/get-your-event";
@@ -209,6 +210,15 @@ export default function EditEventPage() {
                                     <Label htmlFor="secondPersonPhone">Second person phone number</Label>
                                     <Input name="secondPersonPhone" type="tel" defaultValue={eventData?.secondPersonPhone}/>
                                     {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Other</p>
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
+                                    <Label htmlFor="other">Additional information</Label>
+                                    <Textarea name="other" defaultValue={eventData?.other}/>
                                 </div>
                             </div>
                         </div>

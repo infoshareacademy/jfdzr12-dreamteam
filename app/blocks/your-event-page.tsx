@@ -65,21 +65,26 @@ export default function YourEvent() {
                             <p>{`Country: ${eventData.receptionCountryAddress}`}</p>
                         </div>
                     </div>
-                    <div className="flex h-[200px] items-center justify-center p-6">
-                        <p>{`Event code for your guests: ${eventData.eventID}`}</p>
+                    <div className="flex h-[100px] items-center justify-center p-6">
+                        <p>{`Event code: ${eventData.eventID}`}</p>
                     </div>
-                    <div className="grid grid-cols-4 gap-4 justify-items-center">
+                    {eventData.other && (
+                        <div className="flex items-center justify-center p-6 mb-10">
+                            <p>{`Other: ${eventData.other}`}</p>
+                        </div>
+                    )}
+                    <div className="grid grid-cols-4 gap-4 justify-items-center m-10 sticky bottom-0">
                         <div className="col-start-1">
-                            <Link to="guestlist" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Guests list</Link>
+                            <Link to="guestlist">Guest list</Link>
                         </div>
                         <div>
-                            <Link to="budget" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Budget</Link>
+                            <Link to="budget">Budget</Link>
                         </div>
                         <div>
-                            <Link to="edit-your-event" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Edit your event</Link>
+                            <Link to="edit-your-event">Edit</Link>
                         </div>
                         <div>
-                            <Link to={`/${currentUserUID}/events`} className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">Back to your events</Link>
+                            <Link to={`/${currentUserUID}/events`}>Back to your events</Link>
                         </div>
                     </div>
                 </>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui
 import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
+import { Textarea } from "~/atoms/ui/textarea";
 import { useCurrentUser } from "~/db/auth";
 import { eventIdref, eventRef } from "~/db/event-ref";
 import { getUserUID } from "~/db/get-user-uid";
@@ -117,7 +118,7 @@ export default function NewEventPage() {
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
             <CardHeader>
-                <CardTitle className="text-center">Your dream event</CardTitle>
+                <CardTitle className="text-center">Your dream wedding</CardTitle>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
@@ -215,6 +216,15 @@ export default function NewEventPage() {
                                     <Label htmlFor="econdPersonPhone">Second person phone number</Label>
                                     <Input name="secondPersonPhone" type="tel" />
                                     {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Other</p>
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
+                                    <Label htmlFor="other">Additional information</Label>
+                                    <Textarea name="other" />
                                 </div>
                             </div>
                         </div>
