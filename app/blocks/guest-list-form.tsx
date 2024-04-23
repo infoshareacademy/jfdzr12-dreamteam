@@ -116,7 +116,7 @@ export const GuestListForm = () => {
           </div>
         </CardContent>
         <CardFooter className='grid grid-cols-3 gap-6 '>
-          <Button type='reset' variant='outline' className='w-full col-start-2'>
+          <Button type='reset' variant='secondary' className='w-full col-start-2'>
             <Link to='/add-event/new-event'>Cancel</Link></Button>
           <Button type='submit' form='GuestListForm' className='w-full' >Add your guest</Button>
         </CardFooter>
