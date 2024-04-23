@@ -7,7 +7,7 @@ import { Textarea } from '~/atoms/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/atoms/ui/select';
 import { NewGuest, addGuest } from '~/db/guest';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/atoms/ui/card';
-import { FieldPath, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+import { FieldPath, collection, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { db } from '~/db/firebase';
 import { guestRef } from '~/db/guest-list-ref';
 import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
@@ -58,21 +58,15 @@ interface Guest {
   firstName: string;
   lastName: string;
 }
-// interface FormValues {
-//   isAlcoholCheckedGuest?: string[];
-//   alcohols?: string[];
-// }
 
 interface NameFormProps {
   onSubmit: (objectValues: NewGuest) => void;
 }
 
 export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
-  const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean>(false);
+  const [showAdditionalQuestions, setShowAdditionalQuestions] = useState<boolean | null>(false);
   const [showQuestionAboutChild, setShowQuestionAboutChild] = useState<boolean | 'indeterminate'>(false);
   const [showQuestionAboutPartner, setShowQuestionAboutPartner] = useState<boolean | 'indeterminate'>(false);
-  // const [selectMenuOptionGuest, setSelectMenuOptionGuest] = useState<string>()
-  // const [isAlcoholCheckedGuest, setIsAlcoholCheckedGuest] = useState<string[] | undefined>([]);
   const [alcohols, toggleAlcohol] = useReducer((prev: Partial<Record<AlcoholKind, boolean>>, alcoholKind: AlcoholKind) => {
     return {
       ...prev,
@@ -81,6 +75,14 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
   }, {});
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
   const [guests, setGuests] = useState<Guest[]>([]);
+  // const [isRadioActive, setIsRadioactive] = useState<undefined>();
+  // const [cancelClicked, setCancelClicked] = useState(false);
+// const [sendClicked, setSendClicked] = useState(false);
+const [radioGroupKey, setRadioGroupKey] = useState('');
+
+const handleReset = () => {
+  setShowAdditionalQuestions(false); 
+};
 
   const getGuestList = () => {
     const guestListCollection = collection(db, 'guestlist');
@@ -97,23 +99,9 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     getGuestList();
   }, []);
 
-// ????
-// const handleValueChange = (e: React.FormEvent<HTMLInputElement>) => {
-//   const yesAnswer = basicAnswer.find(answer => answer.value === 'yes');
-//   const noAnswer = basicAnswer.find(answer => answer.value === 'no');
-//     if (yesAnswer) {
-//       setShow('yes');
-//     } 
-//     if (noAnswer) {
-//       setShow('no');
-//     }
-// }
-
-// const handleValueChange = () => {
-//   setShow(e.currentTarget.value);
-// }
-
-  
+  useEffect(() => {
+    setRadioGroupKey(''); // Inicjalizacja wartości klucza
+  }, []);
 
   async function handleSubmit (e: React.FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
@@ -143,7 +131,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     }
 
     if (!("guestUniqueId" in formData && typeof formData.guestUniqueId === "string" && formData.guestUniqueId.length === 4)) {
-      errors.guestUniqueId = 'Your four-digit code is required';
+      errors.guestUniqueId = 'Your four-digit code is required ';
     }
 
     if (!("presence" in formData && typeof formData.guestUniqueId === "string")) {
@@ -157,18 +145,29 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
     const snapshot = await getDocs(guestId);
 
     if (snapshot.size === 0) {
-      errors.exists = "Wrong code";
+      errors.exists = "Provided code doesn't exist in the database";
     } 
+
+    if (snapshot.size === 1) {
+      const docRef = snapshot.docs[0].ref;
+      await updateDoc(docRef, {formData});
+    }
     
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
       console.log('Names errors');
       return;
-    } else {e.target.reset()}
+    } 
 
     console.log('handleSubmit', formData)
     addGuest(formData);
-    // e.target.reset();
+    e.target.reset();
+    setRadioGroupKey(performance.now().toString()); // Ustawia nowy klucz po kliknięciu Send
+  };
+
+  const handleCancelClick = () => {
+    setErrors({});
+    setRadioGroupKey(performance.now().toString()); // Ustawia nowy klucz po kliknięciu Cancel
   };
 
   return (
@@ -177,7 +176,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
         <CardTitle className='text-center'>Guest Form</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} id="GuestForm" method="post" action="/guest">
+        <form onSubmit={handleSubmit} onReset={handleReset} id="GuestForm" method="post" action="/guest">
           <div className="grid w-full items-center gap-4">
             <div className="space-y-1.5">
               <p className="text-lg font-bold">Your presence</p>
@@ -207,12 +206,12 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   // type="number"
                   // pattern="[0-9]{4}"
                   />
-                  {!!errors?.guestUniqueId && <em className="text-xs">{errors.guestUniqueId}</em>}
                   {!!errors?.exists && <em className="text-xs">{errors.exists}</em>}
+                  {!!errors?.guestUniqueId && <em className="text-xs"><br/>{errors.guestUniqueId}</em>}
               </div>
               
               <div className="flex flex-col space-y-1.5">
-              <RadioGroup name="presence" onValueChange={(value) => setShowAdditionalQuestions(value === 'yes')}>
+              <RadioGroup key={radioGroupKey} name="presence" onValueChange={(value) => setShowAdditionalQuestions(value === 'yes')}>
                 <div><Label>{textLabelPresence}</Label></div>
                 
                 <div className="flex items-center space-x-2">
@@ -226,7 +225,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
               </RadioGroup>
               {!!errors?.presence && <em className="text-xs">{errors.presence}</em>}
               </div>
-
+              
               {/* <div>
                 <Label htmlFor="presence">{textLabelPresence}</Label>
                 <Checkbox 
@@ -246,7 +245,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                       <Label htmlFor="partner">{textLabelPartner}</Label>
                       <Checkbox
                           name="partner" 
-                          checked={showQuestionAboutPartner}
+                          checked={showQuestionAboutPartner /*=== basicAnswer[0].value*/}
                           onCheckedChange={setShowQuestionAboutPartner} 
                         />
                     </div>
@@ -394,9 +393,9 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
         </form>
         </CardContent>
         <CardFooter className='grid grid-cols-3 gap-4'>
-          <Button form="GuestForm" variant='outline' type="reset" className='w-full'>{textButtonCancel}</Button>
+          <Button form="GuestForm" variant='outline' type="reset" onClick={handleCancelClick} className='w-full'>{textButtonCancel}</Button>
           {/* <Button form="GuestForm">OK</Button> */}
-          <Button type="submit" form="GuestForm">{textButtonSubmit}</Button>
+          <Button type="submit" form="GuestForm" /*onClick={handleSendClick}*/>{textButtonSubmit}</Button>
         </CardFooter>
     </Card>
   );
