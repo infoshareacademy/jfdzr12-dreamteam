@@ -5,16 +5,16 @@ interface Option {
     value: string;
   }
   
-  interface CheckboxAlcoholProps {
+  interface CheckboxProps {
     options: Option[];
     name: string;
     checked: string | string[] | undefined;
     onChange: (value: string[]) => void;
   }
   
-export const AlcoholCheckbox: React.FC<CheckboxAlcoholProps> = ({options, onChange}) => {
+export const Checkbox: React.FC<CheckboxProps> = ({options, onChange}) => {
     const [checkedValues, setCheckedValues] = useState<string[]>([]);
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
         const {value, checked} = e.target;
         if (checked) {
             setCheckedValues([...checkedValues, value])
@@ -30,7 +30,6 @@ export const AlcoholCheckbox: React.FC<CheckboxAlcoholProps> = ({options, onChan
             <div key={option.value}>
                 <input
                 type="checkbox"
-                id={option.value}
                 value={option.value}
                 checked={checkedValues.includes(option.value)}
                 onChange={handleCheckboxChange}

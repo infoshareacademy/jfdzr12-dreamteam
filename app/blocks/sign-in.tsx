@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
-import { loginWithEmailAndPassword } from "~/db/auth";
+import { loginWithEmailAndPassword, useCurrentUser } from "~/db/auth";
 import { resetPassword } from "~/db/auth";
-import { Link } from "@remix-run/react";
-
+import { Link, useNavigate } from "@remix-run/react"; 
+import { getUserUID } from "~/db/get-user-uid";
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); 
 
+  
+
+  
   const handleSignIn = async () => {
     setEmailError("");
     setPasswordError("");
@@ -38,6 +42,8 @@ export function SignIn() {
       console.log("Sign in successful!");
       setEmail("");
       setPassword("");
+      const currentUserUID = await getUserUID();
+      navigate(`/${currentUserUID}/events`);
     } else {
       console.error("Sign in error:", signInResult.error);
     }
