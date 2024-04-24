@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Link } from '@remix-run/react';
 import { Button } from '~/atoms/ui/button';
@@ -58,22 +57,25 @@ export const CreatedEventNav = () => {
             });
     };
     
-    return (
-        <div className="flex justify-center items-center h-64" id="created-event-nav">
-            <div className="flex items-center">
-                {events.map((event) => (
-                    <React.Fragment key={event._id}>
-                        {userUID === event.userUID && (
-                            <React.Fragment>
-                                <Link to={`your-event/${event.eventID}`}>
-                                    <Button>{event.firstPerson} & {event.secondPerson}</Button>
-                                </Link>
-                                <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}> X </button>
-                            </React.Fragment>
-                        )}
-                    </React.Fragment>
-                ))}
-            </div>
+
+return (
+    <div className="flex justify-center items-center " id="created-event-nav">
+      <div className="flex flex-col items-center">
+        <div className="flex justify-center flex-wrap">
+          {events.map((event) => (
+            <React.Fragment key={event._id}>
+              {userUID === event.userUID && (
+                <div className="m-4"> 
+                  <Link to={`your-event/${event.eventID}`}>
+                    <Button className="p-4 text-gray-700" variant="outline">{event.firstPerson} & {event.secondPerson}</Button>
+                  </Link>
+                  <button className="p-1 text-gray-700 rounded-full mt-2 sticky top-0" onClick={() => handleDelete(event._id)}>X</button>
+                </div>
+              )}
+            </React.Fragment>
+          ))}
         </div>
+      </div>
+    </div>
     );
-};
+}
