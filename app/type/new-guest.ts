@@ -11,8 +11,9 @@ export interface GuestPreferences {
   selectedMenuPartner: string | null;
   selectedMenuChild: string | null;
   transport: string | boolean;
+  accommodation: string | boolean;
   alcohols: string[] | null[];
-  aditionalInfo: string | null;
+  additionalInfo: string | null;
 }
 
 export interface NewGuest {
