@@ -7,7 +7,7 @@ export function AddEvent() {
     <div style={{ width: '200px', margin: 'auto auto', marginRight: 'auto' }}>
       <Link to="new-event"> 
         <Button style={{ display: 'block', width: '100%', marginTop: '30px', marginBottom: '30px' }} variant="outline">
-          Add Your Dream Event
+          Add Your Wedding Event
         </Button>
       </Link>
       <Link to="new-related-event"> 
