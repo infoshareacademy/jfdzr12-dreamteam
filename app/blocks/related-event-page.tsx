@@ -1,4 +1,5 @@
 import { Link, useParams } from "@remix-run/react";
+import { PartyPopper } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCurrentUser } from "~/db/auth";
 import { relatedEventRef } from "~/db/event-ref";
@@ -35,7 +36,7 @@ export default function YourRelatedEvent() {
             {eventData && (
                 <>
                     <div className="flex items-center justify-center p-6">
-                        <p>{eventData.eventName}</p>
+                        <h1 className="italic font-serif text-xl font-bold">{eventData.eventName}</h1>
                     </div>
                     <div className="flex items-center justify-center p-6">
                         <p>{eventDateString}</p>
@@ -45,7 +46,7 @@ export default function YourRelatedEvent() {
                     </div>
                     <div className="grid gap-4 justify-items-center">
                         <div className="grid justify-items-center">
-                            <h1>EVENT</h1>
+                            <PartyPopper className="my-5"/>
                             <p>{`Place: ${eventData.eventPlace}`}</p>
                             <p>{`Street: ${eventData.eventStreetAddress}`}</p>
                             <p>{`City: ${eventData.eventCityAddress}`}</p>

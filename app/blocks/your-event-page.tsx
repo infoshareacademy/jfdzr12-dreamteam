@@ -1,4 +1,5 @@
 import { Link, useParams } from "@remix-run/react";
+import { Heart, HeartHandshake, Wine } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCurrentUser } from "~/db/auth";
 import { eventRef } from "~/db/event-ref";
@@ -39,10 +40,16 @@ export default function YourEvent() {
                     {content && (
                         <>
                             <div className="flex items-center justify-center p-6">
-                                <p>{content}</p>
+                                <h1 className="italic font-serif text-xl font-bold">{content}</h1>
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <Heart/>
                             </div>
                             <div className="flex items-center justify-center p-6">
                                 <p>{eventDate}</p>
+                            </div>
+                            <div className="flex items-center justify-center">
+                                <Heart/>
                             </div>
                         </>
                     )}
@@ -51,14 +58,16 @@ export default function YourEvent() {
                     </div>
                     <div className="grid grid-cols-2 gap-4 justify-items-center">
                         <div className="grid col-start-1 justify-items-center">
-                            <h1>CEREMONY</h1>
+                            <HeartHandshake className="my-5"/>
+                            <h1 className="mb-5">CEREMONY</h1>
                             <p>{`Place: ${eventData.ceremonyPlace}`}</p>
                             <p>{`Street: ${eventData.ceremonyStreetAddress}`}</p>
                             <p>{`City: ${eventData.ceremonyCityAddress}`}</p>
                             <p>{`Country: ${eventData.ceremonyCountryAddress}`}</p>
                         </div>
                         <div className="grid justify-items-center">
-                            <h1>RECEPTION</h1>
+                            <Wine className="my-5"/>
+                            <h1 className="mb-5">RECEPTION</h1>
                             <p>{`Place: ${eventData.receptionPlace}`}</p>
                             <p>{`Street: ${eventData.receptionStreetAddress}`}</p>
                             <p>{`City: ${eventData.receptionCityAddress}`}</p>
