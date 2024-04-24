@@ -6,8 +6,9 @@ import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { useCurrentUser } from "~/db/auth";
-import { getYourRelatedEvent } from "~/db/get-your-related-event";
-import { updateYourRelatedEvent } from "~/db/update-your-related-event";
+import { relatedEventRef } from "~/db/event-ref";
+import { getYourEvent } from "~/db/get-your-event";
+import { updateYourEvent } from "~/db/update-your-event";
 import { RelatedEventData } from "~/lib/utils";
 
 
@@ -26,7 +27,7 @@ export default function EditRelatedEvent() {
 
     useEffect(() => {
         if(user.status === 'authenticated') {
-            getYourRelatedEvent()
+            getYourEvent(eventID, relatedEventRef)
             .then(res => {
                 const eventData = res as RelatedEventData;
                 setEventData(eventData);
@@ -44,7 +45,6 @@ export default function EditRelatedEvent() {
         event.preventDefault();
 
         const _formData = new FormData(event.target);
-        console.log("_formData", _formData)
 
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
@@ -81,8 +81,8 @@ export default function EditRelatedEvent() {
         if(Object.keys(errors).length !== 0) {
             return;
         } else {
-            await updateYourRelatedEvent(eventData?.eventID, formData);
-            navigate(`/events/${currentUserUID}/related-event/${eventID}`)
+            await updateYourEvent(eventID, formData, relatedEventRef);
+            navigate(`/${currentUserUID}/events/related-event/${eventID}`)
         }
     }
 
@@ -148,7 +148,7 @@ export default function EditRelatedEvent() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to={`/events/${currentUserUID}/related-event/${eventID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">Cancel</Link>
+                <Link to={`/${currentUserUID}/events/related-event/${eventID}`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2">Cancel</Link>
                 <Button type="submit" form="EventForm">Update event</Button>
             </CardFooter>
         </Card>
