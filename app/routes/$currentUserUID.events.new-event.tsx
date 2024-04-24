@@ -126,7 +126,7 @@ export default function NewEventPage() {
                     <div className="w-full border-b-2 pb-4">
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Names</p>
+                            <p className="border-t-2 pt-4">Names</p>
                             <CardDescription className="mb-6">Names of newlyweds</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
@@ -143,7 +143,7 @@ export default function NewEventPage() {
                         </div>
                         
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Event</p>
+                            <p className="border-t-2 pt-4">Event</p>
                             <CardDescription className="mb-6">{"Date and time (in 24-hour format)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
@@ -160,7 +160,7 @@ export default function NewEventPage() {
                         </div>
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Ceremony</p>
+                            <p className="border-t-2 pt-4">Ceremony</p>
                             <CardDescription className="mb-6">Ceremony venue and address</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
@@ -188,7 +188,7 @@ export default function NewEventPage() {
                         </div>
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Reception</p>
+                            <p className="border-t-2 pt-4">Reception</p>
                             <CardDescription className="mb-6">Reception venue and address</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
@@ -215,7 +215,7 @@ export default function NewEventPage() {
                         </div>
 
                         <div className="text-lgmb-2">
-                            <p className="border-t-2">Phone numbers</p>
+                            <p className="border-t-2 pt-4">Phone numbers</p>
                             <CardDescription className="mb-6">Your phone numbers for your guests</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
@@ -232,7 +232,7 @@ export default function NewEventPage() {
                         </div>
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Other</p>
+                            <p className="border-t-2 pt-4">Other</p>
                             <CardDescription className="mb-6">{"(optional)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">

@@ -105,7 +105,7 @@ export default function RelatedEvent() {
                     <div className="w-full border-b-2 pb-4">
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Name</p>
+                            <p className="border-t-2 pt-4">Name</p>
                             <CardDescription className="mb-6">{"(e.g. bachelorette party)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
@@ -116,7 +116,7 @@ export default function RelatedEvent() {
                         </div>
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Event</p>
+                            <p className="border-t-2 pt-4">Event</p>
                             <CardDescription className="mb-6">{"Date and time (in 24-hour format)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
@@ -133,7 +133,7 @@ export default function RelatedEvent() {
                         </div>
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Location</p>
+                            <p className="border-t-2 pt-4">Location</p>
                             <CardDescription className="mb-6">Event venue and address</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
@@ -160,7 +160,7 @@ export default function RelatedEvent() {
                         </div>
 
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Code</p>
+                            <p className="border-t-2 pt-4">Code</p>
                             <CardDescription className="mb-6">{"Your wedding code (if you have one)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
@@ -171,7 +171,7 @@ export default function RelatedEvent() {
                         </div>
                         
                         <div className="text-lg mb-2">
-                            <p className="border-t-2">Other</p>
+                            <p className="border-t-2 pt-4">Other</p>
                             <CardDescription className="mb-6">{"(optional)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
