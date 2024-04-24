@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "@remix-run/react";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
@@ -111,29 +111,32 @@ export default function EditEventPage() {
 
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
-            <CardHeader>
-                <CardTitle className="text-center">{`Edit your event number ${eventID}`}</CardTitle>
+            <CardHeader className="my-4">
+                <CardTitle className="mb-2">{`Edit your event number ${eventID}`}</CardTitle>
+                <CardDescription>You can edit selected form fields</CardDescription>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
                     <div className="w-full border-b-2 pb-4">
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Names</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Names</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="firstPerson" >First person name</Label> 
+                                    <Label htmlFor="firstPerson" >First person</Label> 
                                     <Input name="firstPerson" defaultValue={eventData?.firstPerson}/>
                                     {!!error?.firstPerson && <em className="text-xs">{error.firstPerson}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="secondPerson">Second person name</Label> 
+                                    <Label htmlFor="secondPerson">Second person</Label> 
                                     <Input name="secondPerson" defaultValue={eventData?.secondPerson}/>
                                     {!!error?.secondPerson && <em className="text-xs">{error.secondPerson}</em>} 
                                 </div>
                             </div>
                         </div>
                         
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Event</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Event</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
@@ -141,14 +144,15 @@ export default function EditEventPage() {
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="eventTime">{`Time (in 24-hour format)`}</Label> 
+                                    <Label htmlFor="eventTime">Time</Label> 
                                     <Input name="eventTime" type="time" defaultValue={eventData?.eventTime}/>
                                     {!!error?.eventTime && <em className="text-xs">{error.eventTime}</em>}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Ceremony</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Ceremony</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyPlace">Place name</Label> 
@@ -174,7 +178,8 @@ export default function EditEventPage() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Reception</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Reception</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionPlace">Place name</Label>
@@ -199,22 +204,24 @@ export default function EditEventPage() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Phone numbers</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Phone numbers</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="firstPersonPhone">First person phone number</Label>
+                                    <Label htmlFor="firstPersonPhone">First person</Label>
                                     <Input name="firstPersonPhone" type="tel" defaultValue={eventData?.firstPersonPhone}/>
                                     {!!error?.firstPersonPhone && <em className="text-xs">{error.firstPersonPhone}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="secondPersonPhone">Second person phone number</Label>
+                                    <Label htmlFor="secondPersonPhone">Second person</Label>
                                     <Input name="secondPersonPhone" type="tel" defaultValue={eventData?.secondPersonPhone}/>
                                     {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Other</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Other</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="other">Additional information</Label>
