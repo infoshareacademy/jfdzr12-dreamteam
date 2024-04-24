@@ -74,7 +74,7 @@ export default function YourEvent() {
                     </div>
                     {eventData.other && (
                         <>
-                        <div className="flex items-center justify-center mt-20">
+                        <div className="flex items-center justify-center mt-5">
                             <p>OTHER</p>
                         </div>
                         <div className="flex items-center justify-center p-6 whitespace-pre-wrap">

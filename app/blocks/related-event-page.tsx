@@ -57,9 +57,14 @@ export default function YourRelatedEvent() {
                         <p>{`Event code: ${eventData.eventID}`}</p>
                     </div>
                     {eventData.other && (
-                        <div className="flex items-center justify-center p-6 mb-10">
-                            <p>{`Other: ${eventData.other}`}</p>
+                        <>
+                        <div className="flex items-center justify-center mt-5">
+                            <p>OTHER</p>
                         </div>
+                        <div className="flex items-center justify-center p-6 whitespace-pre-wrap">
+                            <p>{eventData.other}</p>
+                        </div>
+                        </>
                     )}
                     <div className="m-10 sm:grid sm:grid-cols-4 sm:gap-4 sm:justify-items-center">
                             <Link to="guestlist" className="h-10 w-full px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Guest list</Link>
