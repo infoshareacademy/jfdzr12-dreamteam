@@ -1,27 +1,32 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { addDoc, query, where, getDocs } from "firebase/firestore";
-// import { db } from "~/db/firebase";
 import { uniqueGuestCode } from "~/lib/generator";
 import { guestIdRef, guestRef } from "~/db/guest-list-ref";
-
-interface NewGuest {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  exists: boolean
-}
+import { Link } from "@remix-run/react";
+import { useCurrentUser } from "~/db/auth";
+import { getUserUID } from "~/db/get-user-uid";
+import { NewGuest } from "~/type/new-guest";
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
-// const newGuestListData = collection(db, 'guestlist');
-
 export const GuestListForm = () => {
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
+  const [userUID, setUserUID] = useState<string | null>();
+
+  const user = useCurrentUser();
+
+  useEffect(() => {
+    if (user.status === 'authenticated') {
+      getUserUID()
+        .then(res => setUserUID(res))
+    } else {
+      setUserUID(null)
+    }
+  }, [user.status])
 
   async function handleOnSubmit(e: FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
@@ -31,8 +36,16 @@ export const GuestListForm = () => {
     const _formData = new FormData(e.target);
     console.log("_formData", _formData);
 
-    const guestID = await uniqueGuestCode.next();
+    if (userUID) {
+      _formData.append('userUID', userUID)
+    }
+
+    const guestID = uniqueGuestCode.next();
     _formData.append("guestID", String(guestID.value));
+
+    const currentDate = new Date();
+    const addTimes = currentDate.getTime();
+    _formData.append("timestamp", addTimes.toString());
 
     const formData = Object.fromEntries(_formData.entries());
     console.log("submit", formData);
@@ -66,13 +79,13 @@ export const GuestListForm = () => {
     setErrors(errors);
 
     if (Object.keys(errors).length !== 0) {
-      e.target.reset();
+      // e.target.reset();
       return;
     } else {
-      await addDoc(guestIdRef, { "ID": guestID.value });
-      // addDoc(newGuestListData, formData);
-      await addDoc(guestRef, formData);
+      addDoc(guestIdRef, { "ID": guestID.value });
+      addDoc(guestRef, formData);
       e.target.reset();
+      // GuestListTable.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
   }
 
@@ -100,8 +113,9 @@ export const GuestListForm = () => {
             {!!errors?.email && <em className="text-xs">{errors.email}</em>}
           </div>
         </CardContent>
-        <CardFooter className='grid grid-cols-2 gap-4 '>
-          <Button variant='outline' className='w-full' >Cancel</Button>
+        <CardFooter className='grid grid-cols-3 gap-6 '>
+          <Button type='reset' variant='secondary' className='w-full col-start-2'>
+            <Link to='/add-event/new-event'>Cancel</Link></Button>
           <Button type='submit' form='GuestListForm' className='w-full' >Add your guest</Button>
         </CardFooter>
       </Card>
