@@ -45,6 +45,7 @@ export interface RelatedEventData {
   eventStreetAddress: string,
   eventCityAddress: string,
   eventCountryAddress: string,
+  eventCode?: string,
   other?: string,
   eventID: string,
   userUID: string,

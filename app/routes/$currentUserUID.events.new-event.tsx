@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams } from "@remix-run/react";
 import { addDoc } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
@@ -117,29 +117,34 @@ export default function NewEventPage() {
 
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
-            <CardHeader>
-                <CardTitle className="text-center">Your dream wedding</CardTitle>
+            <CardHeader className="my-4">
+                <CardTitle className="mb-2">Your dream wedding</CardTitle>
+                <CardDescription>{"Provide the necessary information about your wedding."}</CardDescription>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
                     <div className="w-full border-b-2 pb-4">
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Names</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2">Names</p>
+                            <CardDescription className="mb-6">Names of newlyweds</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="firstPerson" >First person name</Label> 
+                                    <Label htmlFor="firstPerson">First person</Label> 
                                     <Input name="firstPerson"/>
                                     {!!error?.firstPerson && <em className="text-xs">{error.firstPerson}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="secondPerson">Second person name</Label> 
+                                    <Label htmlFor="secondPerson">Second person</Label> 
                                     <Input name="secondPerson"/>
                                     {!!error?.secondPerson && <em className="text-xs">{error.secondPerson}</em>} 
                                 </div>
                             </div>
                         </div>
                         
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Event</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2">Event</p>
+                            <CardDescription className="mb-6">{"Date and time (in 24-hour format)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
@@ -147,14 +152,16 @@ export default function NewEventPage() {
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="eventTime">{`Time (in 24-hour format)`}</Label> 
+                                    <Label htmlFor="eventTime">Time</Label> 
                                     <Input name="eventTime" type="time"/>
                                     {!!error?.eventTime && <em className="text-xs">{error.eventTime}</em>}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Ceremony</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2">Ceremony</p>
+                            <CardDescription className="mb-6">Ceremony venue and address</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyPlace">Place name</Label> 
@@ -180,7 +187,9 @@ export default function NewEventPage() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Reception</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2">Reception</p>
+                            <CardDescription className="mb-6">Reception venue and address</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionPlace">Place name</Label>
@@ -205,7 +214,9 @@ export default function NewEventPage() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Phone numbers</p>
+                        <div className="text-lgmb-2">
+                            <p className="border-t-2">Phone numbers</p>
+                            <CardDescription className="mb-6">Your phone numbers for your guests</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="firstPersonPhone">First person phone number</Label>
@@ -220,7 +231,9 @@ export default function NewEventPage() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Other</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2">Other</p>
+                            <CardDescription className="mb-6">{"(optional)"}</CardDescription>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="other">Additional information</Label>
@@ -236,7 +249,7 @@ export default function NewEventPage() {
                 <Link to={`/${currentUserUID}/events`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
                     Cancel
                 </Link>
-                <Button type="submit" form="EventForm" >Add your event</Button>
+                <Button type="submit" form="EventForm">Add your wedding</Button>
             </CardFooter>
         </Card>
     )
