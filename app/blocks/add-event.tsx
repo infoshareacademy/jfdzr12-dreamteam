@@ -4,23 +4,17 @@ import { Link } from "@remix-run/react";
 
 export function AddEvent() {
   return (
-    <>
-    <Link to="new-event"> 
-      <Button 
-        style={{ display: 'block', width: '200px', margin: '0 auto' }} 
-        variant="outline"
-      >
-        Add Your Dream Event
-      </Button>
-    </Link>
+    <div style={{ width: '200px', margin: 'auto auto', marginRight: 'auto' }}>
+      <Link to="new-event"> 
+        <Button style={{ display: 'block', width: '100%', marginTop: '30px', marginBottom: '30px' }} variant="outline">
+          Add Your Wedding Event
+        </Button>
+      </Link>
       <Link to="new-related-event"> 
-      <Button 
-        style={{ display: 'block', width: '200px', margin: '0 auto' }} 
-        variant="outline"
-      >
-        Add Related Event
-      </Button>
-    </Link>
-    </>
+        <Button style={{ display: 'block', width: '100%', marginBottom: '30px' }} variant="outline">
+          Add Related Event
+        </Button>
+      </Link>
+    </div>
   );
 }
