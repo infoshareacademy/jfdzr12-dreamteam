@@ -45,9 +45,7 @@ export default function App() {
   return (
     <ThemeProvider storageKey="vite-ui-theme">
       <Header />
-      <ToastProvider>
       <Outlet />
-      </ToastProvider>
     </ThemeProvider>
   )
 }
