@@ -11,6 +11,8 @@ import { LinksFunction } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import { Header } from "~/blocks/header";
 import { ThemeProvider } from "~/blocks/theme-provider"
+import { Toaster } from "./atoms/ui/toaster";
+import { ToastProvider } from "@radix-ui/react-toast";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -31,6 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -42,7 +45,9 @@ export default function App() {
   return (
     <ThemeProvider storageKey="vite-ui-theme">
       <Header />
+      <ToastProvider>
       <Outlet />
+      </ToastProvider>
     </ThemeProvider>
   )
 }

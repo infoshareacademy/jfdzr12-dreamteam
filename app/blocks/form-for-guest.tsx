@@ -11,6 +11,10 @@ import { FieldPath, collection, getDocs, onSnapshot, query, updateDoc, where } f
 import { db } from '~/db/firebase';
 import { guestRef } from '~/db/guest-list-ref';
 import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
+import { toast, useToast } from '~/atoms/ui/use-toast';
+import { Toast, ToastAction } from '~/atoms/ui/toast';
+import { cn } from '~/lib/utils';
+// import { ToastWithTitle } from './toast';
 
 
 const textLabelFirstName = "First name";
@@ -103,6 +107,10 @@ const handleReset = () => {
     setRadioGroupKey(''); // Inicjalizacja wartości klucza
   }, []);
 
+  const { toast } = useToast();
+
+ 
+
   async function handleSubmit (e: React.FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
       return;
@@ -151,8 +159,16 @@ const handleReset = () => {
     if (snapshot.size === 1) {
       const docRef = snapshot.docs[0].ref;
       await updateDoc(docRef, {formData});
+      toast({
+        className: cn(
+        'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20'
+      ),
+        title: "Success!",
+        description: "Your form has been submitted successfully.",
+        duration: 6000, 
+      });
     }
-    
+ 
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
       console.log('Names errors');
@@ -171,6 +187,7 @@ const handleReset = () => {
   };
 
   return (
+    <>
     <Card className="w-full max-w-screen-lg mx-auto my-8">
       <CardHeader>
         <CardTitle className='text-center'>Guest Form</CardTitle>
@@ -398,5 +415,7 @@ const handleReset = () => {
           <Button type="submit" form="GuestForm" /*onClick={handleSendClick}*/>{textButtonSubmit}</Button>
         </CardFooter>
     </Card>
+    
+    </>
   );
 }
