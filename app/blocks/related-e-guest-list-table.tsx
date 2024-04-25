@@ -6,36 +6,36 @@ import { Table, TableBody, TableRow, TableCell, TableHead, TableHeader } from '~
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '~/atoms/ui/dropdown-menu';
 import { Button } from '~/atoms/ui/button';
 import { MoreHorizontal } from 'lucide-react';
-import { NewGuest } from '~/lib/new-guest';
-import { guestRefOrder } from '~/db/guest-list-ref';
+import { RelatedEventNewGuest } from '~/lib/new-guest';
+import { relatedEventGuestRefOrder } from '~/db/related-e-guest-list-ref';
 import { ScrollArea, ScrollBar } from '~/atoms/ui/scroll-area';
 
 
-export const GuestListTable = () => {
+export const RelatedEventGuestListTable = () => {
 
   const { eventID } = useParams()
 
-  const [guests, setGuests] = useState<NewGuest[]>([]);
+  const [relatedEvGuests, setRelatedEvGuests] = useState<RelatedEventNewGuest[]>([]);
 
-  const getGuestList = () => {
-    onSnapshot(guestRefOrder, res => {
-      const guestList = res.docs.map(doc => ({
+  const getRelatedEventGuestList = () => {
+    onSnapshot(relatedEventGuestRefOrder, res => {
+      const relatedEventGuestList = res.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      } as NewGuest));
-      console.log("guest list", guestList);
-      const filteredGuestList = guestList.filter(guest => guest.eventID === eventID);
-      setGuests(filteredGuestList);
+      } as RelatedEventNewGuest));
+      console.log("guest list", relatedEventGuestList);
+      const filteredGuestList = relatedEventGuestList.filter(guest => guest.eventID === eventID);
+      setRelatedEvGuests(filteredGuestList);
     });
   };
 
   useEffect(() => {
-    getGuestList();
+    getRelatedEventGuestList();
   }, []);
 
   const handleDelete = (id: string) => {
-    const guestRefDel = doc(db, 'guestlist', id);
-    deleteDoc(guestRefDel)
+    const relatedEventGuestRefDel = doc(db, 'relatedEventGuestList', id);
+    deleteDoc(relatedEventGuestRefDel)
       .then(() => {
         console.log("Document deleted successfully");
       })
@@ -54,21 +54,19 @@ export const GuestListTable = () => {
             <TableHead>First name</TableHead>
             <TableHead>Last Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead className='text-center'>Confirmation</TableHead>
             <TableHead>
               <span className="sr-only">Actions</span>
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {guests.map((guest, index) => (
+          {relatedEvGuests.map((guest, index) => (
             <TableRow key={guest.id}>
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell className="font-medium">{guest.guestID}</TableCell>
               <TableCell className="font-medium">{guest.firstName}</TableCell>
               <TableCell className="font-medium">{guest.lastName}</TableCell>
               <TableCell className="font-medium">{guest.email}</TableCell>
-              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.presence}</TableCell> : <TableCell>{null}</TableCell>}
               <TableCell>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -83,7 +81,6 @@ export const GuestListTable = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
                     <DropdownMenuItem onClick={() => handleDelete(guest.id)}>Delete</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
