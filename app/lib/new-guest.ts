@@ -25,4 +25,5 @@ export interface NewGuest {
   exists: boolean;
   timestamp: string;
   formData: GuestPreferences | null;
+  eventID: number | string | undefined;
 }

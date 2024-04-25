@@ -1,10 +1,10 @@
 import { onSnapshot } from 'firebase/firestore'
 import { useEffect, useState } from 'react';
 import { Table, TableBody, TableRow, TableCell, TableHead, TableHeader } from '~/atoms/ui/table';
-import { NewGuest } from '~/type/new-guest';
+import { NewGuest } from '~/lib/new-guest';
 import { guestRefOrder } from '~/db/guest-list-ref';
-import { ScrollBar } from '~/atoms/ui/scroll-area';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { ScrollArea, ScrollBar } from '~/atoms/ui/scroll-area';
+import { useParams } from '@remix-run/react';
 
 const guestPrefHeader = [
   'No.',
@@ -16,6 +16,9 @@ const guestPrefHeader = [
 ]
 
 export const GuestPreferTable = () => {
+
+  const { eventID } = useParams()
+
   const [guests, setGuests] = useState<NewGuest[]>([]);
 
   const getGuestList = () => {
@@ -24,8 +27,9 @@ export const GuestPreferTable = () => {
         id: doc.id,
         ...doc.data()
       } as NewGuest));
-      console.log("tuturutu", guestList);
-      setGuests(guestList);
+      console.log("guest list", guestList);
+      const filteredGuestList = guestList.filter(guest => guest.eventID === eventID);
+      setGuests(filteredGuestList);
     });
   };
 
