@@ -1,21 +1,23 @@
-import { useState} from "react";
+import { useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
-import { loginWithEmailAndPassword} from "~/db/auth";
+import { loginWithEmailAndPassword } from "~/db/auth";
 import { resetPassword } from "~/db/auth";
 import { Link, useNavigate } from "@remix-run/react"; 
 import { getUserUID } from "~/db/get-user-uid";
+
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [signInDisabled, setSignInDisabled] = useState(false);
+
   const navigate = useNavigate(); 
 
-  
   const handleSignIn = async () => {
     setEmailError("");
     setPasswordError("");
@@ -35,6 +37,9 @@ export function SignIn() {
       return;
     }
 
+    
+    setSignInDisabled(true);
+
     const signInResult = await loginWithEmailAndPassword(email, password);
     if (signInResult.success) {
       console.log("Sign in successful!");
@@ -44,6 +49,10 @@ export function SignIn() {
       navigate(`/${currentUserUID}/events`);
     } else {
       console.error("Sign in error:", signInResult.error);
+      
+      setSignInDisabled(false);
+      
+      setPasswordError("Invalid email or password");
     }
   };
 
@@ -103,7 +112,7 @@ export function SignIn() {
           <p className="text-sm text-gray-500 cursor-pointer font-bold" onClick={handleForgotPassword}>
             Forgot Password?
           </p>
-          <Button type="button" className="w-full" onClick={handleSignIn}>
+          <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled}> {/* Dodanie blokady przycisku */}
             Sign In
           </Button>
         </div>
