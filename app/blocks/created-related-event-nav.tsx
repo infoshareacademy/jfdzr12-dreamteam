@@ -1,5 +1,4 @@
-
-import{ useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from '@remix-run/react';
 import { Button } from '~/atoms/ui/button';
 import { relatedEventRef } from '~/db/event-ref';
@@ -15,6 +14,7 @@ interface RelatedEvent {
     eventID: string;
     userUID: string;
 }
+
 export const CreatedRelatedEventNav = () => {
     const [relatedEvents, setRelatedEvents] = useState<RelatedEvent[]>([]);
     const [userUID, setUserUID] = useState<string | null>();
@@ -45,7 +45,6 @@ export const CreatedRelatedEventNav = () => {
             setRelatedEvents(relatedEventList);
         });
     };
-
     const handleDelete = (eventID: string) => {
         const eventDoc = doc(relatedEventRef, eventID);
         deleteDoc(eventDoc)
@@ -59,17 +58,17 @@ export const CreatedRelatedEventNav = () => {
     };
     
     return (
-        <div className="flex justify-center items-center h-64" id="created-related-event-nav">
-            <div className="flex items-center">
-                {relatedEvents.map((event) => (
-                    userUID === event.userUID && ( 
-                        <React.Fragment key={event._id}>
-                            <Link to={`related-event/${event.eventID}`}><Button>{event.eventName}</Button></Link>
-                            <button className="ml-2 p-1 text-gray-700 rounded-full" onClick={() => handleDelete(event._id)}>X</button>
-                        </React.Fragment>
-                    )
-                ))}
-            </div>
+        <div className="flex justify-center flex-wrap items-center " id="created-related-event-nav">
+            {relatedEvents.map((event) => (
+                userUID === event.userUID && ( 
+                    <div className="m-4" key={event._id}>
+                        <Link to={`related-event/${event.eventID}`}>
+                            <Button className="p-4 text-gray-700" variant="outline">{event.eventName}</Button>
+                        </Link>
+                        <button className=" p-1 text-gray-700 rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
+                    </div>
+                )
+            ))}
         </div>
     );
 };

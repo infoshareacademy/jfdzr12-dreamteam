@@ -1,10 +1,11 @@
 import { Link, useNavigate, useParams } from "@remix-run/react";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { DatePicker } from "~/atoms/ui/date-picker";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
+import { Textarea } from "~/atoms/ui/textarea";
 import { useCurrentUser } from "~/db/auth";
 import { relatedEventRef } from "~/db/event-ref";
 import { getYourEvent } from "~/db/get-your-event";
@@ -88,14 +89,16 @@ export default function EditRelatedEvent() {
 
     return (
         <Card className="w-full max-w-screen-lg mx-auto my-8">
-            <CardHeader>
-                <CardTitle className="text-center">{`Edit your related event number ${eventID}`}</CardTitle>
+            <CardHeader className="my-4">
+                <CardTitle className="mb-2">{`Edit your related event number ${eventID}`}</CardTitle>
+                <CardDescription>You can edit selected form fields</CardDescription>
             </CardHeader>
             <CardContent>
                 <form id="EventForm" onSubmit={handleOnSubmit}>
                     <div className="w-full border-b-2 pb-4">
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Name</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Name</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventName">Name of your event</Label> 
@@ -104,7 +107,8 @@ export default function EditRelatedEvent() {
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Event</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Event</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
@@ -112,14 +116,15 @@ export default function EditRelatedEvent() {
                                     {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
-                                    <Label htmlFor="eventTime">{`Time (in 24-hour format)`}</Label> 
+                                    <Label htmlFor="eventTime">Time</Label> 
                                     <Input name="eventTime" type="time" defaultValue={eventData?.eventTime}/>
                                     {!!error?.eventTime && <em className="text-xs">{error.eventTime}</em>}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="text-lg font-bold mb-2"><p className="border-t-2 py-4 mb-4">Location</p>
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Location</p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventPlace">Place name</Label>
@@ -140,6 +145,16 @@ export default function EditRelatedEvent() {
                                     <Label htmlFor="eventCountryAddress">Country</Label> 
                                     <Input name="eventCountryAddress" defaultValue={eventData?.eventCountryAddress}/>
                                     {!!error?.eventCountryAddress && <em className="text-xs">{error.eventCountryAddress}</em>}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="text-lg mb-2">
+                            <p className="border-t-2 py-4 mb-4">Other</p>
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
+                                    <Label htmlFor="other">Additional information</Label>
+                                    <Textarea name="other" defaultValue={eventData?.other}/>
                                 </div>
                             </div>
                         </div>
