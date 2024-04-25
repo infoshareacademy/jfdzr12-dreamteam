@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx"
+import { PartyPopper } from "lucide-react";
 import { twMerge } from "tailwind-merge"
 import { getLastEventID } from "~/db/last-event-id";
 
@@ -52,7 +53,7 @@ export interface RelatedEventData {
 }
 
 
-export function calculateEventContent(eventData: EventData | null | undefined, loading: boolean): { content: string, eventType?: string, eventDate: string } | undefined {
+export function calculateEventContent(eventData: EventData | null | undefined, loading: boolean): { content: string | JSX.Element, eventType?: string, eventDate: string } | undefined {
   if (!loading && eventData) {
       const today: Date = new Date();
       today.setHours(0, 0, 0, 0);
@@ -63,11 +64,17 @@ export function calculateEventContent(eventData: EventData | null | undefined, l
       const eventDateString: string = eventDate.toLocaleDateString("en-GB");
 
       if (numberOfDays < 0) {
-          return { content: `You were married ${Math.abs(numberOfDays)} days ago`, eventDate: eventDateString };
+          return { content: `You were married ${Math.abs(numberOfDays)} days ago. Best wishes!`, eventDate: eventDateString };
       } else if (numberOfDays === 0) {
-          return { content: "Your wedding is today!", eventDate: eventDateString };
+          const partyPopper = <PartyPopper className="inline"/>;
+          const content = (
+            <div className="flex items-center">
+              {partyPopper}<p className="ml-5 mr-5">Your wedding is today! Have fun!</p>{partyPopper} 
+            </div>
+          );
+          return { content, eventDate: eventDateString };
       } else if (numberOfDays === 1) {
-          return { content: "Your wedding is tomorrow!", eventDate: eventDateString };
+          return { content: "Your wedding is tomorrow! Are you ready?", eventDate: eventDateString };
       } else {
           return { content: `${numberOfDays} days until ${eventData.firstPerson} and ${eventData.secondPerson}'s wedding`, eventDate: eventDateString };
       }
