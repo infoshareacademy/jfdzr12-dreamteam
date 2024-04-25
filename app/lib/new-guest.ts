@@ -23,7 +23,18 @@ export interface NewGuest {
   lastName: string;
   email: string;
   exists: boolean;
-  timestamp: string;
+  timestamp: string | number | null;
   formData: GuestPreferences | null;
+  eventID: number | string | undefined;
+}
+
+export interface RelatedEventNewGuest {
+  id: string;
+  guestID: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  exists: boolean;
+  timestamp: string | number | null;
   eventID: number | string | undefined;
 }
