@@ -2,17 +2,32 @@ import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, } from "~/atoms/ui/sheet"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+}
+  from "~/atoms/ui/sheet"
 import { addDoc, query, where, getDocs } from "firebase/firestore";
 import { uniqueGuestCode } from "~/lib/generator";
 import { guestIdRef, guestRef } from "~/db/guest-list-ref";
 import { useCurrentUser } from "~/db/auth";
 import { getUserUID } from "~/db/get-user-uid";
-import { NewGuest } from "~/type/new-guest";
+import { NewGuest } from "~/lib/new-guest";
+import { useParams } from "@remix-run/react";
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
 export const GuestListForm = () => {
+
+  const { eventID } = useParams()
+  console.log('eventID', eventID)
+
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
   const [userUID, setUserUID] = useState<string | null>();
 
@@ -34,6 +49,10 @@ export const GuestListForm = () => {
     e.preventDefault();
     const _formData = new FormData(e.target);
     console.log("_formData", _formData);
+
+    if (eventID) {
+      _formData.append('eventID', eventID)
+    }
 
     if (userUID) {
       _formData.append('userUID', userUID)
@@ -78,13 +97,11 @@ export const GuestListForm = () => {
     setErrors(errors);
 
     if (Object.keys(errors).length !== 0) {
-      // e.target.reset();
       return;
     } else {
       addDoc(guestIdRef, { "ID": guestID.value });
       addDoc(guestRef, formData);
       e.target.reset();
-      // GuestListTable.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     }
   }
 

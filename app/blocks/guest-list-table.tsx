@@ -1,17 +1,22 @@
-import { onSnapshot, deleteDoc, doc } from 'firebase/firestore'
+import { onSnapshot, deleteDoc, doc, } from 'firebase/firestore'
 import { db } from '~/db/firebase'
 import { useEffect, useState } from 'react';
+import { useParams } from '@remix-run/react';
 import { Table, TableBody, TableRow, TableCell, TableHead, TableHeader } from '~/atoms/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '~/atoms/ui/dropdown-menu';
 import { Button } from '~/atoms/ui/button';
 import { MoreHorizontal } from 'lucide-react';
-import { NewGuest } from '~/type/new-guest';
+import { NewGuest } from '~/lib/new-guest';
 import { guestRefOrder } from '~/db/guest-list-ref';
 import { ScrollArea, ScrollBar } from '~/atoms/ui/scroll-area';
 
 
 export const GuestListTable = () => {
+
+  const { eventID } = useParams()
+
   const [guests, setGuests] = useState<NewGuest[]>([]);
+
 
   const getGuestList = () => {
     onSnapshot(guestRefOrder, res => {
@@ -19,8 +24,9 @@ export const GuestListTable = () => {
         id: doc.id,
         ...doc.data()
       } as NewGuest));
-      console.log("tuturutu", guestList);
-      setGuests(guestList);
+      console.log("guest list", guestList);
+      const filteredGuestList = guestList.filter(guest => guest.eventID === eventID);
+      setGuests(filteredGuestList);
     });
   };
 
