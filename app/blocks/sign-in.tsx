@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -15,7 +16,7 @@ export function SignIn() {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [signInDisabled, setSignInDisabled] = useState(false);
-
+  const [buttonClicked, setButtonClicked] = useState(false);
   const navigate = useNavigate(); 
 
   const handleSignIn = async () => {
@@ -37,8 +38,8 @@ export function SignIn() {
       return;
     }
 
-    
     setSignInDisabled(true);
+    setButtonClicked(true);
 
     const signInResult = await loginWithEmailAndPassword(email, password);
     if (signInResult.success) {
@@ -49,10 +50,12 @@ export function SignIn() {
       navigate(`/${currentUserUID}/events`);
     } else {
       console.error("Sign in error:", signInResult.error);
-      
       setSignInDisabled(false);
-      
-      setPasswordError("Invalid email or password");
+      if (signInResult.error === "Invalid email or password.") {
+        setPasswordError("Invalid email or password");
+      } else {
+        setPasswordError("Account does not exist. Sign up");
+      }
     }
   };
 
@@ -65,8 +68,14 @@ export function SignIn() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSignIn();
+    }
+  };
+
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-sm" onKeyPress={handleKeyPress}>
       <CardHeader>
         <CardTitle className="text-2x">Sign In</CardTitle>
         <CardDescription>
@@ -112,8 +121,8 @@ export function SignIn() {
           <p className="text-sm text-gray-500 cursor-pointer font-bold" onClick={handleForgotPassword}>
             Forgot Password?
           </p>
-          <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled}> {/* Dodanie blokady przycisku */}
-            Sign In
+          <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled || buttonClicked}>
+            {buttonClicked ? "Signing In..." : "Sign In"}
           </Button>
         </div>
         

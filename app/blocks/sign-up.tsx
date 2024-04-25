@@ -21,7 +21,9 @@ export const SignUp = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false); 
   const navigate = useNavigate(); 
+
   const handleSignUp = async () => {
     setFirstNameError("");
     setLastNameError("");
@@ -57,6 +59,8 @@ export const SignUp = () => {
       return;
     }
 
+    setButtonClicked(true); // Ustawienie stanu, że przycisk został kliknięty
+
     const signUpResult = await registerWithEmailAndPassword(email, password);
     if (signUpResult.success) {
       console.log("Account created successfully!");
@@ -72,8 +76,14 @@ export const SignUp = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSignUp();
+    }
+  };
+
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-sm" onKeyPress={handleKeyPress}>
       <CardHeader>
         <CardTitle className="text-xl">Sign Up</CardTitle>
         <CardDescription>
@@ -160,8 +170,8 @@ export const SignUp = () => {
             </div>
             {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
           </div>
-          <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
-            Create an account 
+          <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp} disabled={buttonClicked}>
+            {buttonClicked ? "Creating Account..." : "Create an account"} 
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
