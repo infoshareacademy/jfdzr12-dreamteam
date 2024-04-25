@@ -3,30 +3,22 @@ import { Button } from "~/atoms/ui/button";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-}
-  from "~/atoms/ui/sheet"
+  Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger,
+} from "~/atoms/ui/sheet"
 import { addDoc, query, where, getDocs } from "firebase/firestore";
 import { uniqueGuestCode } from "~/lib/generator";
-import { guestIdRef, guestRef } from "~/db/guest-list-ref";
+import { relatedEventGuestIdRef, relatedEventGuestRef } from "~/db/related-e-guest-list-ref";
 import { useCurrentUser } from "~/db/auth";
 import { getUserUID } from "~/db/get-user-uid";
-import { NewGuest } from "~/lib/new-guest";
+import { RelatedEventNewGuest } from "~/lib/new-guest";
 import { useParams } from "@remix-run/react";
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
-export const GuestListForm = () => {
+export const RelatedEventGuestListForm = () => {
   const { eventID } = useParams()
 
-  const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
+  const [errors, setErrors] = useState<FormErrorData<RelatedEventNewGuest>>({});
   const [userUID, setUserUID] = useState<string | null>();
 
   const user = useCurrentUser();
@@ -66,7 +58,7 @@ export const GuestListForm = () => {
     const formData = Object.fromEntries(_formData.entries());
     console.log("submit", formData);
 
-    const errors: FormErrorData<NewGuest> = {};
+    const errors: FormErrorData<RelatedEventNewGuest> = {};
 
     if (!("firstName" in formData && typeof formData.firstName === "string" && formData.firstName.length >= 2)) {
       errors.firstName = 'First name is required, min 2 characters';
@@ -80,14 +72,14 @@ export const GuestListForm = () => {
       errors.email = 'Email is required';
     }
 
-    const q = query(guestRef,
+    const existingGuest = query(relatedEventGuestRef,
       where('firstName', '==', formData.firstName),
       where('lastName', '==', formData.lastName),
       where('email', '==', formData.email),
       where('eventID', '==', eventID)
     );
 
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(existingGuest);
 
     if (snapshot.size > 0) {
       errors.exists = 'Guest already exists';
@@ -98,16 +90,15 @@ export const GuestListForm = () => {
     if (Object.keys(errors).length !== 0) {
       return;
     } else {
-      addDoc(guestIdRef, { "ID": guestID.value });
-      addDoc(guestRef, formData);
+      addDoc(relatedEventGuestIdRef, { "ID": guestID.value });
+      addDoc(relatedEventGuestRef, formData);
       e.target.reset();
     }
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
+    const { name, } = e.target;
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
-    console.log('value', value)
   }
 
   function clearErrors() {
@@ -126,7 +117,7 @@ export const GuestListForm = () => {
             Fill in the details of the person you want to invite to your event.
           </SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleOnSubmit} id="GuestListForm" className="grid gap-4 py-4">
+        <form onSubmit={handleOnSubmit} id="RelatedEventGuestListForm" className="grid gap-4 py-4">
           <div className="space-y-1">
             <Label htmlFor="firstName">First name</Label>
             <Input name="firstName" type="text" placeholder="First name" onChange={handleChange} />
@@ -148,7 +139,7 @@ export const GuestListForm = () => {
           <SheetClose>
             <Button type='reset' variant='secondary' className="w-full" onClick={clearErrors}>Cancel</Button>
           </SheetClose>
-          <Button type='submit' form='GuestListForm' >Add your guest</Button>
+          <Button type='submit' form='RelatedEventGuestListForm' >Add your guest</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

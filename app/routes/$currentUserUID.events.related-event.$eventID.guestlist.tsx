@@ -1,11 +1,9 @@
-import { GuestListForm } from "~/blocks/guest-list-form";
-import { GuestListTable } from "~/blocks/guest-list-table";
+import { RelatedEventGuestCard } from "~/pages/guest-related-e-card";
 
 export default function GuestListPage() {
   return (
     <div className="mx-screen mx-auto max-w-7xl">
-      <GuestListForm />
-      <GuestListTable />
+      <RelatedEventGuestCard />
     </div>
 
   )
