@@ -53,10 +53,10 @@ export const GuestPreferTable = () => {
             <TableRow key={guest.id}>
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell className="font-medium ">{guest.firstName} {guest.lastName}</TableCell>
-              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.partner}</TableCell> : <TableCell>{null}</TableCell>}
+              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.partner === "on" ? "yes" : "no"}</TableCell> : <TableCell>{null}</TableCell>}
               {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.numberOfChildren}</TableCell> : <TableCell>{null}</TableCell>}
-              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.accommodation}</TableCell> : <TableCell>{null}</TableCell>}
-              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.transport}</TableCell> : <TableCell>{null}</TableCell>}
+              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.accommodation === "on" ? "yes" : "no"}</TableCell> : <TableCell>{null}</TableCell>}
+              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.transport === "on" ? "yes" : "no"}</TableCell> : <TableCell>{null}</TableCell>}
               {guest.formData ? <TableCell className="font-medium text-center font-normal max-w-36">{guest.formData.alcohols[0]} {guest.formData.alcohols[1]} {guest.formData.alcohols[2]} {guest.formData.alcohols[3]} {guest.formData.alcohols[4]} {guest.formData.alcohols[5]} {guest.formData.alcohols[6]}</TableCell> : <TableCell>{null}</TableCell>}
             </TableRow>
           ))}
