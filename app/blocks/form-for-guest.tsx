@@ -5,12 +5,15 @@ import { Input } from '~/atoms/ui/input';
 import { Checkbox } from '~/atoms/ui/checkbox';
 import { Textarea } from '~/atoms/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/atoms/ui/select';
-import { NewGuest, addGuest } from '~/db/guest';
+// import { NewGuest, addGuest } from '~/db/guest';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/atoms/ui/card';
 import { FieldPath, collection, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { db } from '~/db/firebase';
 import { guestRef } from '~/db/guest-list-ref';
 import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
+import { toast, useToast } from '~/atoms/ui/use-toast';
+import { Toast, ToastAction } from '~/atoms/ui/toast';
+import { cn } from '~/lib/utils';
 
 
 const textLabelFirstName = "First name";
@@ -18,12 +21,12 @@ const textLabelSecondName ="Last name";
 const textLabelPresence = "Do you confirm your arrival? ";
 const textLabelPartner = "Will you be accompanied by a partner or another person? ";
 const textLabelChild = "Will you be accompanied by a child? ";
-const textLabelNumberOfChildren = "Specify the number of children accompanying you";
+const textLabelNumberOfChildren = "Specify the number of children accompanying you :";
 const textLabelMenuGuest = "Select your preferred menu option :";
 const textLabelMenuPartner = "Select menu for your partner :";
 const textLabelMenuChild = "Select menu for child :";
 const textLabelAdditionalInfo = "Please feel free to provide any additional information regarding the menu (e.g., any food allergies or dietary restrictions)"
-const textLabelAlcoholGuest = "Select your preferred alcohol(s)"; 
+const textLabelAlcoholGuest = "Pick your preferred alcohol(s)"; 
 const textLabelAccommodation = "Will accommodation be needed? ";
 const textLabelTransport = "Will you require transportation? ";
 const textButtonSubmit = "Send";
@@ -59,6 +62,24 @@ interface Guest {
   lastName: string;
 }
 
+interface NewGuest {
+  firstName: string;
+  lastName: string;
+  guestUniqueId: string;
+  presence: string;
+  partner?: string;
+  child?: string;
+  numberOfChildren?: number;
+  selectedMenuGuest?: string;
+  selectedMenuPartner?: string;
+  selectedMenuChild?: string;
+  additionalInfo?: string; 
+  alcohols?: string[];
+  accommodation?: string;
+  transport?: string; 
+  exists: boolean;
+}
+
 interface NameFormProps {
   onSubmit: (objectValues: NewGuest) => void;
 }
@@ -75,10 +96,8 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
   }, {});
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
   const [guests, setGuests] = useState<Guest[]>([]);
-  // const [isRadioActive, setIsRadioactive] = useState<undefined>();
-  // const [cancelClicked, setCancelClicked] = useState(false);
-// const [sendClicked, setSendClicked] = useState(false);
-const [radioGroupKey, setRadioGroupKey] = useState('');
+
+  const [radioGroupKey, setRadioGroupKey] = useState('');
 
 const handleReset = () => {
   setShowAdditionalQuestions(false); 
@@ -100,8 +119,10 @@ const handleReset = () => {
   }, []);
 
   useEffect(() => {
-    setRadioGroupKey(''); // Inicjalizacja wartości klucza
+    setRadioGroupKey(''); 
   }, []);
+
+  const { toast } = useToast();
 
   async function handleSubmit (e: React.FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
@@ -151,26 +172,33 @@ const handleReset = () => {
     if (snapshot.size === 1) {
       const docRef = snapshot.docs[0].ref;
       await updateDoc(docRef, {formData});
+      toast({
+        className: cn(
+        'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20'
+      ),
+        title: "Success!",
+        description: "Your form has been submitted successfully.",
+        duration: 6000, 
+      });
     }
-    
+ 
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
-      console.log('Names errors');
       return;
     } 
 
     console.log('handleSubmit', formData)
-    addGuest(formData);
     e.target.reset();
-    setRadioGroupKey(performance.now().toString()); // Ustawia nowy klucz po kliknięciu Send
+    setRadioGroupKey(performance.now().toString()); 
   };
 
   const handleCancelClick = () => {
     setErrors({});
-    setRadioGroupKey(performance.now().toString()); // Ustawia nowy klucz po kliknięciu Cancel
+    setRadioGroupKey(performance.now().toString()); 
   };
 
   return (
+    <>
     <Card className="w-full max-w-screen-lg mx-auto my-8">
       <CardHeader>
         <CardTitle className='text-center'>Guest Form</CardTitle>
@@ -203,8 +231,6 @@ const handleReset = () => {
                 <Label htmlFor="guestUniqueId">Your four-digit code</Label>
                   <Input
                   name="guestUniqueId"
-                  // type="number"
-                  // pattern="[0-9]{4}"
                   />
                   {!!errors?.exists && <em className="text-xs">{errors.exists}</em>}
                   {!!errors?.guestUniqueId && <em className="text-xs"><br/>{errors.guestUniqueId}</em>}
@@ -225,16 +251,6 @@ const handleReset = () => {
               </RadioGroup>
               {!!errors?.presence && <em className="text-xs">{errors.presence}</em>}
               </div>
-              
-              {/* <div>
-                <Label htmlFor="presence">{textLabelPresence}</Label>
-                <Checkbox 
-                  name="presence"
-                  checked={showAdditionalQuestions}
-                  onCheckedChange={setShowAdditionalQuestions}
-                  />
-
-              </div> */}
             </div>
 
               {showAdditionalQuestions && (
@@ -280,14 +296,14 @@ const handleReset = () => {
 
                 <div className="flex flex-col space-y-1.5">
                   <p className="text-lg font-bold">Dinning and alcohol preferences</p>
-                      <div className='grid grid-cols-4 gap-4'>
+                      <div className='grid grid-cols-3 gap-4'>
                         {/* <div className='grid-flow-row'> */}
                           <Label htmlFor="selectedMenuGuest">{textLabelMenuGuest}</Label>
                         {/* </div> */}
                           <div>
-                          <Select name="selectedMenuGuest" defaultValue={menuOptions[0].value} /*value={selectMenuOptionGuest} onValueChange={setSelectMenuOptionGuest}*/ >
+                          <Select name="selectedMenuGuest" defaultValue={menuOptions[0].value} >
                             <SelectTrigger>
-                              <SelectValue /*placeholder="Select your preferred menu option"*/ />
+                              <SelectValue />
                             </SelectTrigger>
                               <SelectContent position="popper">
                                 {menuOptions.map((option) => (
@@ -300,7 +316,7 @@ const handleReset = () => {
 
                       {showQuestionAboutPartner && (
                         <>
-                          <div className='grid grid-cols-4 gap-4'>
+                          <div className='grid grid-cols-3 gap-4'>
                           {/* <div className='grid-flow-row'> */}
                             <Label htmlFor="selectedMenuPartner">{textLabelMenuPartner}</Label>
                           {/* </div> */}
@@ -322,7 +338,7 @@ const handleReset = () => {
 
                       {showQuestionAboutChild && (
                         <>
-                          <div className='grid grid-cols-4 gap-4'>
+                          <div className='grid grid-cols-3 gap-4'>
                           {/* <div className='grid-flow-row'> */}
                             <Label htmlFor="selectedMenuPartner">{textLabelMenuChild}</Label>
                           {/* </div> */}
@@ -341,8 +357,6 @@ const handleReset = () => {
                           </div>
                         </>
                       )}
-                
-                
 
                   <div>
                     <div>
@@ -394,9 +408,10 @@ const handleReset = () => {
         </CardContent>
         <CardFooter className='grid grid-cols-3 gap-4'>
           <Button form="GuestForm" variant='outline' type="reset" onClick={handleCancelClick} className='w-full'>{textButtonCancel}</Button>
-          {/* <Button form="GuestForm">OK</Button> */}
-          <Button type="submit" form="GuestForm" /*onClick={handleSendClick}*/>{textButtonSubmit}</Button>
+          <Button type="submit" form="GuestForm">{textButtonSubmit}</Button>
         </CardFooter>
     </Card>
+    
+    </>
   );
 }
