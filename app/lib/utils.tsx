@@ -92,3 +92,6 @@ export function relatedEventDate(eventData: RelatedEventData | null | undefined,
     return eventDateString;
   }
 }
+
+export const eventLinkStyleOptions = "h-10 w-full px-4 py-2 bg-transparent border border-gray-300 text-secondary-foreground hover:bg-secondary/80 hover:border-transparent inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+export const eventLinkStyleBack = "h-10 w-full px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";

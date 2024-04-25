@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCurrentUser } from "~/db/auth";
 import { relatedEventRef } from "~/db/event-ref";
 import { getYourEvent } from "~/db/get-your-event";
-import { RelatedEventData, relatedEventDate } from "~/lib/utils";
+import { RelatedEventData, eventLinkStyleBack, eventLinkStyleOptions, relatedEventDate } from "~/lib/utils";
 
 export default function YourRelatedEvent() {
     const [eventData, setEventData] = useState<RelatedEventData | null>();
@@ -67,10 +67,10 @@ export default function YourRelatedEvent() {
                         </>
                     )}
                     <div className="m-10 sm:grid sm:grid-cols-4 sm:gap-4 sm:justify-items-center">
-                            <Link to="guestlist" className="h-10 w-full px-4 py-2 bg-transparent border border-gray-300 text-secondary-foreground hover:bg-secondary/80 hover:border-transparent inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Guest list</Link>
-                            <Link to="budget" className="h-10 w-full px-4 py-2 bg-transparent border border-gray-300 text-secondary-foreground hover:bg-secondary/80 hover:border-transparent inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Budget</Link>
-                            <Link to="edit-your-related-event" className="h-10 w-full px-4 py-2 bg-transparent border border-gray-300 text-secondary-foreground hover:bg-secondary/80 hover:border-transparent inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Edit</Link>
-                            <Link to={`/${currentUserUID}/events`} className="h-10 w-full px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Back to your events</Link>
+                            <Link to="guestlist" className={eventLinkStyleOptions}>Guest list</Link>
+                            <Link to="budget" className={eventLinkStyleOptions}>Budget</Link>
+                            <Link to="edit-your-related-event" className={eventLinkStyleOptions}>Edit</Link>
+                            <Link to={`/${currentUserUID}/events`} className={eventLinkStyleBack}>Back to your events</Link>
                     </div>
                 </>
             )}
