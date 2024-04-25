@@ -24,9 +24,7 @@ import { useParams } from "@remix-run/react";
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
 export const GuestListForm = () => {
-
   const { eventID } = useParams()
-  console.log('eventID', eventID)
 
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
   const [userUID, setUserUID] = useState<string | null>();
@@ -85,7 +83,8 @@ export const GuestListForm = () => {
     const q = query(guestRef,
       where('firstName', '==', formData.firstName),
       where('lastName', '==', formData.lastName),
-      where('email', '==', formData.email)
+      where('email', '==', formData.email),
+      where('eventID', '==', eventID)
     );
 
     const snapshot = await getDocs(q);
@@ -108,6 +107,7 @@ export const GuestListForm = () => {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+    console.log('value', value)
   }
 
   function clearErrors() {
