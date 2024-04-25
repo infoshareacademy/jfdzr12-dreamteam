@@ -17,7 +17,6 @@ export const GuestListTable = () => {
 
   const [guests, setGuests] = useState<NewGuest[]>([]);
 
-
   const getGuestList = () => {
     onSnapshot(guestRefOrder, res => {
       const guestList = res.docs.map(doc => ({
