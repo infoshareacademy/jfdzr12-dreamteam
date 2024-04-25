@@ -29,7 +29,8 @@ export const loginWithEmailAndPassword = (email: string, password: string) => {
     })
     .catch((error) => {
       if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
-        return { success: false, error: "Invalid email or password." } as const;
+       
+        return { success: false, error: "Invalid email/password." } as const;
       }
       return { success: false, error: error.message } as const;
     });

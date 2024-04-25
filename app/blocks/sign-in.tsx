@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -50,7 +51,11 @@ export function SignIn() {
     } else {
       console.error("Sign in error:", signInResult.error);
       setSignInDisabled(false);
-      setPasswordError("Invalid email or password");
+      if (signInResult.error === "Invalid email or password.") {
+        setPasswordError("Invalid email or password");
+      } else {
+        setPasswordError("Account does not exist. Sign up");
+      }
     }
   };
 
