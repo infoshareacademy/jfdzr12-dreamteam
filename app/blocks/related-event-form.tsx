@@ -111,6 +111,7 @@ export default function RelatedEvent() {
                                 <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventName">Name of your event</Label> 
                                     <Input name="eventName" />
+                                    {!!error?.eventName && <em className="text-base text-red-700">{error.eventName}</em>}
                                 </div>
                             </div>
                         </div>
@@ -122,12 +123,12 @@ export default function RelatedEvent() {
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
                                     <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)}/>
-                                    {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
+                                    {!!error?.eventDate && <em className="text-base text-red-700">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventTime">Time</Label> 
                                     <Input name="eventTime" type="time"/>
-                                    {!!error?.eventTime && <em className="text-xs">{error.eventTime}</em>}
+                                    {!!error?.eventTime && <em className="text-base text-red-700">{error.eventTime}</em>}
                                 </div>
                             </div>
                         </div>
@@ -139,22 +140,22 @@ export default function RelatedEvent() {
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventPlace">Place name</Label>
                                     <Input name="eventPlace" />
-                                    {!!error?.eventPlace && <em className="text-xs">{error.eventPlace}</em>}
+                                    {!!error?.eventPlace && <em className="text-base text-red-700">{error.eventPlace}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventStreetAddress">Street</Label> 
                                     <Input name="eventStreetAddress" />
-                                    {!!error?.eventStreetAddress && <em className="text-xs">{error.eventStreetAddress}</em>}
+                                    {!!error?.eventStreetAddress && <em className="text-base text-red-700">{error.eventStreetAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventCityAddress">City</Label> 
                                     <Input name="eventCityAddress" />
-                                    {!!error?.eventCityAddress && <em className="text-xs">{error.eventCityAddress}</em>}
+                                    {!!error?.eventCityAddress && <em className="text-base text-red-700">{error.eventCityAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventCountryAddress">Country</Label> 
                                     <Input name="eventCountryAddress" />
-                                    {!!error?.eventCountryAddress && <em className="text-xs">{error.eventCountryAddress}</em>}
+                                    {!!error?.eventCountryAddress && <em className="text-base text-red-700">{error.eventCountryAddress}</em>}
                                 </div>
                             </div>
                         </div>
