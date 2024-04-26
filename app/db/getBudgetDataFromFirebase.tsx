@@ -5,9 +5,12 @@ export const getBudgetDataFromFirebase = async (documentName: string) => {
   try {
     const docRef = doc(db, 'budget', documentName); // Referencja do dokumentu w kolekcji 'budgets'
     const docSnap = await getDoc(docRef); // Pobierz dokument z bazy danych
+    console.log("docSnap", docSnap)
     
     if (docSnap.exists()) {
       return docSnap.data(); // Zwróć dane dokumentu
+      console.log("docSnap(data)", docSnap.data())
+      
     } else {
       throw new Error('Document does not exist');
     }

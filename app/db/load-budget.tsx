@@ -88,10 +88,14 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
 
       console.log("type of budgetData.elements",typeof budgetData.elements); 
       console.log(" budgetData.elements",typeof budgetData.elements); 
+      console.log(" bodgetsdokumentData", budgetDocumentsData); 
+      
+      
   
   
       if (budgetData && budgetData.elements ) {
         setBudgetDocumentsData(budgetData.elements); // Ustawienie danych budżetu
+        console.log(" bodgetsdokumentData", budgetDocumentsData); 
       } else {
         console.error("Nieprawidłowe lub brak danych budżetu.", documentName);
       }
