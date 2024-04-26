@@ -11,7 +11,7 @@ return (
 <AddEvent />
         <CreatedEventNav />
         
-   <CreatedRelatedEventNav />
+   {/* <CreatedRelatedEventNav /> */}
    </>
   
 );

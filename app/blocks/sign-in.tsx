@@ -119,8 +119,8 @@ export function SignIn() {
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
          
-          <p className="text-sm  cursor-pointer " onClick={handleForgotPassword}>
-            Forgot Password?
+          <p className="/forgot-password" className="text-sm  hover:underline" onClick={handleForgotPassword}  style={{ cursor: 'pointer' }}>
+            Forgot Password? Please check email
           </p>
           <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled || buttonClicked}>
             {buttonClicked ? "Signing In..." : "Sign In"}

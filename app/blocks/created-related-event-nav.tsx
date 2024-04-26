@@ -57,18 +57,21 @@ export const CreatedRelatedEventNav = () => {
             });
     };
     
-    return (
-        <div className="flex justify-center flex-wrap items-center " id="created-related-event-nav">
-            {relatedEvents.map((event) => (
-                userUID === event.userUID && ( 
-                    <div className="m-4" key={event._id}>
-                        <Link to={`related-event/${event.eventID}`}>
-                            <Button className="p-4 " variant="outline">{event.eventName}</Button>
-                        </Link>
-                        <button className=" p-1  rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
-                    </div>
-                )
-            ))}
-        </div>
-    );
+return (
+    <div id="created-related-event-nav">
+        <div className="flex flex-col items-center"> 
+        {relatedEvents.map((event) => (
+            userUID === event.userUID && ( 
+                <div className="m-4" key={event._id}>
+                    <Link to={`related-event/${event.eventID}`}>
+                        <Button className="p-4 " variant="outline">{event.eventName}</Button>
+                    </Link>
+                    <button className=" p-1 rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
+                </div>
+            )
+        ))}
+    </div>
+    </div>
+);
 };
+
