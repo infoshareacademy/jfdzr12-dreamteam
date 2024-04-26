@@ -10,7 +10,7 @@ import { Textarea } from "~/atoms/ui/textarea";
 import { useCurrentUser } from "~/db/auth";
 import { eventIdref, eventRef } from "~/db/event-ref";
 import { getUserUID } from "~/db/get-user-uid";
-import { EventData, uniqueCodeGenerator } from "~/lib/utils";
+import { EventData, formEventLinkStyleCancel, uniqueCodeGenerator } from "~/lib/utils";
 
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
@@ -132,12 +132,12 @@ export default function NewEventPage() {
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="firstPerson">First person</Label> 
                                     <Input name="firstPerson"/>
-                                    {!!error?.firstPerson && <em className="text-xs">{error.firstPerson}</em>}
+                                    {!!error?.firstPerson && <em className="text-base text-red-700">{error.firstPerson}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="secondPerson">Second person</Label> 
                                     <Input name="secondPerson"/>
-                                    {!!error?.secondPerson && <em className="text-xs">{error.secondPerson}</em>} 
+                                    {!!error?.secondPerson && <em className="text-base text-red-700">{error.secondPerson}</em>} 
                                 </div>
                             </div>
                         </div>
@@ -149,12 +149,12 @@ export default function NewEventPage() {
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label>Date</Label> 
                                     <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)}/>
-                                    {!!error?.eventDate && <em className="text-xs">{error.eventDate}</em>}                                   
+                                    {!!error?.eventDate && <em className="text-base text-red-700">{error.eventDate}</em>}                                   
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="eventTime">Time</Label> 
                                     <Input name="eventTime" type="time"/>
-                                    {!!error?.eventTime && <em className="text-xs">{error.eventTime}</em>}
+                                    {!!error?.eventTime && <em className="text-base text-red-700">{error.eventTime}</em>}
                                 </div>
                             </div>
                         </div>
@@ -166,23 +166,23 @@ export default function NewEventPage() {
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyPlace">Place name</Label> 
                                     <Input name="ceremonyPlace" />
-                                    {!!error?.ceremonyPlace && <em className="text-xs">{error.ceremonyPlace}</em>}
+                                    {!!error?.ceremonyPlace && <em className="text-base text-red-700">{error.ceremonyPlace}</em>}
                                     
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyStreetAddress">Street</Label> 
                                     <Input name="ceremonyStreetAddress" />
-                                    {!!error?.ceremonyStreetAddress && <em className="text-xs">{error.ceremonyStreetAddress}</em>}
+                                    {!!error?.ceremonyStreetAddress && <em className="text-base text-red-700">{error.ceremonyStreetAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyCityAddress">City</Label> 
                                     <Input name="ceremonyCityAddress" />
-                                    {!!error?.ceremonyCityAddress && <em className="text-xs">{error.ceremonyCityAddress}</em>}
+                                    {!!error?.ceremonyCityAddress && <em className="text-base text-red-700">{error.ceremonyCityAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="ceremonyCountryAddress">Country</Label> 
                                     <Input name="ceremonyCountryAddress" />
-                                    {!!error?.ceremonyCountryAddress && <em className="text-xs">{error.ceremonyCountryAddress}</em>}
+                                    {!!error?.ceremonyCountryAddress && <em className="text-base text-red-700">{error.ceremonyCountryAddress}</em>}
                                 </div>
                             </div>
                         </div>
@@ -194,22 +194,22 @@ export default function NewEventPage() {
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionPlace">Place name</Label>
                                     <Input name="receptionPlace" />
-                                    {!!error?.receptionPlace && <em className="text-xs">{error.receptionPlace}</em>}
+                                    {!!error?.receptionPlace && <em className="text-base text-red-700">{error.receptionPlace}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionStreetAddress">Street</Label> 
                                     <Input name="receptionStreetAddress" />
-                                    {!!error?.receptionStreetAddress && <em className="text-xs">{error.receptionStreetAddress}</em>}
+                                    {!!error?.receptionStreetAddress && <em className="text-base text-red-700">{error.receptionStreetAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionCityAddress">City</Label> 
                                     <Input name="receptionCityAddress" />
-                                    {!!error?.receptionCityAddress && <em className="text-xs">{error.receptionCityAddress}</em>}
+                                    {!!error?.receptionCityAddress && <em className="text-base text-red-700">{error.receptionCityAddress}</em>}
                                 </div>
                                 <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="receptionCountryAddress">Country</Label> 
                                     <Input name="receptionCountryAddress" />
-                                    {!!error?.receptionCountryAddress && <em className="text-xs">{error.receptionCountryAddress}</em>}
+                                    {!!error?.receptionCountryAddress && <em className="text-base text-red-700">{error.receptionCountryAddress}</em>}
                                 </div>
                             </div>
                         </div>
@@ -221,12 +221,12 @@ export default function NewEventPage() {
                                 <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="firstPersonPhone">First person phone number</Label>
                                     <Input name="firstPersonPhone" type="tel" />
-                                    {!!error?.firstPersonPhone && <em className="text-xs">{error.firstPersonPhone}</em>}
+                                    {!!error?.firstPersonPhone && <em className="text-base text-red-700">{error.firstPersonPhone}</em>}
                                 </div>
                                 <div className="flex flex-col space-y-1.5 mb-5">
                                     <Label htmlFor="econdPersonPhone">Second person phone number</Label>
                                     <Input name="secondPersonPhone" type="tel" />
-                                    {!!error?.secondPersonPhone && <em className="text-xs">{error.secondPersonPhone}</em>}
+                                    {!!error?.secondPersonPhone && <em className="text-base text-red-700">{error.secondPersonPhone}</em>}
                                 </div>
                             </div>
                         </div>
@@ -246,10 +246,10 @@ export default function NewEventPage() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to={`/${currentUserUID}/events`} className="col-start-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2" >
+                <Link to={`/${currentUserUID}/events`} className={formEventLinkStyleCancel} >
                     Cancel
                 </Link>
-                <Button type="submit" form="EventForm">Add your wedding</Button>
+                <Button type="submit" form="EventForm">Add</Button>
             </CardFooter>
         </Card>
     )
