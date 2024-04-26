@@ -52,6 +52,9 @@ export const SignUp = () => {
     if (!password) {
       setPasswordError("Password is required");
       return;
+    } else if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+      return;
     }
 
     if (password !== confirmPassword) {
@@ -59,7 +62,7 @@ export const SignUp = () => {
       return;
     }
 
-    setButtonClicked(true); // Ustawienie stanu, że przycisk został kliknięty
+    setButtonClicked(true); 
 
     const signUpResult = await registerWithEmailAndPassword(email, password);
     if (signUpResult.success) {
@@ -72,8 +75,11 @@ export const SignUp = () => {
       const currentUserUID = await getUserUID();
       navigate(`/${currentUserUID}/events`);
     } else {
+      setEmailError("An account with this email already exists.");
       console.error("Sign up error:", signUpResult.error);
     }
+
+    setButtonClicked(false); 
   };
 
   const handleKeyPress = (e) => {
@@ -170,7 +176,7 @@ export const SignUp = () => {
             </div>
             {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
           </div>
-          <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp} disabled={buttonClicked}>
+          <Button type="button" className="w-full"  onClick={handleSignUp} disabled={buttonClicked}>
             {buttonClicked ? "Creating Account..." : "Create an account"} 
           </Button>
         </div>

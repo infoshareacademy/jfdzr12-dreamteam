@@ -54,9 +54,10 @@ export function SignIn() {
       if (signInResult.error === "Invalid email or password.") {
         setPasswordError("Invalid email or password");
       } else {
-        setPasswordError("Account does not exist. Sign up");
+        setPasswordError("Incorrect login or password or account does not exist");
       }
     }
+    setButtonClicked(false);
   };
 
   const handleForgotPassword = async () => {
