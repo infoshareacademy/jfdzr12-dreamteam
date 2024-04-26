@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "~/atoms/ui/button";
 import { getBudgetsFromFirebase } from './getBudgetsFromFirebase';
+import { getBudgetDataFromFirebase } from './getBudgetDataFromFirebase';
 
 interface LoadBudgetProps {
-  onSelectBudget: (documentName: string) => void;
+  onSelectBudget: (documentData: { name: string, elements: { element: string, amount: number }[] }) => void;
 }
 
 export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
@@ -24,8 +25,14 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
     }
   };
 
-  const handleSelectBudget = (documentName: string) => {
-    onSelectBudget(documentName);
+  const handleSelectBudget = async (documentName: string) => {
+    try {
+      const budgetData = await getBudgetDataFromFirebase(documentName);
+      console.log("budgetData", budgetData)
+      onSelectBudget({ name: documentName, elements: budgetData.elements });
+    } catch (error) {
+      console.error("Błąd podczas ładowania danych budżetu: ", error);
+    }
   };
 
   return (
@@ -38,3 +45,5 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
     </div>
   );
 };
+
+
