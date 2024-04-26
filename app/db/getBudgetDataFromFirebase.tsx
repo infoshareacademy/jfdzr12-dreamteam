@@ -15,3 +15,20 @@ export const getBudgetDataFromFirebase = async (documentName: string) => {
     throw new Error("Błąd podczas pobierania danych budżetu z Firebase: " + error);
   }
 };
+
+
+// export const getBudgetDataFromFirebase = async (documentName: string) => {
+//   try {
+//     const docRef = doc(db, 'budget', documentName);
+//     const docSnap = await getDoc(docRef);
+    
+//     if (docSnap.exists()) {
+//       const budgetData = docSnap.data();
+//       return budgetData ? budgetData.elements : []; // Zwróć pole 'elements' lub pustą tablicę, jeśli nie istnieje
+//     } else {
+//       throw new Error('Document does not exist');
+//     }
+//   } catch (error) {
+//     throw new Error("Błąd podczas pobierania danych budżetu z Firebase: " + error);
+//   }
+// };
