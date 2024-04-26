@@ -63,8 +63,10 @@ export function calculateEventContent(eventData: EventData | null | undefined, l
       const numberOfDays = Math.floor(timeDifference / (1000 * 3600 * 24));
       const eventDateString: string = eventDate.toLocaleDateString("en-GB");
 
-      if (numberOfDays < 0) {
+      if (numberOfDays < -1) {
           return { content: `You were married ${Math.abs(numberOfDays)} days ago. Best wishes!`, eventDate: eventDateString };
+      } else if (numberOfDays === -1) {
+        return { content: "You were married yesterday. Best wishes!", eventDate: eventDateString };
       } else if (numberOfDays === 0) {
           const partyPopper = <PartyPopper className="inline"/>;
           const content = (
