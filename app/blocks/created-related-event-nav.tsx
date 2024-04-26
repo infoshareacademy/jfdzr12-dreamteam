@@ -63,9 +63,9 @@ export const CreatedRelatedEventNav = () => {
                 userUID === event.userUID && ( 
                     <div className="m-4" key={event._id}>
                         <Link to={`related-event/${event.eventID}`}>
-                            <Button className="p-4 text-gray-700" variant="outline">{event.eventName}</Button>
+                            <Button className="p-4 " variant="outline">{event.eventName}</Button>
                         </Link>
-                        <button className=" p-1 text-gray-700 rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
+                        <button className=" p-1  rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
                     </div>
                 )
             ))}

@@ -119,7 +119,7 @@ export function SignIn() {
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
          
-          <p className="text-sm text-gray-500 cursor-pointer font-bold" onClick={handleForgotPassword}>
+          <p className="text-sm  cursor-pointer " onClick={handleForgotPassword}>
             Forgot Password?
           </p>
           <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled || buttonClicked}>
