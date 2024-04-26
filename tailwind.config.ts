@@ -54,6 +54,10 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        mainBorder: {
+          DEFAULT: "hsl(var(--main-border))",
+          foreground: "hsl(var(--main-border-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -74,6 +78,9 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        "hero-pattern": "var(--back-image)",
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

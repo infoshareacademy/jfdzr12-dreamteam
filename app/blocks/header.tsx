@@ -35,8 +35,8 @@ export const Header = () => {
     if (userUID) {
       return (
         <>
-        <Button variant={"ghost"}><Link to={`/${userUID}/events`}>Events</Link></Button>
-        <Button variant={"ghost"} className="self-center text-sm font-medium transition-colors" onClick={handleLogout}>Sign out</Button>
+          <Button variant={"ghost"}><Link to={`/${userUID}/events`}>Events</Link></Button>
+          <Button variant={"ghost"} className="self-center text-sm font-medium transition-colors" onClick={handleLogout}>Sign out</Button>
         </>
       )
     } else {

@@ -8,6 +8,7 @@ import { useParams } from '@remix-run/react';
 
 const guestPrefHeader = [
   'No.',
+  'Name',
   'Partner',
   'Children',
   'Accommodation',
@@ -42,7 +43,6 @@ export const GuestPreferTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
             {guestPrefHeader.map((header, index) => (
               <TableHead key={index} className='text-center'>{header}</TableHead>
             ))}
