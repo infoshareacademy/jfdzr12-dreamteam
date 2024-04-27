@@ -139,7 +139,7 @@ export const RelatedEventGuestListForm = () => {
           <SheetClose>
             <Button type='reset' variant='secondary' className="w-full" onClick={clearErrors}>Cancel</Button>
           </SheetClose>
-          <Button type='submit' form='RelatedEventGuestListForm' >Add your guest</Button>
+          <Button type='submit' form='RelatedEventGuestListForm' >Add</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>

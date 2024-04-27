@@ -44,7 +44,7 @@ const menuOptions = [
   {value: 'gluten-free', label: 'Gluten-free'},
 ];
 const alcoholOptions = [
-  {value: "vine", label: "Vine"},
+  {value: "wine", label: "Wine"},
   {value: "vodka", label: "Vodka"},
   {value: "homemade spirits", label: "Homemade spirits"},
   {value: "whiskey", label: "Whiskey"},
@@ -214,7 +214,7 @@ const handleReset = () => {
                   <Input 
                   name="firstName"
                   />
-                  {!!errors?.firstName && <em className="text-xs">{errors.firstName}</em>}
+                  {!!errors?.firstName && <em className="text-base text-rose-700">{errors.firstName}</em>}
                   
                 </div>
 
@@ -223,7 +223,7 @@ const handleReset = () => {
                   <Input 
                   name="lastName"
                   />
-                  {!!errors?.lastName && <em className="text-xs">{errors.lastName}</em>}
+                  {!!errors?.lastName && <em className="text-base text-rose-700">{errors.lastName}</em>}
                 </div>
               </div>
 
@@ -232,8 +232,8 @@ const handleReset = () => {
                   <Input
                   name="guestUniqueId"
                   />
-                  {!!errors?.exists && <em className="text-xs">{errors.exists}</em>}
-                  {!!errors?.guestUniqueId && <em className="text-xs"><br/>{errors.guestUniqueId}</em>}
+                  {!!errors?.exists && <em className="text-base text-rose-700">{errors.exists}</em>}
+                  {!!errors?.guestUniqueId && <em className="text-base text-rose-700"><br/>{errors.guestUniqueId}</em>}
               </div>
               
               <div className="flex flex-col space-y-1.5">
@@ -249,7 +249,7 @@ const handleReset = () => {
                         })}
                 </div>
               </RadioGroup>
-              {!!errors?.presence && <em className="text-xs">{errors.presence}</em>}
+              {!!errors?.presence && <em className="text-base text-rose-700">{errors.presence}</em>}
               </div>
             </div>
 

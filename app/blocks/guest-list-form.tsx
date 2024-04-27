@@ -148,7 +148,7 @@ export const GuestListForm = () => {
           <SheetClose>
             <Button type='reset' variant='secondary' className="w-full" onClick={clearErrors}>Cancel</Button>
           </SheetClose>
-          <Button type='submit' form='GuestListForm' >Add your guest</Button>
+          <Button type='submit' form='GuestListForm' >Add</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
