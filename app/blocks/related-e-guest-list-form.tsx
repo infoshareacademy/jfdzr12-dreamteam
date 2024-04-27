@@ -107,9 +107,11 @@ export const RelatedEventGuestListForm = () => {
 
   return (
     <Sheet>
-      <SheetTrigger>
-        <Button >Add new guest</Button>
-      </SheetTrigger>
+      <Button>
+        <SheetTrigger>
+          Add new guest
+        </SheetTrigger>
+      </Button>
       <SheetContent side='left'>
         <SheetHeader>
           <SheetTitle>New guest</SheetTitle>
@@ -136,12 +138,14 @@ export const RelatedEventGuestListForm = () => {
           </div>
         </form>
         <SheetFooter className="grid gap-4 py-4 grid-cols-2">
-          <SheetClose>
-            <Button type='reset' variant='secondary' className="w-full" onClick={clearErrors}>Cancel</Button>
+          <SheetClose >
+            <Button type='reset' variant='secondary' className="w-full" onClick={clearErrors}>
+              Cancel
+            </Button>
           </SheetClose>
           <Button type='submit' form='RelatedEventGuestListForm' >Add</Button>
         </SheetFooter>
       </SheetContent>
-    </Sheet>
+    </Sheet >
   )
 }

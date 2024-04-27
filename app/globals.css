@@ -56,6 +56,7 @@
     --back-image: url("/img/back.jpg");
     --table-image: url("/img/table-back2.jpg");
     --error-image: url("/img/img404.jpg");
+    --low-hero-image: url("/img/back-low.jpg");
   }
 
   .dark {
@@ -106,8 +107,9 @@
     --ring: 33 42% 69%;
     /* 5 */
 
-    --back-image: url("/img/back-dark.jpg");
+    --back-image: url("/img/back-dark1.jpg");
     --table-image: url("/img/table-back-dark2.jpg");
+    --low-hero-image: url("/img/back-dark1-low.jpg");
 
     /* --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
