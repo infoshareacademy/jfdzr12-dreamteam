@@ -20,7 +20,7 @@ const textLabelSecondName = "Last name";
 const textLabelPresence = "Do you confirm your arrival? ";
 const textLabelPartner = "Will you be accompanied by a partner or another person? ";
 const textLabelChild = "Will you be accompanied by a child? ";
-const textLabelNumberOfChildren = "Specify the number of children accompanying you :";
+const textLabelNumberOfChildren = "Specify the number of children :";
 const textLabelMenuGuest = "Select your preferred menu option :";
 const textLabelMenuPartner = "Select menu for your partner :";
 const textLabelMenuChild = "Select menu for child :";
@@ -225,7 +225,8 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                     {!!errors?.lastName && <em className="text-base text-rose-700">{errors.lastName}</em>}
                   </div>
                 </div>
-
+                
+                <div className='grid grid-cols-3 gap-4'>
                 <div>
                   <Label htmlFor="guestUniqueId">Your four-digit code</Label>
                   <Input
@@ -233,6 +234,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   />
                   {!!errors?.exists && <em className="text-base text-rose-700">{errors.exists}</em>}
                   {!!errors?.guestUniqueId && <em className="text-base text-rose-700"><br />{errors.guestUniqueId}</em>}
+                </div>
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
@@ -276,7 +278,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
 
                     {showQuestionAboutChild && (
                       <>
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-3 gap-4'>
                           <div>
                             <Label htmlFor="numberOfChildren">{textLabelNumberOfChildren}</Label>
                             <div>
@@ -400,7 +402,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
           </form>
         </CardContent>
         <CardFooter className='grid grid-cols-3 gap-4'>
-          <Button form="GuestForm" variant='outline' type="reset" onClick={handleCancelClick} className='w-full'>{textButtonCancel}</Button>
+          <Button form="GuestForm" variant="mainOutline" type="reset" onClick={handleCancelClick} className='w-full'>{textButtonCancel}</Button>
           <Button type="submit" form="GuestForm">{textButtonSubmit}</Button>
         </CardFooter>
       </Card>
