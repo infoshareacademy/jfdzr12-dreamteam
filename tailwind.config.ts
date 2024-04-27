@@ -80,6 +80,7 @@ const config = {
       },
       backgroundImage: {
         "hero-pattern": "var(--back-image)",
+        "table-pattern": "var(--table-image)"
       }
     },
   },
