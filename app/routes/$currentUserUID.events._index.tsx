@@ -8,10 +8,11 @@ export default function SignInPage() {
 
 return (
 <>
-<AddEvent />
 <CreatedEventNav />
+<AddEvent />
 
-   {/* <CreatedRelatedEventNav /> */}
+
+   {/* <CreatedRelatedEventNav /> jest dodany ten komponent w pliku createdEventNav*/}
    </>
   
 );
