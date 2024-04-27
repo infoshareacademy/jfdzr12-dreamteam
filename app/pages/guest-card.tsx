@@ -1,12 +1,16 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger, } from '~/atoms/ui/tabs';
 import { GuestListTable } from "~/blocks/guest-list-table";
 import { GuestPreferTable } from "~/blocks/guest-prefer-table";
 import { GuestMenuInfo } from "~/blocks/guest-menu-info";
 import { GuestListForm } from "~/blocks/guest-list-form";
 import { mainCardOnPage } from "~/lib/utils";
+import { Link, useParams } from "@remix-run/react";
+import { Button } from "~/atoms/ui/button";
 
 export const GuestCard = () => {
+
+  const { currentUserUID, eventID } = useParams();
 
   return (<>
     {/* <div className="fixed z-10 h-screen bg-table-pattern bg-cover bg-bottom top-0 left-0 right-0">
@@ -41,9 +45,9 @@ export const GuestCard = () => {
           </CardContent>
         </TabsContent>
       </Tabs>
-      {/* <CardFooter className='grid justify-end'>
-        <Button >Send email to all guests</Button>
-      </CardFooter> */}
+      <CardFooter className='grid justify-end'>
+        <Button variant='secondary'><Link to={`/${currentUserUID}/events/your-event/${eventID}`}>Back to your event</Link></Button>
+      </CardFooter>
     </Card >
 
   </>
