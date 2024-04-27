@@ -44,7 +44,7 @@ const menuOptions = [
   {value: 'gluten-free', label: 'Gluten-free'},
 ];
 const alcoholOptions = [
-  {value: "vine", label: "Vine"},
+  {value: "wine", label: "Wine"},
   {value: "vodka", label: "Vodka"},
   {value: "homemade spirits", label: "Homemade spirits"},
   {value: "whiskey", label: "Whiskey"},

@@ -59,7 +59,7 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-    
+      // <div className="h-screen bg-hero-pattern bg-cover bg-bottom fixed top-0 left-0 right-0">
     <div className="grid gap-4 md:gap-8 absolute
     top-16 md:top-20 lg:top-24 xl:top-24 2xl:top-44
     inset-x-10 md:inset-x-20 lg:inset-x-56 xl:inset-x-60 2xl:inset-x-96 
@@ -74,6 +74,7 @@ export function ErrorBoundary() {
         <Button size='lg' variant='mainOutline' className="flex justify-center flex-wrap flex-auto"><Link to="/">Back to DreamDay</Link></Button>
       </div>
     </div>
+    // </div>
     
     );
   }
