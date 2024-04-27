@@ -11,7 +11,7 @@ import { EventData, calculateEventContent } from "~/lib/utils";
 export default function YourEvent() {
     const [eventData, setEventData] = useState<EventData | null>();
 
-    const { currentUserUID, eventID } = useParams();
+    const { eventID } = useParams();
 
     const user = useCurrentUser();
     const loading = user.status === 'loading';
@@ -43,7 +43,7 @@ export default function YourEvent() {
                         <h1 className="text-center scroll-m-20 text-xl font-bold md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-5xl">{content}</h1>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
-                        <Card className="grid col-start-1 justify-items-center w-full p-5">
+                        <Card className="grid col-start-1 justify-items-center w-full p-5 shadow-xl">
                             <HeartHandshake className="mb-5" />
                             <h1 className="mb-5">CEREMONY</h1>
                             <p className="text-center">{`Place: ${eventData.ceremonyPlace}`}</p>
@@ -51,7 +51,7 @@ export default function YourEvent() {
                             <p className="text-center">{`City: ${eventData.ceremonyCityAddress}`}</p>
                             <p className="text-center">{`Country: ${eventData.ceremonyCountryAddress}`}</p>
                         </Card>
-                        <Card className="grid justify-items-center w-full p-5">
+                        <Card className="grid justify-items-center w-full p-5 shadow-xl">
                             <div className="flex items-center justify-center p-6">
                                 <p>{eventDate}</p>
                             </div>
@@ -62,7 +62,7 @@ export default function YourEvent() {
                                 <p>{eventData.eventTime}</p>
                             </div>
                         </Card>
-                        <Card className="grid justify-items-center w-full p-5">
+                        <Card className="grid justify-items-center w-full p-5 shadow-xl">
                             <Wine className="mb-5" />
                             <h1 className="mb-5">RECEPTION</h1>
                             <p className="text-center">{`Place: ${eventData.receptionPlace}`}</p>
@@ -72,7 +72,7 @@ export default function YourEvent() {
                         </Card>
                     </div>
                     {eventData.other && (
-                        <Card className="mt-4">
+                        <Card className="mt-4 shadow-xl">
                             <div className="flex items-center justify-center mt-5">
                                 <p>OTHER</p>
                             </div>
@@ -85,7 +85,7 @@ export default function YourEvent() {
                         <Link to="guestlist"><Button className="w-full inline-flex" variant="mainOutline">Guest list</Button></Link>
                         <Link to="budget"><Button className="w-full inline-flex" variant="mainOutline">Budget</Button></Link>
                         <Link to="edit-your-event"><Button className="w-full inline-flex" variant="mainOutline">Edit</Button></Link>
-                        <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="ghost">Back to your events</Button></Link>
+                        <Link to="/events"><Button className="w-full inline-flex" variant="ghost">Back to your events</Button></Link>
                     </div>
                 </Card>
             )}
