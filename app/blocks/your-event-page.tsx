@@ -82,9 +82,10 @@ export default function YourEvent() {
                         </div>
                         </>
                     )}
-                    <div className="m-10 sm:grid sm:grid-cols-4 sm:gap-4 sm:justify-items-center">
+                    <div className="m-10 sm:grid sm:grid-cols-5 sm:gap-4 sm:justify-items-center">
                             <Link to="guestlist" className={eventLinkStyleOptions}>Guest list</Link>
                             <Link to="budget" className={eventLinkStyleOptions}>Budget</Link>
+                            <Link to="gallery" className={eventLinkStyleOptions}>Gallery</Link>
                             <Link to="edit-your-event" className={eventLinkStyleOptions}>Edit</Link>
                             <Link to={`/${currentUserUID}/events`} className={eventLinkStyleBack}>Back to your events</Link>
                     </div>
