@@ -10,7 +10,7 @@ import { Textarea } from "~/atoms/ui/textarea";
 import { useCurrentUser } from "~/db/auth";
 import { eventIdref, relatedEventRef } from "~/db/event-ref";
 import { getUserUID } from "~/db/get-user-uid";
-import { RelatedEventData, formEventLinkStyleCancel, uniqueCodeGenerator } from "~/lib/utils";
+import { RelatedEventData, uniqueCodeGenerator } from "~/lib/utils";
 
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
@@ -186,7 +186,7 @@ export default function RelatedEvent() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to={`/${currentUserUID}/events`} className={formEventLinkStyleCancel}>Cancel</Link>
+            <Link to={`/${currentUserUID}/events`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
                 <Button type="submit" form="EventForm">Add</Button>
             </CardFooter>
         </Card>

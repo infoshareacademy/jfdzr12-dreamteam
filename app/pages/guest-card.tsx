@@ -1,19 +1,21 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
-import { Button } from '~/atoms/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger, } from '~/atoms/ui/tabs';
 import { GuestListTable } from "~/blocks/guest-list-table";
 import { GuestPreferTable } from "~/blocks/guest-prefer-table";
-import { GuestAdditionalInfo } from "~/blocks/guest-additional-info";
+import { GuestMenuInfo } from "~/blocks/guest-menu-info";
 import { GuestListForm } from "~/blocks/guest-list-form";
+import { mainCardOnPage } from "~/lib/utils";
 
 export const GuestCard = () => {
 
-  return (
-    <Card className="w-96 sm:w-11/12 md:w-11/12 lg:w-10/12 xl:w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
-      <CardHeader className="grid grid-cols-3 justify-center">
+  return (<>
+    {/* <div className="fixed z-10 h-screen bg-table-pattern bg-cover bg-bottom top-0 left-0 right-0">
+    </div> */}
+    <Card className={mainCardOnPage}>
+      <CardHeader className="grid auto-cols-auto sm:grid-cols-3 gap-4 justify-center">
         <div className="col-start-1 col-end-3">
           <CardTitle>Your Guests</CardTitle>
-          <CardDescription>Manage your guests and check their preferences.</CardDescription>
+          <CardDescription className="pt-2">Manage your guests and check their preferences.</CardDescription>
         </div>
         <div className="col-start-3 self-center justify-self-end"><GuestListForm /></div>
       </CardHeader>
@@ -35,7 +37,7 @@ export const GuestCard = () => {
         </TabsContent>
         <TabsContent value="menu">
           <CardContent>
-            <GuestAdditionalInfo />
+            <GuestMenuInfo />
           </CardContent>
         </TabsContent>
       </Tabs>
@@ -43,6 +45,8 @@ export const GuestCard = () => {
         <Button >Send email to all guests</Button>
       </CardFooter> */}
     </Card >
+
+  </>
   )
 
 }
