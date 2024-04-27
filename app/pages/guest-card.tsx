@@ -18,7 +18,7 @@ export const GuestCard = () => {
     <Card className={mainCardOnPage}>
       <CardHeader className="grid auto-cols-auto sm:grid-cols-3 gap-4 justify-center">
         <div className="col-start-1 col-end-3">
-          <CardTitle>Your Guests</CardTitle>
+          <CardTitle>Your wedding guests</CardTitle>
           <CardDescription className="pt-2">Manage your guests and check their preferences.</CardDescription>
         </div>
         <div className="col-start-3 self-center justify-self-end"><GuestListForm /></div>
