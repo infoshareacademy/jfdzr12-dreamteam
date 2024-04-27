@@ -11,7 +11,7 @@ export default function LandingPage() {
             <div className="grid gap-4 md:gap-6 absolute
             top-16 md:top-20 lg:top-24 xl:top-24 2xl:top-44
             inset-x-10 md:inset-x-20 lg:inset-x-56 xl:inset-x-60 2xl:inset-x-96 
-            h-3/5 lg:h-auto 2xl:h-1/2" /*style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}*/>
+            h-3/5 lg:h-auto" /*style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}*/>
                 <div className="grid justify-center content-end text-center">
                     <h1 className="scroll-m-20 text-3xl font-bold md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-7xl">Your perfect &thinsp;wedding <br />&ensp;starts here... DreamDay</h1>
                 </div>

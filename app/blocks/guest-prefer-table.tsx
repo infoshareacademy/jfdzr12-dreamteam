@@ -7,13 +7,12 @@ import { ScrollArea, ScrollBar } from '~/atoms/ui/scroll-area';
 import { useParams } from '@remix-run/react';
 
 const guestPrefHeader = [
-  'No.',
-  'Name',
   'Partner',
   'Children',
+  'No. of children',
   'Accommodation',
   'Transport',
-  'Alcohol',
+  'Additional information',
 ]
 
 export const GuestPreferTable = () => {
@@ -43,6 +42,8 @@ export const GuestPreferTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableCell>No.</TableCell>
+            <TableCell>Name</TableCell>
             {guestPrefHeader.map((header, index) => (
               <TableHead key={index} className='text-center'>{header}</TableHead>
             ))}
@@ -54,10 +55,11 @@ export const GuestPreferTable = () => {
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell className="font-medium ">{guest.firstName} {guest.lastName}</TableCell>
               {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.partner === "on" ? "yes" : "no"}</TableCell> : <TableCell>{null}</TableCell>}
+              {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.child === "on" ? "yes" : "no"}</TableCell> : <TableCell>{null}</TableCell>}
               {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.numberOfChildren}</TableCell> : <TableCell>{null}</TableCell>}
               {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.accommodation === "on" ? "yes" : "no"}</TableCell> : <TableCell>{null}</TableCell>}
               {guest.formData ? <TableCell className="font-medium text-center font-normal">{guest.formData.transport === "on" ? "yes" : "no"}</TableCell> : <TableCell>{null}</TableCell>}
-              {guest.formData ? <TableCell className="font-medium text-center font-normal max-w-36">{guest.formData.alcohols[0]} {guest.formData.alcohols[1]} {guest.formData.alcohols[2]} {guest.formData.alcohols[3]} {guest.formData.alcohols[4]} {guest.formData.alcohols[5]} {guest.formData.alcohols[6]}</TableCell> : <TableCell>{null}</TableCell>}
+              {guest.formData ? <TableCell className="font-medium text-center font-normal max-w-48">{guest.formData.additionalInfo}</TableCell> : <TableCell>{null}</TableCell>}
             </TableRow>
           ))}
         </TableBody>
