@@ -41,7 +41,7 @@ export default function YourRelatedEvent() {
                         <h1 className="text-center scroll-m-20 text-xl font-bold md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-5xl">{eventData.eventName}</h1>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
-                        <Card className="grid col-start-1 justify-items-center w-full p-5">
+                        <Card className="grid col-start-1 justify-items-center w-full p-5 shadow-xl">
                             <div className="flex items-center justify-center p-6">
                                 <p>{eventDateString}</p>
                             </div>
@@ -49,7 +49,7 @@ export default function YourRelatedEvent() {
                                 <p>{eventData.eventTime}</p>
                             </div>
                         </Card>
-                        <Card className="grid justify-items-center w-full p-5">
+                        <Card className="grid justify-items-center w-full p-5 shadow-xl">
                             <div className="grid gap-4 justify-items-center">
                                 <div className="grid justify-items-center">
                                     <PartyPopper className="mb-5" />
@@ -62,7 +62,7 @@ export default function YourRelatedEvent() {
                         </Card>
                     </div>
                     {eventData.other && (
-                        <Card className="mt-4">
+                        <Card className="mt-4 shadow-xl">
                             <div className="flex items-center justify-center mt-5">
                                 <p>OTHER</p>
                             </div>
