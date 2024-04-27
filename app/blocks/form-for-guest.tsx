@@ -16,7 +16,7 @@ import { CheckCheck } from 'lucide-react';
 
 
 const textLabelFirstName = "First name";
-const textLabelSecondName ="Last name";
+const textLabelSecondName = "Last name";
 const textLabelPresence = "Do you confirm your arrival? ";
 const textLabelPartner = "Will you be accompanied by a partner or another person? ";
 const textLabelChild = "Will you be accompanied by a child? ";
@@ -25,31 +25,31 @@ const textLabelMenuGuest = "Select your preferred menu option :";
 const textLabelMenuPartner = "Select menu for your partner :";
 const textLabelMenuChild = "Select menu for child :";
 const textLabelAdditionalInfo = "Please feel free to provide any additional information regarding the menu (e.g., any food allergies or dietary restrictions)"
-const textLabelAlcoholGuest = "Pick your preferred alcohol(s)"; 
+const textLabelAlcoholGuest = "Pick your preferred alcohol(s)";
 const textLabelAccommodation = "Will accommodation be needed? ";
 const textLabelTransport = "Will you require transportation? ";
 const textButtonSubmit = "Send";
 const textButtonCancel = "Cancel";
 
 const basicAnswer = [
-  {value: 'yes', label: 'Yes'},
-  {value: 'no', label: 'No'},
+  { value: 'yes', label: 'Yes' },
+  { value: 'no', label: 'No' },
 ]
 
 const menuOptions = [
-  {value: 'standard', label: 'Standard'},
-  {value: 'vegetarian', label: 'Vegetarian'},
-  {value: 'vegan', label: 'Vegan'},
-  {value: 'gluten-free', label: 'Gluten-free'},
+  { value: 'standard', label: 'Standard' },
+  { value: 'vegetarian', label: 'Vegetarian' },
+  { value: 'vegan', label: 'Vegan' },
+  { value: 'gluten-free', label: 'Gluten-free' },
 ];
 const alcoholOptions = [
-  {value: "wine", label: "Wine"},
-  {value: "vodka", label: "Vodka"},
-  {value: "homemade spirits", label: "Homemade spirits"},
-  {value: "whiskey", label: "Whiskey"},
-  {value: "beer", label: "Beer"},
-  {value: "rum", label: "Rum"},
-  {value: "gin", label: "Gin"}, 
+  { value: "wine", label: "Wine" },
+  { value: "vodka", label: "Vodka" },
+  { value: "homemade spirits", label: "Homemade spirits" },
+  { value: "whiskey", label: "Whiskey" },
+  { value: "beer", label: "Beer" },
+  { value: "rum", label: "Rum" },
+  { value: "gin", label: "Gin" },
 ] as const
 
 type AlcoholKind = typeof alcoholOptions[number]['value']
@@ -72,10 +72,10 @@ interface NewGuest {
   selectedMenuGuest?: string;
   selectedMenuPartner?: string;
   selectedMenuChild?: string;
-  additionalInfo?: string; 
+  additionalInfo?: string;
   alcohols?: string[];
   accommodation?: string;
-  transport?: string; 
+  transport?: string;
   exists: boolean;
 }
 
@@ -98,9 +98,9 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
 
   const [radioGroupKey, setRadioGroupKey] = useState('');
 
-const handleReset = () => {
-  setShowAdditionalQuestions(false); 
-};
+  const handleReset = () => {
+    setShowAdditionalQuestions(false);
+  };
 
   const getGuestList = () => {
     const guestListCollection = collection(db, 'guestlist');
@@ -112,18 +112,18 @@ const handleReset = () => {
       setGuests(guestList);
     });
   };
-  
+
   useEffect(() => {
     getGuestList();
   }, []);
 
   useEffect(() => {
-    setRadioGroupKey(''); 
+    setRadioGroupKey('');
   }, []);
 
   const { toast } = useToast();
 
-  async function handleSubmit (e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
       return;
     }
@@ -166,11 +166,11 @@ const handleReset = () => {
 
     if (snapshot.size === 0) {
       errors.exists = "Provided code doesn't exist in the database";
-    } 
+    }
 
     if (snapshot.size === 1) {
       const docRef = snapshot.docs[0].ref;
-      await updateDoc(docRef, {formData});
+      await updateDoc(docRef, { formData });
       toast({
         className: cn(
         'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20 bg-emerald-300 text-black'
@@ -180,82 +180,82 @@ const handleReset = () => {
         duration: 6000, 
       });
     }
- 
+
     setErrors(errors);
     if (Object.keys(errors).length !== 0) {
       return;
-    } 
+    }
 
     // console.log('handleSubmit', formData)
     e.target.reset();
-    setRadioGroupKey(performance.now().toString()); 
+    setRadioGroupKey(performance.now().toString());
   };
 
   const handleCancelClick = () => {
     setErrors({});
-    setRadioGroupKey(performance.now().toString()); 
+    setRadioGroupKey(performance.now().toString());
   };
 
   return (
-    <>
-    <Card className="w-full max-w-screen-lg mx-auto my-8">
-      <CardHeader>
-        <CardTitle className='text-center'>Guest Form</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} onReset={handleReset} id="GuestForm" method="post" action="/guest">
-          <div className="grid w-full items-center gap-4">
-            <div className="space-y-1.5">
-              <p className="text-lg font-bold">Your presence</p>
-              <div className='grid grid-cols-2 gap-4'>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="firstName">{textLabelFirstName}</Label>
-                  <Input 
-                  name="firstName"
-                  />
-                  {!!errors?.firstName && <em className="text-base text-rose-700">{errors.firstName}</em>}
-                  
+    <div className={mainCardOnPage}>
+      <Card className="w-full max-w-screen-lg mx-auto mb-8">
+        <CardHeader>
+          <CardTitle className='text-center'>Guest Form</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} onReset={handleReset} id="GuestForm" method="post" action="/guest">
+            <div className="grid w-full items-center gap-4">
+              <div className="space-y-1.5">
+                <p className="text-lg font-bold">Your presence</p>
+                <div className='grid grid-cols-2 gap-4'>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="firstName">{textLabelFirstName}</Label>
+                    <Input
+                      name="firstName"
+                    />
+                    {!!errors?.firstName && <em className="text-base text-rose-700">{errors.firstName}</em>}
+
+                  </div>
+
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="lastName">{textLabelSecondName}</Label>
+                    <Input
+                      name="lastName"
+                    />
+                    {!!errors?.lastName && <em className="text-base text-rose-700">{errors.lastName}</em>}
+                  </div>
                 </div>
 
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="lastName">{textLabelSecondName}</Label>
-                  <Input 
-                  name="lastName"
-                  />
-                  {!!errors?.lastName && <em className="text-base text-rose-700">{errors.lastName}</em>}
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="guestUniqueId">Your four-digit code</Label>
+                <div>
+                  <Label htmlFor="guestUniqueId">Your four-digit code</Label>
                   <Input
-                  name="guestUniqueId"
+                    name="guestUniqueId"
                   />
                   {!!errors?.exists && <em className="text-base text-rose-700">{errors.exists}</em>}
-                  {!!errors?.guestUniqueId && <em className="text-base text-rose-700"><br/>{errors.guestUniqueId}</em>}
-              </div>
-              
-              <div className="flex flex-col space-y-1.5">
-              <RadioGroup key={radioGroupKey} name="presence" onValueChange={(value) => setShowAdditionalQuestions(value === 'yes')}>
-                <div><Label>{textLabelPresence}</Label></div>
-                
-                <div className="flex items-center space-x-2">
-                {basicAnswer.map((element)=>{
-                          return <div key={element.value}>
-                                  <RadioGroupItem value={element.value}/>
-                                  <Label htmlFor={element.value}>{" " + element.label}</Label>
-                                </div>
-                        })}
+                  {!!errors?.guestUniqueId && <em className="text-base text-rose-700"><br />{errors.guestUniqueId}</em>}
                 </div>
-              </RadioGroup>
-              {!!errors?.presence && <em className="text-base text-rose-700">{errors.presence}</em>}
+
+                <div className="flex flex-col space-y-1.5">
+                  <RadioGroup key={radioGroupKey} name="presence" onValueChange={(value) => setShowAdditionalQuestions(value === 'yes')}>
+                    <div><Label>{textLabelPresence}</Label></div>
+
+                    <div className="flex items-center space-x-2">
+                      {basicAnswer.map((element) => {
+                        return <div key={element.value}>
+                          <RadioGroupItem value={element.value} />
+                          <Label htmlFor={element.value}>{" " + element.label}</Label>
+                        </div>
+                      })}
+                    </div>
+                  </RadioGroup>
+                  {!!errors?.presence && <em className="text-base text-rose-700">{errors.presence}</em>}
+                </div>
               </div>
-            </div>
 
               {showAdditionalQuestions && (
-              <>
-                <div>
-                  <p className="text-lg font-bold">Accompanying Guests</p>
+                <>
+                  <div>
+                    <p className="text-lg font-bold">Accompanying Guests</p>
                     <div>
                       <Label htmlFor="partner">{textLabelPartner}</Label>
                       <Checkbox
@@ -264,34 +264,34 @@ const handleReset = () => {
                           onCheckedChange={setShowQuestionAboutPartner} 
                         />
                     </div>
-                
+
                     <div>
                       <Label htmlFor="child">{textLabelChild}</Label>
-                      <Checkbox 
-                          name="child" 
-                          checked={showQuestionAboutChild}
-                          onCheckedChange={setShowQuestionAboutChild} 
-                        />
+                      <Checkbox
+                        name="child"
+                        checked={showQuestionAboutChild}
+                        onCheckedChange={setShowQuestionAboutChild}
+                      />
                     </div>
 
                     {showQuestionAboutChild && (
                       <>
-                      <div className='grid grid-cols-2 gap-4'>
-                        <div>
-                          <Label htmlFor="numberOfChildren">{textLabelNumberOfChildren}</Label>
+                        <div className='grid grid-cols-2 gap-4'>
                           <div>
-                          <Input 
-                              name="numberOfChildren" 
-                              type="number" 
-                              defaultValue={1}
-                              min={1}
-                            />
+                            <Label htmlFor="numberOfChildren">{textLabelNumberOfChildren}</Label>
+                            <div>
+                              <Input
+                                name="numberOfChildren"
+                                type="number"
+                                defaultValue={1}
+                                min={1}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
                       </>
                     )}
-                </div>
+                  </div>
 
                 <div className="flex flex-col space-y-1.5">
                   <p className="text-lg font-bold">Dinning and alcohol preferences</p>
@@ -318,18 +318,18 @@ const handleReset = () => {
                             <div>
                             <Select name="selectedMenuPartner" defaultValue={menuOptions[0].value} >
                               <SelectTrigger>
-                                <SelectValue/>
+                                <SelectValue />
                               </SelectTrigger>
-                                <SelectContent position="popper">
-                                  {menuOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                                  ))}
-                                </SelectContent>
+                              <SelectContent position="popper">
+                                {menuOptions.map((option) => (
+                                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                ))}
+                              </SelectContent>
                             </Select>
-                            </div>
                           </div>
-                        </>
-                      )}
+                        </div>
+                      </>
+                    )}
 
                       {showQuestionAboutChild && (
                         <>
@@ -338,73 +338,73 @@ const handleReset = () => {
                             <div>
                             <Select name="selectedMenuChild" defaultValue={menuOptions[0].value} >
                               <SelectTrigger>
-                                <SelectValue/>
+                                <SelectValue />
                               </SelectTrigger>
-                                <SelectContent position="popper">
-                                  {menuOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                                  ))}
-                                </SelectContent>
+                              <SelectContent position="popper">
+                                {menuOptions.map((option) => (
+                                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                ))}
+                              </SelectContent>
                             </Select>
-                            </div>
                           </div>
-                        </>
-                      )}
+                        </div>
+                      </>
+                    )}
 
-                  <div>
                     <div>
-                    <Label htmlFor="additionalInfo"></Label>
+                      <div>
+                        <Label htmlFor="additionalInfo"></Label>
+                        <div>
+                          <Textarea
+                            className="resize-none"
+                            maxLength={500}
+                            name="additionalInfo"
+                            placeholder={textLabelAdditionalInfo}
+                          />
+                        </div>
+                      </div>
+                    </div>
                     <div>
-                      <Textarea
-                      className="resize-none"
-                      maxLength = {500}
-                      name="additionalInfo"
-                      placeholder={textLabelAdditionalInfo}
-                      />
+                      <Label htmlFor="alcohol">{textLabelAlcoholGuest}</Label>
+                      <div className="flex flex-col space-y-1.5">
+                        {alcoholOptions.map((element) => {
+                          return <div key={element.value}>
+                            <Label>
+                              <Checkbox name={element.value} /> {element.label}
+                            </Label>
+                          </div>
+                        })}
                       </div>
                     </div>
                   </div>
+
                   <div>
-                      <Label htmlFor="alcohol">{textLabelAlcoholGuest}</Label>
-                      <div className="flex flex-col space-y-1.5">
-                        {alcoholOptions.map((element)=>{
-                          return <div key={element.value}>
-                                <Label>
-                                  <Checkbox name={element.value} /> {element.label}
-                                </Label>
-                                </div>
-                        })}
+                    <p className="text-lg font-bold">Logistical organization</p>
+                    <div>
+                      <Label htmlFor="accommodation">{textLabelAccommodation}</Label>
+                      <Checkbox
+                        name="accommodation"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="transport">{textLabelTransport}</Label>
+                      <Checkbox
+                        name="transport"
+                      />
                     </div>
                   </div>
-                </div>
-
-                <div>
-                  <p className="text-lg font-bold">Logistical organization</p>
-                  <div>
-                  <Label htmlFor="accommodation">{textLabelAccommodation}</Label>
-                    <Checkbox
-                      name="accommodation"
-                    />
-                  </div>
-
-                  <div>
-                  <Label htmlFor="transport">{textLabelTransport}</Label>
-                      <Checkbox
-                        name="transport" 
-                      />
-                  </div>
-                </div>  
                 </>
               )}
-          </div>
-        </form>
+            </div>
+          </form>
         </CardContent>
         <CardFooter className='grid grid-cols-3 gap-4'>
           <Button form="GuestForm" variant='outline' type="reset" onClick={handleCancelClick} className='w-full'>{textButtonCancel}</Button>
           <Button type="submit" form="GuestForm">{textButtonSubmit}</Button>
         </CardFooter>
-    </Card>
-    
-    </>
+      </Card>
+
+    </div>
   );
 }
