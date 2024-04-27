@@ -192,5 +192,7 @@ export default function RelatedEvent() {
                 </CardFooter>
             </Card>
         </div>
+        }
+        </>
     )
 }

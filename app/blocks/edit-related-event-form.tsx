@@ -164,14 +164,16 @@ export default function EditRelatedEvent() {
                                     </div>
                                 </div>
 
-                        </div>
-                    </form>
-                </CardContent>
-                <CardFooter className="grid grid-cols-3 gap-4">
-                    <Link to={`/events/related-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
-                    <Button type="submit" form="EventForm">Update event</Button>
-                </CardFooter>
-            </Card>
-        </div >
+                            </div>
+                        </form>
+                    </CardContent>
+                    <CardFooter className="grid grid-cols-3 gap-4">
+                        <Link to={`/events/related-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
+                        <Button type="submit" form="EventForm">Update event</Button>
+                    </CardFooter>
+                </Card>
+            </div >
+        }
+        </>
     )
 }
