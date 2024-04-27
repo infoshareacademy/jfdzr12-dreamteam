@@ -1,11 +1,11 @@
 import { Link, useParams } from "@remix-run/react";
 import { Heart, HeartHandshake, Wine } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Card } from "~/atoms/ui/card";
+import { Button } from "~/atoms/ui/button";
 import { useCurrentUser } from "~/db/auth";
 import { eventRef } from "~/db/event-ref";
 import { getYourEvent } from "~/db/get-your-event";
-import { EventData, calculateEventContent, eventLinkStyleBack, eventLinkStyleOptions, mainCardOnPage } from "~/lib/utils";
+import { EventData, calculateEventContent } from "~/lib/utils";
 
 export default function YourEvent() {
     const [eventData, setEventData] = useState<EventData | null>();
@@ -37,9 +37,9 @@ export default function YourEvent() {
     return (
         <>
             {eventData && (
-                <Card className={mainCardOnPage}>
-                    <div className="flex items-center justify-center mt-5 mb-5 p-6">
-                        <h1 className="italic font-serif text-xl font-bold text-center">{content}</h1>
+                <>
+                    <div className="flex items-center justify-center mt-5 mb-10 p-6">
+                        <h1 className="text-center scroll-m-20 text-3xl font-bold md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-7xl">{content}</h1>
                     </div>
                     <div className="grid grid-cols-3 gap-4 justify-items-center">
                         <div className="grid col-start-1 justify-items-center">
@@ -83,13 +83,13 @@ export default function YourEvent() {
                             </div>
                         </>
                     )}
-                    <div className="m-10 sm:grid sm:grid-cols-4 sm:gap-4 sm:justify-items-center">
-                        <Link to="guestlist" className={eventLinkStyleOptions}>Guest list</Link>
-                        <Link to="budget" className={eventLinkStyleOptions}>Budget</Link>
-                        <Link to="edit-your-event" className={eventLinkStyleOptions}>Edit</Link>
-                        <Link to={`/${currentUserUID}/events`} className={eventLinkStyleBack}>Back to your events</Link>
+                    <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
+                        <Link to="guestlist"><Button className="w-full inline-flex" variant="outline">Guest list</Button></Link>
+                        <Link to="budget"><Button className="w-full inline-flex" variant="outline">Budget</Button></Link>
+                        <Link to="edit-your-event"><Button className="w-full inline-flex" variant="outline">Edit</Button></Link>
+                        <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link>
                     </div>
-                </Card>
+                </>
             )}
         </>
     );
