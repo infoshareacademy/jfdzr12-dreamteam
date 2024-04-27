@@ -54,6 +54,8 @@
     --radius: 0.5rem;
 
     --back-image: url("/img/back.jpg");
+    --table-image: url("/img/table-back2.jpg");
+    --error-image: url("/img/img404.jpg");
   }
 
   .dark {
@@ -105,6 +107,7 @@
     /* 5 */
 
     --back-image: url("/img/back-dark.jpg");
+    --table-image: url("/img/table-back-dark2.jpg");
 
     /* --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
