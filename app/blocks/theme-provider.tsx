@@ -31,9 +31,9 @@ export function ThemeProvider({
   )
 
   useEffect(() => {
-    console.log("useEffect called with theme:", theme);
+    // console.log("useEffect called with theme:", theme);
     const root = window.document.documentElement
-    console.log("root:", root, root.className);
+    // console.log("root:", root, root.className);
 
     root.classList.remove("light", "dark")
 
@@ -49,16 +49,16 @@ export function ThemeProvider({
     }
 
     root.classList.add(theme)
-    console.log("Added theme:", theme);
+    // console.log("Added theme:", theme);
   }, [theme])
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      console.log("Setting theme to:", theme);
+      // console.log("Setting theme to:", theme);
       localStorage.setItem(storageKey, theme)
       setTheme(theme)
-      console.log("Setting theme END");
+      // console.log("Setting theme END");
     },
   }
 
@@ -71,7 +71,7 @@ export function ThemeProvider({
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext)
-  console.log("useTheme called. Theme context:", context);
+  // console.log("useTheme called. Theme context:", context);
 
   if (context === undefined)
     throw new Error("useTheme must be used within a ThemeProvider")
