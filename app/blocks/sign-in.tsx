@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
@@ -69,14 +69,14 @@ export function SignIn() {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSignIn();
     }
   };
 
   return (
-    <Card className="mx-auto max-w-sm " onKeyPress={add . handleKeyPress}>
+    <Card className="mx-auto max-w-sm" onKeyPress={handleKeyPress}>
       <CardHeader>
         <CardTitle className="text-2x">Sign In</CardTitle>
         <CardDescription>
@@ -119,20 +119,9 @@ export function SignIn() {
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
          
-          <span
-            role="link"
-            tabIndex={0}
-            className="text-sm  hover:underline"
-            onClick={handleForgotPassword}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                handleForgotPassword();
-              }
-            }}
-            style={{ cursor: 'pointer' }}
-          >
+          <p className="text-sm hover:underline" onClick={handleForgotPassword} style={{ cursor: 'pointer' }}>
             Forgot Password? Please check email
-          </span>
+          </p>
           <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled || buttonClicked}>
             {buttonClicked ? "Signing In..." : "Sign In"}
           </Button>
@@ -146,4 +135,3 @@ export function SignIn() {
     </Card>
   );
 }
-

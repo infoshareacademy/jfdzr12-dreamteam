@@ -9,8 +9,8 @@ export default function SignInPage() {
 return (
 <>
 <AddEvent />
-        <CreatedEventNav />
-        
+<CreatedEventNav />
+
    {/* <CreatedRelatedEventNav /> */}
    </>
   

@@ -7,6 +7,8 @@ import { db } from '~/db/firebase';
 import React from 'react';
 import { useCurrentUser } from '~/db/auth';
 import { getUserUID } from '~/db/get-user-uid';
+import { X } from 'lucide-react';
+
 
 interface RelatedEvent {
     eventName: string;
@@ -66,7 +68,7 @@ return (
                     <Link to={`related-event/${event.eventID}`}>
                         <Button className="p-4 " variant="outline">{event.eventName}</Button>
                     </Link>
-                    <button className=" p-1 rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
+                    <button className=" p-1 rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}><X size={16} /></button>
                 </div>
             )
         ))}
