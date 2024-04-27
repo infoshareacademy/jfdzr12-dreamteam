@@ -54,7 +54,7 @@ import { getBudgetsFromFirebase } from './getBudgetsFromFirebase';
 import { getBudgetDataFromFirebase } from './getBudgetDataFromFirebase';
 import { BudgetForm } from '~/blocks/budgetForm';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
-import { Table, TableCell, TableFooter, TableHead, TableRow } from '~/atoms/ui/table';
+import { Table, TableCell, TableFooter, TableHead, TableRow, TableHeader, TableBody } from '~/atoms/ui/table';
 
 // interface LoadBudgetProps {
 //   onSelectBudget: (documentData: { name: string, elements: { element: string, amount: number }[] }) => void;
@@ -103,37 +103,36 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
       console.error("Błąd podczas ładowania danych budżetu: ", error);
     }
   };
-  
   return (
     <div>
       <div>
         {budgetDocuments.map((documentName, index) => (
-          <Button key={index} variant={"ghost"} onClick={() => handleSelectBudget(documentName)}>
+          <Button key={index} variant="ghost" onClick={() => handleSelectBudget(documentName)}>
             {documentName}
           </Button>
         ))}
       </div>
       <div>
-      <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
-  {budgetDocumentsData.length > 0 && (
-    <table>
-      <thead>
-        <tr>
-          <th>Element</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        {budgetDocumentsData.map((item, index) => (
-          <tr key={index}>
-            <td>{item.element}</td>
-            <td>{item.amount}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )}
-</Card>
+        <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
+          {budgetDocumentsData.length > 0 && (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>List of items:</TableHead>
+                  <TableHead>Amount:</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {budgetDocumentsData.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{item.element}</TableCell>
+                    <TableCell>{item.amount}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </Card>
       </div>
     </div>
   );}
