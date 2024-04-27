@@ -574,7 +574,7 @@ import { Button } from "~/atoms/ui/button";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
-import { Table, TableCell, TableFooter, TableHead, TableRow } from '~/atoms/ui/table';
+import { Table, TableCell, TableFooter, TableHead, TableRow, TableHeader, TableBody } from '~/atoms/ui/table';
 import { addBudget } from '~/db/users-budget';
 import { LoadBudget } from '../db/load-budget'; 
 import { getBudgetsFromFirebase } from '../db/getBudgetsFromFirebase';
@@ -650,10 +650,10 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      <Card className="w-[500px]">
+      <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
         <CardHeader>
           <CardTitle>CREATE YOUR BUDGET PROJECT</CardTitle>
-          <CardDescription>Enter budget items</CardDescription>
+          <CardDescription>Take control of your finances</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid w-full items-center gap-4">
@@ -675,6 +675,7 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
                     type="text"
                     value={documentName}
                     onChange={(e) => setDocumentName(e.target.value)}
+                    required
                   />
                 </Label>
                 <br />
@@ -705,9 +706,16 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
         </CardContent>
       </Card>
       {isFormSubmitted && totalAmount > 0 && (
-        <Card className="w-[500px]">
-          <Table>
-            <TableHead>List od items: </TableHead>
+        <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>List of items:</TableHead>
+              <TableHead>Amount:</TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {budgetEl.map((el, index) => (
               <TableRow key={index}>
                 <TableCell>{`${index + 1}. ${el}`}</TableCell>
@@ -717,13 +725,18 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
                 </TableCell>
               </TableRow>
             ))}
-            <TableFooter>
+          </TableBody>
+          <TableFooter>
+            <TableRow>
               <TableCell>TOTAL AMOUNT:</TableCell>
               <TableCell>{totalAmount}</TableCell>
-            </TableFooter>
-          </Table>
-        </Card>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </Card>
+      
       )}
+    
     </div>
   );
 };

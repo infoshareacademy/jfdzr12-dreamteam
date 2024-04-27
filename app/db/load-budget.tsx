@@ -45,7 +45,8 @@
 //     </div>
 //   );
 // };
-
+// 
+// działa ale nie ściągają sie dane z FB , 
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "~/atoms/ui/button";
@@ -77,33 +78,28 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
     }
   };
 
-  const handleSelectBudget = async (documentName: string) => {
-    try {
-      const budgetData = await getBudgetDataFromFirebase(documentName);
-      console.log("budgetData w handleSelectBudget w LoadBudget", budgetData); 
-      console.log("type of budgetData t w LoadBudget",typeof budgetData); 
-      onSelectBudget({ name: documentName, elements: budgetData.elements });
-      setSelectedBudget(documentName); // Ustawienie wybranego budżetu
-      setBudgetDocumentsData(budgetData.elements)
+ const handleSelectBudget = async (documentName: string) => {
+  try {
+    const budgetData = await getBudgetDataFromFirebase(documentName);
+    console.log("budgetData w handleSelectBudget w LoadBudget", budgetData); 
+    console.log("type of budgetData t w LoadBudget",typeof budgetData); 
 
-      console.log("type of budgetData.elements",typeof budgetData.elements); 
-      console.log(" budgetData.elements",typeof budgetData.elements); 
-      console.log(" bodgetsdokumentData", budgetDocumentsData); 
-      
-      
-  
-  
-      if (budgetData && budgetData.elements ) {
-        setBudgetDocumentsData(budgetData.elements); // Ustawienie danych budżetu
-        console.log(" bodgetsdokumentData", budgetDocumentsData); 
-      } else {
-        console.error("Nieprawidłowe lub brak danych budżetu.", documentName);
-      }
-    } catch (error) {
-      console.error("Błąd podczas ładowania danych budżetu: ", error);
+    // Sprawdzamy, czy budgetData zawiera dane oraz elementy
+    if (budgetData && budgetData.elements) {
+      const { elements } = budgetData; // Wyodrębniamy tylko elementy budżetu
+      onSelectBudget(elements); // Wywołujemy funkcję onSelectBudget przekazując tylko elementy
+      setSelectedBudget(documentName); // Ustawienie wybranego budżetu
+      setBudgetDocumentsData(elements); // Ustawienie danych budżetu
+
+      console.log("Załadowano dane budżetu:", elements); 
+    } else {
+      console.error("Nieprawidłowe lub brak danych budżetu.", documentName);
     }
-  };
-  
+  } catch (error) {
+    console.error("Błąd podczas ładowania danych budżetu: ", error);
+  }
+};
+
   
   
   return (
@@ -116,7 +112,7 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
         ))}
       </div>
       <div>
-      <Card>
+      <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
   {selectedBudget && budgetDocumentsData !== undefined && (
     <table>
       <thead>
@@ -149,3 +145,76 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
     </div> 
   );}
   
+
+// //   wg plik Kaśki 
+
+// import { collection, onSnapshot, deleteDoc, doc, getDocs } from 'firebase/firestore'
+// import { db } from '~/db/firebase'
+// import { useEffect, useState } from 'react';
+// import { Table, TableBody, TableRow, TableCell, TableHead, TableHeader } from '~/atoms/ui/table';
+// import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '~/atoms/ui/dropdown-menu';
+// import { Button } from '~/atoms/ui/button';
+// import { MoreHorizontal } from 'lucide-react';
+
+// interface budget {
+//   element: string;
+//   amount: number;
+// }
+
+// export const LoadBudget = () => {
+//   const [bugetData, settbugetData] = useState<budget[]>([]);
+
+//   const getBudgetList = async () => {
+//     try {
+//       const budgetListCollection = collection(db, 'budget');
+//       const querySnapshot = await getDocs(budgetListCollection);
+//       const budgetList = querySnapshot.docs.map(doc => ({
+//         ...doc.data()
+//       } as budget));
+//       settbugetData(budgetList);
+//     } catch (error) {
+//       console.error('Błąd podczas pobierania danych z bazy danych:', error);
+//     }
+//   };
+  
+
+//   useEffect(() => {
+//     getBudgetList();
+//   }, []);
+
+
+
+//   return (
+//     <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
+//       <CardHeader>
+//         <CardTitle>Guest list</CardTitle>
+//         <CardDescription>Manage your guests and check their survey responses.</CardDescription>
+//       </CardHeader>
+//       <CardContent>
+//         <Table>
+//           <TableHeader>
+//             <TableRow>
+//               <TableHead>Element</TableHead>
+//               <TableHead>Amount </TableHead>
+//               <TableHead>
+//               </TableHead>
+//             </TableRow>
+//           </TableHeader>
+//           <TableBody>
+//             {bugetData.map((list, index) => (
+//               <TableRow key={index}>
+//                 <TableCell className="font-medium">{list.element}</TableCell>
+//                 <TableCell className="font-medium">{list.amount}</TableCell>
+
+//               </TableRow>
+//             ))}
+//           </TableBody>
+//         </Table>
+//       </CardContent>
+//       <CardFooter className='grid justify-end'>
+//       </CardFooter>
+//     </Card >
+//   )
+
+// }
