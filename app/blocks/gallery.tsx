@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { storage } from "~/db/firebase";
-import { formEventLinkStyleCancel } from "~/lib/utils";
 
 export default function UploadFile() {
     const [url, setUrl] = useState<string[]>();
@@ -71,7 +70,7 @@ export default function UploadFile() {
                     </form>
                 </CardContent>
                 <CardFooter className="grid grid-cols-3 gap-4">
-                    <Link to={`/${currentUserUID}/events`} className={formEventLinkStyleCancel}>Cancel</Link>
+                    <Link to={`/${currentUserUID}/events`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
                     <Button type="submit" form="Gallery">Send</Button>
                 </CardFooter>
             </Card>
