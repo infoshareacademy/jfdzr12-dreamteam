@@ -68,8 +68,8 @@ export const Header = () => {
                 </nav>
               </SheetContent>
             </Sheet>
-            <Link to="/" className="ml-4 lg:ml-0">
-              <h1 className="flex items-center gap-1.5 text-xl font-bold"><Heart className="h-6" />DreamDay</h1>
+            <Link to={"/_index"} className="ml-4 lg:ml-0">
+              <h1 className="flex items-center gap-1.5 text-xl font-bold bg-transparent p-4"><Heart className="h-6" />DreamDay</h1>
             </Link>
           </div>
 
