@@ -11,7 +11,7 @@ import { RelatedEventData, relatedEventDate } from "~/lib/utils";
 export default function YourRelatedEvent() {
     const [eventData, setEventData] = useState<RelatedEventData | null>();
 
-    const { currentUserUID, eventID } = useParams();
+    const { eventID } = useParams();
 
     const user = useCurrentUser();
     const loading = user.status === 'loading';
@@ -75,7 +75,7 @@ export default function YourRelatedEvent() {
                         <Link to="guestlist"><Button className="w-full inline-flex" variant="mainOutline">Guest list</Button></Link>
                         <Link to="budget"><Button className="w-full inline-flex" variant="mainOutline">Budget</Button></Link>
                         <Link to="edit-your-related-event"><Button className="w-full inline-flex" variant="mainOutline">Edit</Button></Link>
-                        <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="ghost">Back to your events</Button></Link>
+                        <Link to="/events"><Button className="w-full inline-flex" variant="ghost">Back to your events</Button></Link>
                     </div>
                 </Card>
             )}
