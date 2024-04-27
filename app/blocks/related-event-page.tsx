@@ -10,28 +10,28 @@ import { RelatedEventData, relatedEventDate } from "~/lib/utils";
 export default function YourRelatedEvent() {
     const [eventData, setEventData] = useState<RelatedEventData | null>();
 
-    const {currentUserUID, eventID} = useParams();
+    const { currentUserUID, eventID } = useParams();
 
     const user = useCurrentUser();
     const loading = user.status === 'loading';
 
     useEffect(() => {
-        if(user.status === 'authenticated') {
+        if (user.status === 'authenticated') {
             getYourEvent(eventID, relatedEventRef)
-            .then(res => {
-                if (res) {
-                    setEventData(res as RelatedEventData);
-                } else {
-                    setEventData(null);
-                }
-            })
+                .then(res => {
+                    if (res) {
+                        setEventData(res as RelatedEventData);
+                    } else {
+                        setEventData(null);
+                    }
+                })
         } else {
             setEventData(null)
         }
     }, [user.status])
 
     const eventDateString = relatedEventDate(eventData, loading);
-    
+
     return (
         <>
             {eventData && (
@@ -47,7 +47,7 @@ export default function YourRelatedEvent() {
                     </div>
                     <div className="grid gap-4 justify-items-center">
                         <div className="grid justify-items-center">
-                            <PartyPopper className="my-5"/>
+                            <PartyPopper className="my-5" />
                             <p>{`Place: ${eventData.eventPlace}`}</p>
                             <p>{`Street: ${eventData.eventStreetAddress}`}</p>
                             <p>{`City: ${eventData.eventCityAddress}`}</p>
@@ -59,19 +59,19 @@ export default function YourRelatedEvent() {
                     </div>
                     {eventData.other && (
                         <>
-                        <div className="flex items-center justify-center mt-5">
-                            <p>OTHER</p>
-                        </div>
-                        <div className="flex items-center justify-center p-6 whitespace-pre-wrap">
-                            <p>{eventData.other}</p>
-                        </div>
+                            <div className="flex items-center justify-center mt-5">
+                                <p>OTHER</p>
+                            </div>
+                            <div className="flex items-center justify-center p-6 whitespace-pre-wrap">
+                                <p>{eventData.other}</p>
+                            </div>
                         </>
                     )}
                     <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
-                    <Link to="guestlist"><Button className="w-full inline-flex" variant="outline">Guest list</Button></Link>
-                            <Link to="budget"><Button className="w-full inline-flex" variant="outline">Budget</Button></Link>
-                            <Link to="edit-your-related-event"><Button className="w-full inline-flex" variant="outline">Edit</Button></Link>
-                            <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link>
+                        <Link to="guestlist"><Button className="w-full inline-flex" variant="outline">Guest list</Button></Link>
+                        <Link to="budget"><Button className="w-full inline-flex" variant="outline">Budget</Button></Link>
+                        <Link to="edit-your-related-event"><Button className="w-full inline-flex" variant="outline">Edit</Button></Link>
+                        <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link>
                     </div>
                 </>
             )}
