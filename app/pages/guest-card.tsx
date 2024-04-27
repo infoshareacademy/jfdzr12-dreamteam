@@ -46,7 +46,7 @@ export const GuestCard = () => {
         </TabsContent>
       </Tabs>
       <CardFooter className='grid justify-end'>
-        <Button variant='secondary'><Link to={`/${currentUserUID}/events/your-event/${eventID}`}>Back to your event</Link></Button>
+        <Button variant='secondary'><Link to={`/events/your-event/${eventID}`}>Back to your event</Link></Button>
       </CardFooter>
     </Card >
 

@@ -24,7 +24,7 @@ export const RelatedEventGuestCard = () => {
         <RelatedEventGuestListTable />
       </CardContent>
       <CardFooter className='grid justify-end'>
-        <Button variant='secondary'><Link to={`/${currentUserUID}/events/related-event/${eventID}`}>Back to your event</Link></Button>
+        <Button variant='secondary'><Link to={`/events/related-event/${eventID}`}>Back to your event</Link></Button>
       </CardFooter>
     </Card >
   </>
