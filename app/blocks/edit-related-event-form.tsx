@@ -20,7 +20,7 @@ export default function EditRelatedEvent() {
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [eventData, setEventData] = useState<RelatedEventData | null>();
 
-    const { currentUserUID, eventID } = useParams();
+    const { eventID } = useParams();
 
     const navigate = useNavigate();
 
@@ -84,7 +84,7 @@ export default function EditRelatedEvent() {
             return;
         } else {
             await updateYourEvent(eventID, formData, relatedEventRef);
-            navigate(`/${currentUserUID}/events/related-event/${eventID}`)
+            navigate(`/events/related-event/${eventID}`)
         }
     }
 
@@ -164,16 +164,14 @@ export default function EditRelatedEvent() {
                                     </div>
                                 </div>
 
-                            </div>
-                        </form>
-                    </CardContent>
-                    <CardFooter className="grid grid-cols-3 gap-4">
-                        <Link to={`/${currentUserUID}/events/related-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
-                        <Button type="submit" form="EventForm">Update event</Button>
-                    </CardFooter>
-                </Card>
-            </div >
-        }
-        </>
+                        </div>
+                    </form>
+                </CardContent>
+                <CardFooter className="grid grid-cols-3 gap-4">
+                    <Link to={`/events/related-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
+                    <Button type="submit" form="EventForm">Update event</Button>
+                </CardFooter>
+            </Card>
+        </div >
     )
 }

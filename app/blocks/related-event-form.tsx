@@ -87,7 +87,7 @@ export default function RelatedEvent() {
             await addDoc(eventIdref, { "ID": nextID.value });
             await addDoc(relatedEventRef, formData);
             event.target.reset();
-            navigate(`/${userUID}/events`);
+            navigate(`/events`);
         }
     }
 
@@ -183,16 +183,14 @@ export default function RelatedEvent() {
                                     </div>
                                 </div>
 
-                            </div>
-                        </form>
-                    </CardContent>
-                    <CardFooter className="grid grid-cols-3 gap-4">
-                        <Link to={`/${userUID}/events`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
-                        <Button type="submit" form="EventForm">Add</Button>
-                    </CardFooter>
-                </Card>
-            </div>
-        }
-        </>
+                        </div>
+                    </form>
+                </CardContent>
+                <CardFooter className="grid grid-cols-3 gap-4">
+                    <Link to="/events" className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
+                    <Button type="submit" form="EventForm">Add</Button>
+                </CardFooter>
+            </Card>
+        </div>
     )
 }

@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from "@remix-run/react";
+import { addDoc } from "firebase/firestore";
 import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -7,21 +8,18 @@ import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
 import { Textarea } from "~/atoms/ui/textarea";
 import { useCurrentUser } from "~/db/auth";
-import { eventRef } from "~/db/event-ref";
-import { getYourEvent } from "~/db/get-your-event";
-import { updateYourEvent } from "~/db/update-your-event";
-import { EventData } from "~/lib/utils";
+import { eventIdref, eventRef } from "~/db/event-ref";
+import { getUserUID } from "~/db/get-user-uid";
+import { EventData, mainCardOnPage, uniqueCodeGenerator } from "~/lib/utils";
 
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>
 
-export default function EditEventPage() {
+export default function NewEventPage() {
 
     const [error, setError] = useState<FormErrorData<EventData> | null>();
     const [eventDate, setEventDate] = useState<Date | undefined>();
-    const [eventData, setEventData] = useState<EventData | null>();
-
-    const {eventID} = useParams();
+    const [userUID, setUserUID] = useState<string | null>();
 
     const navigate = useNavigate();
 
@@ -29,14 +27,10 @@ export default function EditEventPage() {
 
     useEffect(() => {
         if(user.status === 'authenticated') {
-            getYourEvent(eventID, eventRef)
-            .then(res => {
-                const eventData = res as EventData;
-                setEventData(eventData);
-                setEventDate(new Date(eventData.eventDate))});
+            getUserUID()
+                .then(res => setUserUID(res))
         } else {
-            setEventData(null);
-            setEventDate(undefined);
+            setUserUID(null)
         }
     }, [user.status])
 
@@ -47,10 +41,18 @@ export default function EditEventPage() {
         event.preventDefault();
 
         const _formData = new FormData(event.target);
+        console.log("_formData", _formData)
+
+        if(userUID) {
+        _formData.append('userUID', userUID)
+        }
 
         if(eventDate) {
             _formData.append("eventDate", eventDate.toString());
         };
+
+        const nextID = await uniqueCodeGenerator.next();
+        _formData.append("eventID", String(nextID.value));
 
         const formData = Object.fromEntries(_formData.entries());
 
@@ -104,143 +106,149 @@ export default function EditEventPage() {
         if(Object.keys(errors).length !== 0) {
             return;
         } else {
-            await updateYourEvent(eventID, formData, eventRef);
-            navigate(`/events/your-event/${eventID}`);
+            await addDoc(eventIdref, {"ID": nextID.value});
+            await addDoc(eventRef, formData);
+            event.target.reset();
+            navigate(`/events`);
         }
     }
 
     return (
-        <>
-        {eventData &&
+        <div className={mainCardOnPage}>
             <Card className="w-full max-w-screen-lg mx-auto my-8">
                 <CardHeader className="my-4">
-                    <CardTitle className="mb-2">{`Edit your event number ${eventID}`}</CardTitle>
-                    <CardDescription>You can edit selected form fields</CardDescription>
+                    <CardTitle className="mb-2">Your dream wedding</CardTitle>
+                    <CardDescription>{"Provide the necessary information about your wedding."}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form id="EventForm" onSubmit={handleOnSubmit}>
                         <div className="w-full border-b-2 pb-4">
 
                             <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Names</p>
+                                <p className="border-t-2 pt-4">Names</p>
+                                <CardDescription className="mb-6">Names of newlyweds</CardDescription>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="firstPerson" >First person</Label> 
-                                        <Input name="firstPerson" defaultValue={eventData?.firstPerson}/>
+                                        <Label htmlFor="firstPerson">First person</Label> 
+                                        <Input name="firstPerson"/>
                                         {!!error?.firstPerson && <em className="text-base text-red-700">{error.firstPerson}</em>}
                                     </div>
                                     <div className="flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="secondPerson">Second person</Label> 
-                                        <Input name="secondPerson" defaultValue={eventData?.secondPerson}/>
+                                        <Input name="secondPerson"/>
                                         {!!error?.secondPerson && <em className="text-base text-red-700">{error.secondPerson}</em>} 
                                     </div>
                                 </div>
                             </div>
                             
                             <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Event</p>
+                                <p className="border-t-2 pt-4">Event</p>
+                                <CardDescription className="mb-6">{"Date and time (in 24-hour format)"}</CardDescription>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                         <Label>Date</Label> 
-                                        <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} />
+                                        <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)}/>
                                         {!!error?.eventDate && <em className="text-base text-red-700">{error.eventDate}</em>}                                   
                                     </div>
                                     <div className="flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="eventTime">Time</Label> 
-                                        <Input name="eventTime" type="time" defaultValue={eventData?.eventTime}/>
+                                        <Input name="eventTime" type="time"/>
                                         {!!error?.eventTime && <em className="text-base text-red-700">{error.eventTime}</em>}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Ceremony</p>
+                                <p className="border-t-2 pt-4">Ceremony</p>
+                                <CardDescription className="mb-6">Ceremony venue and address</CardDescription>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="ceremonyPlace">Place name</Label> 
-                                        <Input name="ceremonyPlace" defaultValue={eventData?.ceremonyPlace}/>
+                                        <Input name="ceremonyPlace" />
                                         {!!error?.ceremonyPlace && <em className="text-base text-red-700">{error.ceremonyPlace}</em>}
                                         
                                     </div>
                                     <div className="flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="ceremonyStreetAddress">Street</Label> 
-                                        <Input name="ceremonyStreetAddress" defaultValue={eventData?.ceremonyStreetAddress}/>
+                                        <Input name="ceremonyStreetAddress" />
                                         {!!error?.ceremonyStreetAddress && <em className="text-base text-red-700">{error.ceremonyStreetAddress}</em>}
                                     </div>
                                     <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="ceremonyCityAddress">City</Label> 
-                                        <Input name="ceremonyCityAddress" defaultValue={eventData?.ceremonyCityAddress}/>
+                                        <Input name="ceremonyCityAddress" />
                                         {!!error?.ceremonyCityAddress && <em className="text-base text-red-700">{error.ceremonyCityAddress}</em>}
                                     </div>
                                     <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="ceremonyCountryAddress">Country</Label> 
-                                        <Input name="ceremonyCountryAddress" defaultValue={eventData?.ceremonyCountryAddress}/>
+                                        <Input name="ceremonyCountryAddress" />
                                         {!!error?.ceremonyCountryAddress && <em className="text-base text-red-700">{error.ceremonyCountryAddress}</em>}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Reception</p>
+                                <p className="border-t-2 pt-4">Reception</p>
+                                <CardDescription className="mb-6">Reception venue and address</CardDescription>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="receptionPlace">Place name</Label>
-                                        <Input name="receptionPlace" defaultValue={eventData?.receptionPlace}/>
+                                        <Input name="receptionPlace" />
                                         {!!error?.receptionPlace && <em className="text-base text-red-700">{error.receptionPlace}</em>}
                                     </div>
                                     <div className="flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="receptionStreetAddress">Street</Label> 
-                                        <Input name="receptionStreetAddress" defaultValue={eventData?.receptionStreetAddress}/>
+                                        <Input name="receptionStreetAddress" />
                                         {!!error?.receptionStreetAddress && <em className="text-base text-red-700">{error.receptionStreetAddress}</em>}
                                     </div>
                                     <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="receptionCityAddress">City</Label> 
-                                        <Input name="receptionCityAddress" defaultValue={eventData?.receptionCityAddress}/>
+                                        <Input name="receptionCityAddress" />
                                         {!!error?.receptionCityAddress && <em className="text-base text-red-700">{error.receptionCityAddress}</em>}
                                     </div>
                                     <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="receptionCountryAddress">Country</Label> 
-                                        <Input name="receptionCountryAddress" defaultValue={eventData?.receptionCountryAddress}/>
+                                        <Input name="receptionCountryAddress" />
                                         {!!error?.receptionCountryAddress && <em className="text-base text-red-700">{error.receptionCountryAddress}</em>}
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Phone numbers</p>
+                            <div className="text-lgmb-2">
+                                <p className="border-t-2 pt-4">Phone numbers</p>
+                                <CardDescription className="mb-6">Your phone numbers for your guests</CardDescription>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="firstPersonPhone">First person</Label>
-                                        <Input name="firstPersonPhone" type="tel" defaultValue={eventData?.firstPersonPhone}/>
+                                        <Label htmlFor="firstPersonPhone">First person phone number</Label>
+                                        <Input name="firstPersonPhone" type="tel" />
                                         {!!error?.firstPersonPhone && <em className="text-base text-red-700">{error.firstPersonPhone}</em>}
                                     </div>
                                     <div className="flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="secondPersonPhone">Second person</Label>
-                                        <Input name="secondPersonPhone" type="tel" defaultValue={eventData?.secondPersonPhone}/>
+                                        <Label htmlFor="econdPersonPhone">Second person phone number</Label>
+                                        <Input name="secondPersonPhone" type="tel" />
                                         {!!error?.secondPersonPhone && <em className="text-base text-red-700">{error.secondPersonPhone}</em>}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Other</p>
+                                <p className="border-t-2 pt-4">Other</p>
+                                <CardDescription className="mb-6">{"(optional)"}</CardDescription>
                                 <div className="grid grid-cols-3 gap-4">
                                     <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
                                         <Label htmlFor="other">Additional information</Label>
-                                        <Textarea name="other" defaultValue={eventData?.other}/>
+                                        <Textarea name="other" />
                                     </div>
                                 </div>
                             </div>
 
-                    </div>
-                </form>
-            </CardContent>
-            <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to={`/events/your-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
-                <Button type="submit" form="EventForm" >Update event</Button>
-            </CardFooter>
-        </Card>
-        }
-        </>
+                        </div>
+                    </form>
+                </CardContent>
+                <CardFooter className="grid grid-cols-3 gap-4">
+                    <Link to={`/events`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
+                    <Button type="submit" form="EventForm">Add</Button>
+                </CardFooter>
+            </Card>
+        </div>
     )
 }
