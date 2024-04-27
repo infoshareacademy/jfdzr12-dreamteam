@@ -74,14 +74,16 @@ export default function UploadFile() {
                     <Button type="submit" form="Gallery">Send</Button>
                 </CardFooter>
             </Card>
-            <div className="w-full max-w-screen-lg mx-auto my-8 grid grid-cols-2 justify-center place-items-center gap-10 mt-10 mb-5">
-                {url?.map((data) => (
-                    <div key={data} className="relative m-5">
-                            <Button onClick={() => handleDelete(data)} className="absolute top-0 right-0">X</Button>
-                            <img src={data} className="h-260px w-full object-cover"/>
-                    </div>))
-                }
-            </div>
+            {url &&
+                <div className="w-full max-w-screen-lg mx-auto my-8 grid justify-center place-items-center gap-10 mt-10 mb-5 lg:grid-cols-2 sm:grid-cols-1">
+                    {url.map((data) => (
+                        <div key={data} className="relative w-64 h-64">
+                            <Button onClick={() => handleDelete(data)} className="absolute top-0 right-0 text-xs">X</Button>
+                            <img src={data} className="w-full h-full object-cover"/>
+                        </div>))
+                    }
+                </div>
+            }
         </>
     )
 }
