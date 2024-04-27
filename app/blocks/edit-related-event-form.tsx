@@ -89,87 +89,91 @@ export default function EditRelatedEvent() {
     }
 
     return (
-        <div className={mainCardOnPage}>
-            <Card className="w-full max-w-screen-lg mx-auto my-8">
-                <CardHeader className="my-4">
-                    <CardTitle className="mb-2">{`Edit your related event number ${eventID}`}</CardTitle>
-                    <CardDescription>You can edit selected form fields</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form id="EventForm" onSubmit={handleOnSubmit}>
-                        <div className="w-full border-b-2 pb-4">
+        <>
+        {eventData &&
+            <div className={mainCardOnPage}>
+                <Card className="w-full max-w-screen-lg mx-auto my-8">
+                    <CardHeader className="my-4">
+                        <CardTitle className="mb-2">{`Edit your related event number ${eventID}`}</CardTitle>
+                        <CardDescription>You can edit selected form fields</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form id="EventForm" onSubmit={handleOnSubmit}>
+                            <div className="w-full border-b-2 pb-4">
 
-                            <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Name</p>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="eventName">Name of your event</Label>
-                                        <Input name="eventName" defaultValue={eventData?.eventName} />
-                                        {!!error?.eventName && <em className="text-base text-red-700">{error.eventName}</em>}
+                                <div className="text-lg mb-2">
+                                    <p className="border-t-2 py-4 mb-4">Name</p>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
+                                            <Label htmlFor="eventName">Name of your event</Label>
+                                            <Input name="eventName" defaultValue={eventData?.eventName} />
+                                            {!!error?.eventName && <em className="text-base text-red-700">{error.eventName}</em>}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Event</p>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                        <Label>Date</Label>
-                                        <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} />
-                                        {!!error?.eventDate && <em className="text-base text-red-700">{error.eventDate}</em>}
-                                    </div>
-                                    <div className="flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="eventTime">Time</Label>
-                                        <Input name="eventTime" type="time" defaultValue={eventData?.eventTime} />
-                                        {!!error?.eventTime && <em className="text-base text-red-700">{error.eventTime}</em>}
+                                <div className="text-lg mb-2">
+                                    <p className="border-t-2 py-4 mb-4">Event</p>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
+                                            <Label>Date</Label>
+                                            <DatePicker value={eventDate} onSelectDate={(date) => setEventDate(date)} />
+                                            {!!error?.eventDate && <em className="text-base text-red-700">{error.eventDate}</em>}
+                                        </div>
+                                        <div className="flex flex-col space-y-1.5 mb-5">
+                                            <Label htmlFor="eventTime">Time</Label>
+                                            <Input name="eventTime" type="time" defaultValue={eventData?.eventTime} />
+                                            {!!error?.eventTime && <em className="text-base text-red-700">{error.eventTime}</em>}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Location</p>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="eventPlace">Place name</Label>
-                                        <Input name="eventPlace" defaultValue={eventData?.eventPlace} />
-                                        {!!error?.eventPlace && <em className="text-base text-red-700">{error.eventPlace}</em>}
-                                    </div>
-                                    <div className="flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="eventStreetAddress">Street</Label>
-                                        <Input name="eventStreetAddress" defaultValue={eventData?.eventStreetAddress} />
-                                        {!!error?.eventStreetAddress && <em className="text-base text-red-700">{error.eventStreetAddress}</em>}
-                                    </div>
-                                    <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="eventCityAddress">City</Label>
-                                        <Input name="eventCityAddress" defaultValue={eventData?.eventCityAddress} />
-                                        {!!error?.eventCityAddress && <em className="text-base text-red-700">{error.eventCityAddress}</em>}
-                                    </div>
-                                    <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="eventCountryAddress">Country</Label>
-                                        <Input name="eventCountryAddress" defaultValue={eventData?.eventCountryAddress} />
-                                        {!!error?.eventCountryAddress && <em className="text-base text-red-700">{error.eventCountryAddress}</em>}
+                                <div className="text-lg mb-2">
+                                    <p className="border-t-2 py-4 mb-4">Location</p>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="col-start-2 flex flex-col space-y-1.5 mb-5">
+                                            <Label htmlFor="eventPlace">Place name</Label>
+                                            <Input name="eventPlace" defaultValue={eventData?.eventPlace} />
+                                            {!!error?.eventPlace && <em className="text-base text-red-700">{error.eventPlace}</em>}
+                                        </div>
+                                        <div className="flex flex-col space-y-1.5 mb-5">
+                                            <Label htmlFor="eventStreetAddress">Street</Label>
+                                            <Input name="eventStreetAddress" defaultValue={eventData?.eventStreetAddress} />
+                                            {!!error?.eventStreetAddress && <em className="text-base text-red-700">{error.eventStreetAddress}</em>}
+                                        </div>
+                                        <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
+                                            <Label htmlFor="eventCityAddress">City</Label>
+                                            <Input name="eventCityAddress" defaultValue={eventData?.eventCityAddress} />
+                                            {!!error?.eventCityAddress && <em className="text-base text-red-700">{error.eventCityAddress}</em>}
+                                        </div>
+                                        <div className="col-start-3 flex flex-col space-y-1.5 mb-5">
+                                            <Label htmlFor="eventCountryAddress">Country</Label>
+                                            <Input name="eventCountryAddress" defaultValue={eventData?.eventCountryAddress} />
+                                            {!!error?.eventCountryAddress && <em className="text-base text-red-700">{error.eventCountryAddress}</em>}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="text-lg mb-2">
-                                <p className="border-t-2 py-4 mb-4">Other</p>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
-                                        <Label htmlFor="other">Additional information</Label>
-                                        <Textarea name="other" defaultValue={eventData?.other} />
+                                <div className="text-lg mb-2">
+                                    <p className="border-t-2 py-4 mb-4">Other</p>
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="col-start-2 col-end-4 flex flex-col space-y-1.5 mb-5">
+                                            <Label htmlFor="other">Additional information</Label>
+                                            <Textarea name="other" defaultValue={eventData?.other} />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                        </div>
-                    </form>
-                </CardContent>
-                <CardFooter className="grid grid-cols-3 gap-4">
-                    <Link to={`/events/related-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
-                    <Button type="submit" form="EventForm">Update event</Button>
-                </CardFooter>
-            </Card>
-        </div >
+                            </div>
+                        </form>
+                    </CardContent>
+                    <CardFooter className="grid grid-cols-3 gap-4">
+                        <Link to={`/events/related-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
+                        <Button type="submit" form="EventForm">Update event</Button>
+                    </CardFooter>
+                </Card>
+            </div >
+        }
+        </>
     )
 }
