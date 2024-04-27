@@ -83,11 +83,12 @@ export default function YourEvent() {
                         </div>
                         </>
                     )}
-                    <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
-                            <Link to="guestlist"><Button className="w-full inline-flex" variant="outline">Guest list</Button></Link>
-                            <Link to="budget"><Button className="w-full inline-flex" variant="outline">Budget</Button></Link>
-                            <Link to="edit-your-event"><Button className="w-full inline-flex" variant="outline">Edit</Button></Link>
-                            <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link>
+                    <div className="m-10 grid grid-cols-1 md:grid-cols-5 gap-4 justify-center">
+                        <Link to="guestlist"><Button className="w-full inline-flex" variant="outline">Guest list</Button></Link>
+                        <Link to="budget"><Button className="w-full inline-flex" variant="outline">Budget</Button></Link>
+                        <Link to="gallery"><Button className="w-full inline-flex" variant="outline">Gallery</Button></Link>
+                        <Link to="edit-your-event"><Button className="w-full inline-flex" variant="outline">Edit</Button></Link>
+                        <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link>
                     </div>
                 </>
             )}
