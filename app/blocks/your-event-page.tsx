@@ -10,21 +10,21 @@ import { EventData, calculateEventContent } from "~/lib/utils";
 export default function YourEvent() {
     const [eventData, setEventData] = useState<EventData | null>();
 
-    const {currentUserUID, eventID} = useParams();
+    const { currentUserUID, eventID } = useParams();
 
     const user = useCurrentUser();
     const loading = user.status === 'loading';
 
     useEffect(() => {
-        if(user.status === 'authenticated') {
+        if (user.status === 'authenticated') {
             getYourEvent(eventID, eventRef)
-            .then(res => {
-                if (res) {
-                    setEventData(res as EventData);
-                } else {
-                    setEventData(null);
-                }
-            })
+                .then(res => {
+                    if (res) {
+                        setEventData(res as EventData);
+                    } else {
+                        setEventData(null);
+                    }
+                })
         } else {
             setEventData(null)
         }
@@ -33,7 +33,7 @@ export default function YourEvent() {
     const contentData = calculateEventContent(eventData, loading);
     const content = contentData?.content;
     const eventDate = contentData?.eventDate;
-    
+
     return (
         <>
             {eventData && (
@@ -43,7 +43,7 @@ export default function YourEvent() {
                     </div>
                     <div className="grid grid-cols-3 gap-4 justify-items-center">
                         <div className="grid col-start-1 justify-items-center">
-                            <HeartHandshake className="my-5"/>
+                            <HeartHandshake className="my-5" />
                             <h1 className="mb-5">CEREMONY</h1>
                             <p className="text-center">{`Place: ${eventData.ceremonyPlace}`}</p>
                             <p className="text-center">{`Street: ${eventData.ceremonyStreetAddress}`}</p>
@@ -55,14 +55,14 @@ export default function YourEvent() {
                                 <p>{eventDate}</p>
                             </div>
                             <div className="flex items-center justify-center">
-                                <Heart/>
+                                <Heart />
                             </div>
                             <div className="flex items-center justify-center p-6">
                                 <p>{eventData.eventTime}</p>
                             </div>
                         </div>
                         <div className="grid justify-items-center">
-                            <Wine className="my-5"/>
+                            <Wine className="my-5" />
                             <h1 className="mb-5">RECEPTION</h1>
                             <p className="text-center">{`Place: ${eventData.receptionPlace}`}</p>
                             <p className="text-center">{`Street: ${eventData.receptionStreetAddress}`}</p>
@@ -75,12 +75,12 @@ export default function YourEvent() {
                     </div>
                     {eventData.other && (
                         <>
-                        <div className="flex items-center justify-center mt-5">
-                            <p>OTHER</p>
-                        </div>
-                        <div className="flex items-center justify-center p-6 whitespace-pre-wrap">
-                            <p>{eventData.other}</p>
-                        </div>
+                            <div className="flex items-center justify-center mt-5">
+                                <p>OTHER</p>
+                            </div>
+                            <div className="flex items-center justify-center p-6 whitespace-pre-wrap">
+                                <p>{eventData.other}</p>
+                            </div>
                         </>
                     )}
                     <div className="m-10 grid grid-cols-1 md:grid-cols-5 gap-4 justify-center">
