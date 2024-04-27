@@ -1,9 +1,6 @@
 import { Button } from "~/atoms/ui/button";
 import { Link } from "@remix-run/react";
 
-
-
-
 export function AddEvent() {
   return (
     <>
