@@ -78,7 +78,7 @@ export function calculateEventContent(eventData: EventData | null | undefined, l
     } else if (numberOfDays === 1) {
       return { content: "Your wedding is tomorrow! Are you ready?", eventDate: eventDateString };
     } else {
-      return { content: `${numberOfDays} days until ${eventData.firstPerson} and ${eventData.secondPerson}'s wedding`, eventDate: eventDateString };
+      return { content: `${numberOfDays} days until ${eventData.firstPerson} & ${eventData.secondPerson}'s wedding`, eventDate: eventDateString };
     }
   }
 
