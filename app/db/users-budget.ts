@@ -39,12 +39,12 @@ const budgetsCollection = collection(db, "budget");
 // }
 
 
-export function addBudget(budgetData: Budget[], documentName: string) {
+export function addBudget(budgetData: Budget[], documentName: string, eventID:string) {
   // Tworzymy dokument do dodania
   const newDoc = doc(budgetsCollection, documentName);
 
   // Ustawiamy dokument z budżetem w kolekcji
-  return setDoc(newDoc, { budget: budgetData }).then(() => {
+  return setDoc(newDoc, { budget: budgetData, eventID }).then(() => {
     console.log('Budżet zapisany pomyślnie!');
     alert('Budżet zapisany pomyślnie!');
   }).catch((error) => {

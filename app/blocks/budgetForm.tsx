@@ -579,9 +579,13 @@ import { addBudget } from '~/db/users-budget';
 import { LoadBudget } from '../db/load-budget'; 
 import { getBudgetsFromFirebase } from '../db/getBudgetsFromFirebase';
 
-interface NameFormProps {}
+import {  useParams } from "@remix-run/react";
 
-export const BudgetForm: React.FC<NameFormProps> = () => {
+interface NameFormProps {
+  eventIDProp: string; 
+}
+
+export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
   const [budgetEl, setBudgetEl] = useState<string[]>([]);
   const [budgetElAmount, setBudgetElAmount] = useState<number[]>([0]);
   const [budgetElInput, setBudgetElInput] = useState<string>('');
@@ -590,13 +594,16 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [budgetDocuments, setBudgetDocuments] = useState<string[]>([]);
 
+  const { currentUserUID, eventID } = useParams();
+
   const handleCreateNewBudget = () => {
     setShowForm(true);
   };
 
   const handleLoadBudget = async () => {
+    if (eventID === undefined) {return}
     try {
-      const budgets = await getBudgetsFromFirebase();
+      const budgets = await getBudgetsFromFirebase(eventID);
       setBudgetDocuments(budgets);
     } catch (error) {
       console.error("Error loading budgets: ", error);
@@ -626,13 +633,14 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (eventID === undefined) {return}
     const budgetData = budgetEl.map((el, index) => ({
       element: el,
       amount: budgetElAmount[index],
     }));
 
     try {
-      await addBudget(budgetData, documentName);
+      await addBudget(budgetData, documentName, eventID);
       console.log("Budget saved successfully!");
     } catch (error) {
       console.error("Error saving budgets: ", error);
