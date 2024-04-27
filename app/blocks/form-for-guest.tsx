@@ -5,15 +5,14 @@ import { Input } from '~/atoms/ui/input';
 import { Checkbox } from '~/atoms/ui/checkbox';
 import { Textarea } from '~/atoms/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/atoms/ui/select';
-// import { NewGuest, addGuest } from '~/db/guest';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/atoms/ui/card';
 import { FieldPath, collection, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { db } from '~/db/firebase';
 import { guestRef } from '~/db/guest-list-ref';
 import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
-import { toast, useToast } from '~/atoms/ui/use-toast';
-import { Toast, ToastAction } from '~/atoms/ui/toast';
+import { useToast } from '~/atoms/ui/use-toast';
 import { cn } from '~/lib/utils';
+import { CheckCheck } from 'lucide-react';
 
 
 const textLabelFirstName = "First name";
@@ -174,10 +173,10 @@ const handleReset = () => {
       await updateDoc(docRef, {formData});
       toast({
         className: cn(
-        'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20'
+        'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20 bg-emerald-300 text-black'
       ),
         title: "Success!",
-        description: "Your form has been submitted successfully.",
+        description: (<><p>Your form has been submitted successfully! </p><CheckCheck/></>),
         duration: 6000, 
       });
     }
@@ -187,7 +186,7 @@ const handleReset = () => {
       return;
     } 
 
-    console.log('handleSubmit', formData)
+    // console.log('handleSubmit', formData)
     e.target.reset();
     setRadioGroupKey(performance.now().toString()); 
   };
@@ -261,7 +260,7 @@ const handleReset = () => {
                       <Label htmlFor="partner">{textLabelPartner}</Label>
                       <Checkbox
                           name="partner" 
-                          checked={showQuestionAboutPartner /*=== basicAnswer[0].value*/}
+                          checked={showQuestionAboutPartner}
                           onCheckedChange={setShowQuestionAboutPartner} 
                         />
                     </div>
@@ -297,9 +296,7 @@ const handleReset = () => {
                 <div className="flex flex-col space-y-1.5">
                   <p className="text-lg font-bold">Dinning and alcohol preferences</p>
                       <div className='grid grid-cols-3 gap-4'>
-                        {/* <div className='grid-flow-row'> */}
                           <Label htmlFor="selectedMenuGuest">{textLabelMenuGuest}</Label>
-                        {/* </div> */}
                           <div>
                           <Select name="selectedMenuGuest" defaultValue={menuOptions[0].value} >
                             <SelectTrigger>
@@ -317,9 +314,7 @@ const handleReset = () => {
                       {showQuestionAboutPartner && (
                         <>
                           <div className='grid grid-cols-3 gap-4'>
-                          {/* <div className='grid-flow-row'> */}
                             <Label htmlFor="selectedMenuPartner">{textLabelMenuPartner}</Label>
-                          {/* </div> */}
                             <div>
                             <Select name="selectedMenuPartner" defaultValue={menuOptions[0].value} >
                               <SelectTrigger>
@@ -339,9 +334,7 @@ const handleReset = () => {
                       {showQuestionAboutChild && (
                         <>
                           <div className='grid grid-cols-3 gap-4'>
-                          {/* <div className='grid-flow-row'> */}
                             <Label htmlFor="selectedMenuPartner">{textLabelMenuChild}</Label>
-                          {/* </div> */}
                             <div>
                             <Select name="selectedMenuChild" defaultValue={menuOptions[0].value} >
                               <SelectTrigger>
