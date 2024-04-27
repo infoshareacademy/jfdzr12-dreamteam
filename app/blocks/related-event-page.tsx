@@ -1,10 +1,11 @@
 import { Link, useParams } from "@remix-run/react";
 import { PartyPopper } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "~/atoms/ui/button";
 import { useCurrentUser } from "~/db/auth";
 import { relatedEventRef } from "~/db/event-ref";
 import { getYourEvent } from "~/db/get-your-event";
-import { RelatedEventData, eventLinkStyleBack, eventLinkStyleOptions, relatedEventDate } from "~/lib/utils";
+import { RelatedEventData, relatedEventDate } from "~/lib/utils";
 
 export default function YourRelatedEvent() {
     const [eventData, setEventData] = useState<RelatedEventData | null>();
@@ -36,7 +37,7 @@ export default function YourRelatedEvent() {
             {eventData && (
                 <>
                     <div className="flex items-center justify-center p-6">
-                        <h1 className="italic font-serif text-xl font-bold text-center">{eventData.eventName}</h1>
+                        <h1 className="text-center scroll-m-20 text-3xl font-bold md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-7xl">{eventData.eventName}</h1>
                     </div>
                     <div className="flex items-center justify-center p-6">
                         <p>{eventDateString}</p>
@@ -66,12 +67,11 @@ export default function YourRelatedEvent() {
                         </div>
                         </>
                     )}
-                    <div className="m-10 sm:grid sm:grid-cols-5 sm:gap-4 sm:justify-items-center">
-                            <Link to="guestlist" className={eventLinkStyleOptions}>Guest list</Link>
-                            <Link to="budget" className={eventLinkStyleOptions}>Budget</Link>
-                            <Link to="gallery" className={eventLinkStyleOptions}>Gallery</Link>
-                            <Link to="edit-your-related-event" className={eventLinkStyleOptions}>Edit</Link>
-                            <Link to={`/${currentUserUID}/events`} className={eventLinkStyleBack}>Back to your events</Link>
+                    <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
+                    <Link to="guestlist"><Button className="w-full inline-flex" variant="outline">Guest list</Button></Link>
+                            <Link to="budget"><Button className="w-full inline-flex" variant="outline">Budget</Button></Link>
+                            <Link to="edit-your-related-event"><Button className="w-full inline-flex" variant="outline">Edit</Button></Link>
+                            <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link>
                     </div>
                 </>
             )}
