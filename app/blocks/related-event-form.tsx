@@ -33,8 +33,6 @@ export default function RelatedEvent() {
         }
     }, [user.status])
 
-    const { currentUserUID } = useParams();
-
     async function handleOnSubmit(event: FormEvent) {
         if (!(event.target instanceof HTMLFormElement)) {
             return
@@ -89,7 +87,7 @@ export default function RelatedEvent() {
             await addDoc(eventIdref, { "ID": nextID.value });
             await addDoc(relatedEventRef, formData);
             event.target.reset();
-            navigate(`/${currentUserUID}/events`);
+            navigate(`/events`);
         }
     }
 
@@ -187,7 +185,7 @@ export default function RelatedEvent() {
                     </form>
                 </CardContent>
                 <CardFooter className="grid grid-cols-3 gap-4">
-                    <Link to={`/${currentUserUID}/events`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
+                    <Link to="/events" className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
                     <Button type="submit" form="EventForm">Add</Button>
                 </CardFooter>
             </Card>

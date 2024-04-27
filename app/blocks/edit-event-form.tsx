@@ -21,7 +21,7 @@ export default function EditEventPage() {
     const [eventDate, setEventDate] = useState<Date | undefined>();
     const [eventData, setEventData] = useState<EventData | null>();
 
-    const {currentUserUID, eventID} = useParams();
+    const {eventID} = useParams();
 
     const navigate = useNavigate();
 
@@ -105,7 +105,7 @@ export default function EditEventPage() {
             return;
         } else {
             await updateYourEvent(eventID, formData, eventRef);
-            navigate(`/${currentUserUID}/events/your-event/${eventID}`);
+            navigate(`/events/your-event/${eventID}`);
         }
     }
 
@@ -234,7 +234,7 @@ export default function EditEventPage() {
                 </form>
             </CardContent>
             <CardFooter className="grid grid-cols-3 gap-4">
-                <Link to={`/${currentUserUID}/events/your-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
+                <Link to={`/events/your-event/${eventID}`} className="col-start-2"><Button className="w-full" variant="outline">Cancel</Button></Link>
                 <Button type="submit" form="EventForm" >Update event</Button>
             </CardFooter>
         </Card>
