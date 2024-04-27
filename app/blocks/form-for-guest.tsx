@@ -11,7 +11,7 @@ import { db } from '~/db/firebase';
 import { guestRef } from '~/db/guest-list-ref';
 import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
 import { useToast } from '~/atoms/ui/use-toast';
-import { cn } from '~/lib/utils';
+import { cn, mainCardOnPage } from '~/lib/utils';
 import { CheckCheck } from 'lucide-react';
 
 
