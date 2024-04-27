@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
@@ -5,7 +6,8 @@ import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { loginWithEmailAndPassword } from "~/db/auth";
 import { resetPassword } from "~/db/auth";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react"; 
+import { getUserUID } from "~/db/get-user-uid";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -13,6 +15,9 @@ export function SignIn() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [signInDisabled, setSignInDisabled] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const navigate = useNavigate(); 
 
   const handleSignIn = async () => {
     setEmailError("");
@@ -33,14 +38,26 @@ export function SignIn() {
       return;
     }
 
+    setSignInDisabled(true);
+    setButtonClicked(true);
+
     const signInResult = await loginWithEmailAndPassword(email, password);
     if (signInResult.success) {
       console.log("Sign in successful!");
       setEmail("");
       setPassword("");
+      const currentUserUID = await getUserUID();
+      navigate(`/${currentUserUID}/events`);
     } else {
       console.error("Sign in error:", signInResult.error);
+      setSignInDisabled(false);
+      if (signInResult.error === "Invalid email or password.") {
+        setPasswordError("Invalid email or password");
+      } else {
+        setPasswordError("Incorrect login or password or account does not exist");
+      }
     }
+    setButtonClicked(false);
   };
 
   const handleForgotPassword = async () => {
@@ -52,8 +69,14 @@ export function SignIn() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSignIn();
+    }
+  };
+
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-sm" onKeyPress={handleKeyPress}>
       <CardHeader>
         <CardTitle className="text-2x">Sign In</CardTitle>
         <CardDescription>
@@ -96,14 +119,12 @@ export function SignIn() {
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
          
-          <p className="text-sm text-gray-500 cursor-pointer font-bold" onClick={handleForgotPassword}>
-            Forgot Password?
+          <p className="/forgot-password" className="text-sm  hover:underline" onClick={handleForgotPassword}  style={{ cursor: 'pointer' }}>
+            Forgot Password? Please check email
           </p>
-          <Link to="/add-event">
-          <Button type="button" className="w-full" onClick={handleSignIn}>
-            Sign In
+          <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled || buttonClicked}>
+            {buttonClicked ? "Signing In..." : "Sign In"}
           </Button>
-          </Link> 
         </div>
         
         <div className="mt-4 text-center text-sm">

@@ -1,27 +1,44 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Input } from "~/atoms/ui/input";
 import { Label } from "~/atoms/ui/label";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/atoms/ui/card";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+}
+  from "~/atoms/ui/sheet"
 import { addDoc, query, where, getDocs } from "firebase/firestore";
-// import { db } from "~/db/firebase";
 import { uniqueGuestCode } from "~/lib/generator";
 import { guestIdRef, guestRef } from "~/db/guest-list-ref";
-
-interface NewGuest {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  exists: boolean
-}
+import { useCurrentUser } from "~/db/auth";
+import { getUserUID } from "~/db/get-user-uid";
+import { NewGuest } from "~/lib/new-guest";
+import { useParams } from "@remix-run/react";
 
 type FormErrorData<T> = Partial<Record<keyof T, string>>;
 
-// const newGuestListData = collection(db, 'guestlist');
-
 export const GuestListForm = () => {
+  const { eventID } = useParams()
+
   const [errors, setErrors] = useState<FormErrorData<NewGuest>>({});
+  const [userUID, setUserUID] = useState<string | null>();
+
+  const user = useCurrentUser();
+
+  useEffect(() => {
+    if (user.status === 'authenticated') {
+      getUserUID()
+        .then(res => setUserUID(res))
+    } else {
+      setUserUID(null)
+    }
+  }, [user.status])
 
   async function handleOnSubmit(e: FormEvent) {
     if (!(e.target instanceof HTMLFormElement)) {
@@ -31,8 +48,20 @@ export const GuestListForm = () => {
     const _formData = new FormData(e.target);
     console.log("_formData", _formData);
 
-    const guestID = await uniqueGuestCode.next();
+    if (eventID) {
+      _formData.append('eventID', eventID)
+    }
+
+    if (userUID) {
+      _formData.append('userUID', userUID)
+    }
+
+    const guestID = uniqueGuestCode.next();
     _formData.append("guestID", String(guestID.value));
+
+    const currentDate = new Date();
+    const addTimes = currentDate.getTime();
+    _formData.append("timestamp", addTimes.toString());
 
     const formData = Object.fromEntries(_formData.entries());
     console.log("submit", formData);
@@ -54,7 +83,8 @@ export const GuestListForm = () => {
     const q = query(guestRef,
       where('firstName', '==', formData.firstName),
       where('lastName', '==', formData.lastName),
-      where('email', '==', formData.email)
+      where('email', '==', formData.email),
+      where('eventID', '==', eventID)
     );
 
     const snapshot = await getDocs(q);
@@ -66,45 +96,61 @@ export const GuestListForm = () => {
     setErrors(errors);
 
     if (Object.keys(errors).length !== 0) {
-      e.target.reset();
       return;
     } else {
-      await addDoc(guestIdRef, { "ID": guestID.value });
-      // addDoc(newGuestListData, formData);
-      await addDoc(guestRef, formData);
+      addDoc(guestIdRef, { "ID": guestID.value });
+      addDoc(guestRef, formData);
       e.target.reset();
     }
   }
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+    console.log('value', value)
+  }
+
+  function clearErrors() {
+    setErrors({});
+  }
+
   return (
-    <form onSubmit={handleOnSubmit} id="GuestListForm">
-      <Card className="w-9/12 mt-5 mb-6 mx-auto">
-        <CardHeader>
-          <CardTitle className="text-base">Add your new guest</CardTitle>
-        </CardHeader>
-        <CardContent className=" grid grid-cols-3 gap-6 items-top">
+    <Sheet>
+      <SheetTrigger>
+        <Button >Add new guest</Button>
+      </SheetTrigger>
+      <SheetContent side='left'>
+        <SheetHeader>
+          <SheetTitle>New guest</SheetTitle>
+          <SheetDescription>
+            Fill in the details of the person you want to invite to your event.
+          </SheetDescription>
+        </SheetHeader>
+        <form onSubmit={handleOnSubmit} id="GuestListForm" className="grid gap-4 py-4">
           <div className="space-y-1">
             <Label htmlFor="firstName">First name</Label>
-            <Input name="firstName" type="text" placeholder="First name" />
-            {!!errors?.firstName && <em className="text-xs">{errors.firstName}</em>}
-            {errors.exists && <em className="text-xs">{errors.exists}</em>}
+            <Input name="firstName" type="text" placeholder="First name" onChange={handleChange} />
+            {!!errors?.firstName && <em className="text-base text-rose-700">{errors.firstName}</em>}
+            {errors.exists && <em className="text-base text-rose-700">{errors.exists}</em>}
           </div>
           <div className="space-y-1">
             <Label htmlFor="lastName">Last name</Label>
-            <Input name="lastName" type="text" placeholder="Last name" />
-            {!!errors?.lastName && <em className="text-xs">{errors.lastName}</em>}
+            <Input name="lastName" type="text" placeholder="Last name" onChange={handleChange} />
+            {!!errors?.lastName && <em className="text-base text-rose-700">{errors.lastName}</em>}
           </div>
           <div className="space-y-1">
             <Label htmlFor="email">Email address</Label>
-            <Input name="email" type="text" placeholder="Email" />
-            {!!errors?.email && <em className="text-xs">{errors.email}</em>}
+            <Input name="email" type="text" placeholder="Email" onChange={handleChange} />
+            {!!errors?.email && <em className="text-base text-rose-700">{errors.email}</em>}
           </div>
-        </CardContent>
-        <CardFooter className='grid grid-cols-2 gap-4 '>
-          <Button variant='outline' className='w-full' >Cancel</Button>
-          <Button type='submit' form='GuestListForm' className='w-full' >Add your guest</Button>
-        </CardFooter>
-      </Card>
-    </form>
+        </form>
+        <SheetFooter className="grid gap-4 py-4 grid-cols-2">
+          <SheetClose>
+            <Button type='reset' variant='secondary' className="w-full" onClick={clearErrors}>Cancel</Button>
+          </SheetClose>
+          <Button type='submit' form='GuestListForm' >Add your guest</Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   )
 }

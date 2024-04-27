@@ -1,10 +1,12 @@
+
 import { useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/atoms/ui/card";
 import { Input } from '~/atoms/ui/input';
 import { Label } from '~/atoms/ui/label';
 import { registerWithEmailAndPassword } from "~/db/auth";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
+import { getUserUID } from "~/db/get-user-uid";
 
 export const SignUp = () => {
   const [firstName, setFirstName] = useState("");
@@ -19,6 +21,8 @@ export const SignUp = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false); 
+  const navigate = useNavigate(); 
 
   const handleSignUp = async () => {
     setFirstNameError("");
@@ -48,12 +52,17 @@ export const SignUp = () => {
     if (!password) {
       setPasswordError("Password is required");
       return;
+    } else if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+      return;
     }
 
     if (password !== confirmPassword) {
       setConfirmPasswordError("Passwords do not match");
       return;
     }
+
+    setButtonClicked(true); 
 
     const signUpResult = await registerWithEmailAndPassword(email, password);
     if (signUpResult.success) {
@@ -63,13 +72,24 @@ export const SignUp = () => {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      const currentUserUID = await getUserUID();
+      navigate(`/${currentUserUID}/events`);
     } else {
+      setEmailError("An account with this email already exists.");
       console.error("Sign up error:", signUpResult.error);
+    }
+
+    setButtonClicked(false); 
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSignUp();
     }
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="mx-auto max-w-sm" onKeyPress={handleKeyPress}>
       <CardHeader>
         <CardTitle className="text-xl">Sign Up</CardTitle>
         <CardDescription>
@@ -156,11 +176,9 @@ export const SignUp = () => {
             </div>
             {confirmPasswordError && <p className="text-red-500">{confirmPasswordError}</p>}
           </div>
-          <Link to="/add-event">
-          <Button type="button" className="w-full" style={{ backgroundColor: 'black' }} onClick={handleSignUp}>
-            Create an account 
+          <Button type="button" className="w-full"  onClick={handleSignUp} disabled={buttonClicked}>
+            {buttonClicked ? "Creating Account..." : "Create an account"} 
           </Button>
-          </Link>
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
