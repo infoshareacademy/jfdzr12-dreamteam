@@ -56,8 +56,12 @@ import { BudgetForm } from '~/blocks/budgetForm';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
 import { Table, TableCell, TableFooter, TableHead, TableRow } from '~/atoms/ui/table';
 
+// interface LoadBudgetProps {
+//   onSelectBudget: (documentData: { name: string, elements: { element: string, amount: number }[] }) => void;
+// }
+
 interface LoadBudgetProps {
-  onSelectBudget: (documentData: { name: string, elements: { element: string, amount: number }[] }) => void;
+  onSelectBudget: (budget: number, elements: { element: string, amount: number }[]) => void;
 }
 
 export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
@@ -78,29 +82,27 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
     }
   };
 
- const handleSelectBudget = async (documentName: string) => {
-  try {
-    const budgetData = await getBudgetDataFromFirebase(documentName);
-    console.log("budgetData w handleSelectBudget w LoadBudget", budgetData); 
-    console.log("type of budgetData t w LoadBudget",typeof budgetData); 
-
-    // Sprawdzamy, czy budgetData zawiera dane oraz elementy
-    if (budgetData && budgetData.elements) {
-      const { elements } = budgetData; // Wyodrębniamy tylko elementy budżetu
-      onSelectBudget(elements); // Wywołujemy funkcję onSelectBudget przekazując tylko elementy
-      setSelectedBudget(documentName); // Ustawienie wybranego budżetu
-      setBudgetDocumentsData(elements); // Ustawienie danych budżetu
-
-      console.log("Załadowano dane budżetu:", elements); 
-    } else {
-      console.error("Nieprawidłowe lub brak danych budżetu.", documentName);
-    }
-  } catch (error) {
-    console.error("Błąd podczas ładowania danych budżetu: ", error);
-  }
-};
-
+  const handleSelectBudget = async (documentName: string) => {
+    try {
+      const budgetData = await getBudgetDataFromFirebase(documentName);
+      console.log("budgetData w handleSelectBudget w LoadBudget", budgetData); 
+      console.log("type of budgetData t w LoadBudget",typeof budgetData); 
   
+      // Sprawdzamy, czy budgetData zawiera dane oraz elementy
+      if (budgetData && Array.isArray(budgetData.budget) && budgetData.budget.length > 0) {
+        const elements = budgetData.budget.filter(item => typeof item === 'object'); // Filtrujemy tylko obiekty z tablicy budget
+        onSelectBudget(budgetData.budget[0], elements); // Przekazujemy budżet i jego elementy do funkcji onSelectBudget
+        setSelectedBudget(documentName); // Ustawienie wybranego budżetu
+        setBudgetDocumentsData(elements); // Ustawienie danych budżetu
+  
+        console.log("Załadowano dane budżetu:", elements); 
+      } else {
+        console.error("Nieprawidłowe lub brak danych budżetu.", documentName);
+      }
+    } catch (error) {
+      console.error("Błąd podczas ładowania danych budżetu: ", error);
+    }
+  };
   
   return (
     <div>
@@ -113,7 +115,7 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
       </div>
       <div>
       <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
-  {selectedBudget && budgetDocumentsData !== undefined && (
+  {budgetDocumentsData.length > 0 && (
     <table>
       <thead>
         <tr>
@@ -122,27 +124,18 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
         </tr>
       </thead>
       <tbody>
-        {budgetDocumentsData.length > 0 ? (
-          budgetDocumentsData.map((item, index) => (
-            <tr key={index}>
-              <td>{item.element}</td>
-              <td>{item.amount}</td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan="2">Brak danych budżetu</td>
+        {budgetDocumentsData.map((item, index) => (
+          <tr key={index}>
+            <td>{item.element}</td>
+            <td>{item.amount}</td>
           </tr>
-        )}
+        ))}
       </tbody>
     </table>
   )}
 </Card>
-
-
-
       </div>
-    </div> 
+    </div>
   );}
   
 
