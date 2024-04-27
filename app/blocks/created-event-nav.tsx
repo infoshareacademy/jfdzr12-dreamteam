@@ -8,6 +8,8 @@ import { getUserUID } from '~/db/get-user-uid';
 import React, { useEffect, useState } from 'react';
 import { CreatedRelatedEventNav } from './created-related-event-nav';
 
+
+
 interface Event {
     firstPerson: string;
     secondPerson: string;
