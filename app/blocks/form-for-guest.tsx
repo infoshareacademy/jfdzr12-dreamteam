@@ -5,15 +5,14 @@ import { Input } from '~/atoms/ui/input';
 import { Checkbox } from '~/atoms/ui/checkbox';
 import { Textarea } from '~/atoms/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/atoms/ui/select';
-// import { NewGuest, addGuest } from '~/db/guest';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '~/atoms/ui/card';
 import { FieldPath, collection, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
 import { db } from '~/db/firebase';
 import { guestRef } from '~/db/guest-list-ref';
 import { RadioGroup, RadioGroupItem } from '~/atoms/ui/radio-group';
-import { toast, useToast } from '~/atoms/ui/use-toast';
-import { Toast, ToastAction } from '~/atoms/ui/toast';
+import { useToast } from '~/atoms/ui/use-toast';
 import { cn, mainCardOnPage } from '~/lib/utils';
+import { CheckCheck } from 'lucide-react';
 
 
 const textLabelFirstName = "First name";
@@ -21,7 +20,7 @@ const textLabelSecondName = "Last name";
 const textLabelPresence = "Do you confirm your arrival? ";
 const textLabelPartner = "Will you be accompanied by a partner or another person? ";
 const textLabelChild = "Will you be accompanied by a child? ";
-const textLabelNumberOfChildren = "Specify the number of children accompanying you :";
+const textLabelNumberOfChildren = "Specify the number of children :";
 const textLabelMenuGuest = "Select your preferred menu option :";
 const textLabelMenuPartner = "Select menu for your partner :";
 const textLabelMenuChild = "Select menu for child :";
@@ -174,11 +173,11 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       await updateDoc(docRef, { formData });
       toast({
         className: cn(
-          'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20'
-        ),
+        'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20 bg-emerald-300 text-black'
+      ),
         title: "Success!",
-        description: "Your form has been submitted successfully.",
-        duration: 6000,
+        description: (<><p>Your form has been submitted successfully! </p><CheckCheck/></>),
+        duration: 6000, 
       });
     }
 
@@ -187,7 +186,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
       return;
     }
 
-    console.log('handleSubmit', formData)
+    // console.log('handleSubmit', formData)
     e.target.reset();
     setRadioGroupKey(performance.now().toString());
   };
@@ -226,7 +225,8 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                     {!!errors?.lastName && <em className="text-base text-rose-700">{errors.lastName}</em>}
                   </div>
                 </div>
-
+                
+                <div className='grid grid-cols-3 gap-4'>
                 <div>
                   <Label htmlFor="guestUniqueId">Your four-digit code</Label>
                   <Input
@@ -234,6 +234,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                   />
                   {!!errors?.exists && <em className="text-base text-rose-700">{errors.exists}</em>}
                   {!!errors?.guestUniqueId && <em className="text-base text-rose-700"><br />{errors.guestUniqueId}</em>}
+                </div>
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
@@ -260,10 +261,10 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                     <div>
                       <Label htmlFor="partner">{textLabelPartner}</Label>
                       <Checkbox
-                        name="partner"
-                        checked={showQuestionAboutPartner /*=== basicAnswer[0].value*/}
-                        onCheckedChange={setShowQuestionAboutPartner}
-                      />
+                          name="partner" 
+                          checked={showQuestionAboutPartner}
+                          onCheckedChange={setShowQuestionAboutPartner} 
+                        />
                     </div>
 
                     <div>
@@ -277,7 +278,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
 
                     {showQuestionAboutChild && (
                       <>
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-3 gap-4'>
                           <div>
                             <Label htmlFor="numberOfChildren">{textLabelNumberOfChildren}</Label>
                             <div>
@@ -294,33 +295,29 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                     )}
                   </div>
 
-                  <div className="flex flex-col space-y-1.5">
-                    <p className="text-lg font-bold">Dinning and alcohol preferences</p>
-                    <div className='grid grid-cols-3 gap-4'>
-                      {/* <div className='grid-flow-row'> */}
-                      <Label htmlFor="selectedMenuGuest">{textLabelMenuGuest}</Label>
-                      {/* </div> */}
-                      <div>
-                        <Select name="selectedMenuGuest" defaultValue={menuOptions[0].value} >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent position="popper">
-                            {menuOptions.map((option) => (
-                              <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    {showQuestionAboutPartner && (
-                      <>
-                        <div className='grid grid-cols-3 gap-4'>
-                          {/* <div className='grid-flow-row'> */}
-                          <Label htmlFor="selectedMenuPartner">{textLabelMenuPartner}</Label>
-                          {/* </div> */}
+                <div className="flex flex-col space-y-1.5">
+                  <p className="text-lg font-bold">Dinning and alcohol preferences</p>
+                      <div className='grid grid-cols-3 gap-4'>
+                          <Label htmlFor="selectedMenuGuest">{textLabelMenuGuest}</Label>
                           <div>
+                          <Select name="selectedMenuGuest" defaultValue={menuOptions[0].value} >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                              <SelectContent position="popper">
+                                {menuOptions.map((option) => (
+                                  <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                ))}
+                              </SelectContent>
+                          </Select>
+                          </div>
+                      </div>
+
+                      {showQuestionAboutPartner && (
+                        <>
+                          <div className='grid grid-cols-3 gap-4'>
+                            <Label htmlFor="selectedMenuPartner">{textLabelMenuPartner}</Label>
+                            <div>
                             <Select name="selectedMenuPartner" defaultValue={menuOptions[0].value} >
                               <SelectTrigger>
                                 <SelectValue />
@@ -336,13 +333,11 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
                       </>
                     )}
 
-                    {showQuestionAboutChild && (
-                      <>
-                        <div className='grid grid-cols-3 gap-4'>
-                          {/* <div className='grid-flow-row'> */}
-                          <Label htmlFor="selectedMenuPartner">{textLabelMenuChild}</Label>
-                          {/* </div> */}
-                          <div>
+                      {showQuestionAboutChild && (
+                        <>
+                          <div className='grid grid-cols-3 gap-4'>
+                            <Label htmlFor="selectedMenuPartner">{textLabelMenuChild}</Label>
+                            <div>
                             <Select name="selectedMenuChild" defaultValue={menuOptions[0].value} >
                               <SelectTrigger>
                                 <SelectValue />
@@ -407,7 +402,7 @@ export const FormForGuest: React.FC<NameFormProps> = ({ onSubmit }) => {
           </form>
         </CardContent>
         <CardFooter className='grid grid-cols-3 gap-4'>
-          <Button form="GuestForm" variant='outline' type="reset" onClick={handleCancelClick} className='w-full'>{textButtonCancel}</Button>
+          <Button form="GuestForm" variant="mainOutline" type="reset" onClick={handleCancelClick} className='w-full'>{textButtonCancel}</Button>
           <Button type="submit" form="GuestForm">{textButtonSubmit}</Button>
         </CardFooter>
       </Card>

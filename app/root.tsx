@@ -60,14 +60,13 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      // <div className={mainCardOnPage}>
       <div className="fixed z-10 h-screen bg-table-pattern bg-cover bg-bottom top-0 left-0 right-0">
         <div className="grid gap-4 md:gap-8 absolute
         top-16 md:top-20 lg:top-24 xl:top-24 2xl:top-44
         inset-x-10 md:inset-x-20 lg:inset-x-56 xl:inset-x-60 2xl:inset-x-96 
         h-3/5 lg:h-auto 2xl:h-1/2">
           <div className="grid justify-center content-end text-center">
-            <h1 className="scroll-m-20 text-3xl font-bold md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-7xl">Not found 404</h1>
+            <h1 className="scroll-m-20 text-3xl font-bold md:text-4xl lg:text-5xl xl:text-5xl 2xl:text-7xl">Not found</h1>
           </div>
           <div className="grid place-items-center text-center">
             <h3 className="text-sm md:text-lg lg:text-lg xl:text-xl 2xl:text-2xl">Oops! Looks like you've stumbled upon a page that's not on the wedding planning map. No worries, let's get you back on track to the main page where the magic happens, whether you're here to plan a wedding or share your event preferences as a guest!</h3>
@@ -77,8 +76,6 @@ export function ErrorBoundary() {
           </div>
         </div>
       </div>
-      // </div>
-
     );
   }
 }
