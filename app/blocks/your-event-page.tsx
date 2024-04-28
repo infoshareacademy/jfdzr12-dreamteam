@@ -40,11 +40,11 @@ export default function YourEvent() {
             {eventData && (
                 <Card className="absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 p-5">
                     <div className="flex items-center justify-center mt-5 mb-10 p-6">
-                        <h1 className="text-center scroll-m-20 text-xl font-bold md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-5xl">{content}</h1>
+                        <h1 className="text-center scroll-m-20 text-xl font-bold md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-5xl drop-shadow-xl">{content}</h1>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
                         <Card className="grid col-start-1 justify-items-center w-full p-5 shadow-xl">
-                            <HeartHandshake className="mb-5" />
+                            <HeartHandshake className="mb-5" color="primary"/>
                             <h1 className="mb-5">CEREMONY</h1>
                             <p className="text-center">{`Place: ${eventData.ceremonyPlace}`}</p>
                             <p className="text-center">{`Street: ${eventData.ceremonyStreetAddress}`}</p>
