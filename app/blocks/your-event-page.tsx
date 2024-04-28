@@ -44,7 +44,7 @@ export default function YourEvent() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
                         <Card className="grid col-start-1 justify-items-center w-full p-5 shadow-xl">
-                            <HeartHandshake className="mb-5" color="primary"/>
+                            <HeartHandshake className="mb-5"/>
                             <h1 className="mb-5">CEREMONY</h1>
                             <p className="text-center">{`Place: ${eventData.ceremonyPlace}`}</p>
                             <p className="text-center">{`Street: ${eventData.ceremonyStreetAddress}`}</p>
