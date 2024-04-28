@@ -497,9 +497,9 @@
 //         </CardHeader>
 //         <CardContent>
 //           <div className="grid w-full items-center gap-4">
-     
+
 //               <div> 
-                
+
 //                <Button variant={"ghost"} onClick={handleLoadBudget}>Load Budget</Button>
 //                 {budgetDocuments.length > 0 && ( // Renderujemy przyciski na podstawie pobranych dokumentów
 //                   <LoadBudget onSelectBudget={(documentName) => setDocumentName(documentName)} budgetDocuments={budgetDocuments} />
@@ -576,10 +576,11 @@ import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
 import { Table, TableCell, TableFooter, TableHead, TableRow, TableHeader, TableBody } from '~/atoms/ui/table';
 import { addBudget } from '~/db/users-budget';
-import { LoadBudget } from '../db/load-budget'; 
+import { LoadBudget } from '../db/load-budget';
 import { getBudgetsFromFirebase } from '../db/getBudgetsFromFirebase';
+import { mainCardOnPage } from '~/lib/utils';
 
-interface NameFormProps {}
+interface NameFormProps { }
 
 export const BudgetForm: React.FC<NameFormProps> = () => {
   const [budgetEl, setBudgetEl] = useState<string[]>([]);
@@ -649,94 +650,96 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
   const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
 
   return (
-    <div className="grid grid-cols-1 gap-4">
-      <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
-        <CardHeader>
-          <CardTitle>CREATE YOUR BUDGET PROJECT</CardTitle>
-          <CardDescription>Take control of your finances</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid w-full items-center gap-4">
-            {!showForm && (
-              <div>
-                
-                <Button variant={"ghost"} onClick={handleCreateNewBudget}>Create New Budget</Button>
-                <Button variant={"ghost"} onClick={handleLoadBudget}>Load Budget</Button>
-                {budgetDocuments.length > 0 && ( // Renderujemy przyciski na podstawie pobranych dokumentów
-                  <LoadBudget onSelectBudget={(documentName) => setDocumentName(documentName)} budgetDocuments={budgetDocuments} />
-                )}
-              </div>
-            )}
-            {showForm && (
-              <form onSubmit={handleSubmit}>
-                <Label>
-                  Budget name:
-                  <Input
-                    type="text"
-                    value={documentName}
-                    onChange={(e) => setDocumentName(e.target.value)}
-                    required
-                  />
-                </Label>
-                <br />
-                <Label>
-                  Item name:
-                  <Input
-                    type="text"
-                    value={budgetElInput}
-                    onChange={(e) => setBudgetElInput(e.target.value)}
-                  />
-                </Label>
-                <br />
-                <Label>
-                  Amount:
-                  <Input
-                    type="number"
-                    value={budgetElAmount[budgetElAmount.length - 1] || 0}
-                    onChange={(e) => handleAmountChange(e, budgetElAmount.length - 1)}
-                  />
-                </Label>
-                <br />
-                <Button variant={"ghost"} type="button" onClick={handleAddToBudget}>Add item</Button>
-                <Button variant={"ghost"} type="submit">Save budget</Button>
-                <br /><br />
-              </form>
-            )} 
-          </div>
-        </CardContent>
-      </Card>
-      {isFormSubmitted && totalAmount > 0 && (
+    <div className={mainCardOnPage}>
+      <div className="grid grid-cols-1 gap-4">
         <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>List of items:</TableHead>
-              <TableHead>Amount:</TableHead>
-              <TableHead></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {budgetEl.map((el, index) => (
-              <TableRow key={index}>
-                <TableCell>{`${index + 1}. ${el}`}</TableCell>
-                <TableCell>{budgetElAmount[index]}</TableCell>
-                <TableCell>
-                  <Button variant={"ghost"} onClick={() => handleDelete(index)}> X </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell>TOTAL AMOUNT:</TableCell>
-              <TableCell>{totalAmount}</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </Card>
-      
-      )}
-    
+          <CardHeader>
+            <CardTitle>Create your budget project</CardTitle>
+            <CardDescription>Take control of your finances</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid w-full items-center gap-4">
+              {!showForm && (
+                <div>
+
+                  <Button variant={"ghost"} onClick={handleCreateNewBudget}>Create New Budget</Button>
+                  <Button variant={"ghost"} onClick={handleLoadBudget}>Load Budget</Button>
+                  {budgetDocuments.length > 0 && ( // Renderujemy przyciski na podstawie pobranych dokumentów
+                    <LoadBudget onSelectBudget={(documentName) => setDocumentName(documentName)} budgetDocuments={budgetDocuments} />
+                  )}
+                </div>
+              )}
+              {showForm && (
+                <form onSubmit={handleSubmit}>
+                  <Label>
+                    Budget name:
+                    <Input
+                      type="text"
+                      value={documentName}
+                      onChange={(e) => setDocumentName(e.target.value)}
+                      required
+                    />
+                  </Label>
+                  <br />
+                  <Label>
+                    Item name:
+                    <Input
+                      type="text"
+                      value={budgetElInput}
+                      onChange={(e) => setBudgetElInput(e.target.value)}
+                    />
+                  </Label>
+                  <br />
+                  <Label>
+                    Amount:
+                    <Input
+                      type="number"
+                      value={budgetElAmount[budgetElAmount.length - 1] || 0}
+                      onChange={(e) => handleAmountChange(e, budgetElAmount.length - 1)}
+                    />
+                  </Label>
+                  <br />
+                  <Button variant={"ghost"} type="button" onClick={handleAddToBudget}>Add item</Button>
+                  <Button variant={"ghost"} type="submit">Save budget</Button>
+                  <br /><br />
+                </form>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+        {isFormSubmitted && totalAmount > 0 && (
+          <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>List of items:</TableHead>
+                  <TableHead>Amount:</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {budgetEl.map((el, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{`${index + 1}. ${el}`}</TableCell>
+                    <TableCell>{budgetElAmount[index]}</TableCell>
+                    <TableCell>
+                      <Button variant={"ghost"} onClick={() => handleDelete(index)}> X </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell>TOTAL AMOUNT:</TableCell>
+                  <TableCell>{totalAmount}</TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </Card>
+
+        )}
+
+      </div>
     </div>
   );
 };

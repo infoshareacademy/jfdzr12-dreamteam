@@ -1,5 +1,4 @@
 import { Link } from "@remix-run/react";
-import { useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { useCurrentUser } from "~/db/auth";
 
