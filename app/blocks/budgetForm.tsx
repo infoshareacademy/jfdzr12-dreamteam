@@ -584,7 +584,7 @@ import { mainCardOnPage } from '~/lib/utils';
 import {  useParams } from "@remix-run/react";
 
 import { useToast } from '~/atoms/ui/use-toast';
-import { CheckCheck } from 'lucide-react';
+import { CheckCheck, SquareX } from 'lucide-react';
 
 import { Link } from "@remix-run/react";
 
@@ -657,7 +657,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
         'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20 bg-emerald-300 text-black'
       ,
         title: "Success!",
-        description: (<><p>Your form has been saved successfully. </p><CheckCheck/></>),
+        description: (<><p>Your budget has been saved successfully. </p><CheckCheck/></>),
         duration: 6000,
       });
     } catch (error) {
@@ -665,21 +665,32 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
     }
   };
 
+  // const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  //   const { value } = e.target;
+  //   const updatedAmounts = [...budgetElAmount];
+  //   updatedAmounts[index] = Number(value);
+  //   setBudgetElAmount(updatedAmounts);
+  // };
+
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
+    // Zaokrąglanie wartości do dwóch miejsc po przecinku i konwersja na liczbę
+    const roundedValue = Number(value).toFixed(2);
     const updatedAmounts = [...budgetElAmount];
-    updatedAmounts[index] = Number(value);
+    updatedAmounts[index] = Number(roundedValue);
     setBudgetElAmount(updatedAmounts);
   };
 
+
   const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
+  const formattedTotalAmount = totalAmount.toLocaleString();
 
   return (
     <div className={mainCardOnPage}>
     <div className="grid grid-cols-1 gap-4">
       <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
         <CardHeader>
-          <CardTitle>CREATE YOUR BUDGET PROJECT</CardTitle>
+          <CardTitle>Create your budget project</CardTitle>
           <CardDescription>Take control of your finances</CardDescription>
         </CardHeader>
         <CardContent>
@@ -687,7 +698,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
             {!showForm && (
               <div>
                 <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
-                <Button className="w-full inline-flex" variant="outline" onClick={handleCreateNewBudget}>Create New Budget</Button>
+                <Button className="w-full inline-flex"  onClick={handleCreateNewBudget}>Create New Budget</Button>
                 <Button className="w-full inline-flex" variant="outline" onClick={handleLoadBudget}>Load Budget</Button>
                 {/* <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link> */}
                 {/* <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link> */}
@@ -731,12 +742,12 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
                 </Label>
                 <br />
                 <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
-                <Button  className="w-full inline-flex" variant="outline" type="button" onClick={handleAddToBudget}>Add item</Button>
+                <Button  className="w-full inline-flex"  type="button" onClick={handleAddToBudget}>Add item</Button>
                 <Button  className="w-full inline-flex" variant="outline" type="submit">Save budget</Button>
                 {/* <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link> */}
                 {/* <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link> */}
                 
-                <Link to={`/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link></div>
+                <Link to={`/events/your-event/${eventID}`}><Button className="w-full justify-self-end" variant="secondary">Back to your event</Button></Link></div>
                 <br /><br />
               </form>
             )} 
@@ -759,7 +770,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
                 <TableCell>{`${index + 1}. ${el}`}</TableCell>
                 <TableCell>{budgetElAmount[index]}</TableCell>
                 <TableCell>
-                  <Button variant={"ghost"} onClick={() => handleDelete(index)}> X </Button>
+                  <Button variant={"ghost"} onClick={() => handleDelete(index)}> <SquareX color="#ed0c0c" /> </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -767,7 +778,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
           <TableFooter>
             <TableRow>
               <TableCell>TOTAL VALUE:</TableCell>
-              <TableCell>{totalAmount}</TableCell>
+              <TableCell>{formattedTotalAmount}</TableCell>
             </TableRow>
           </TableFooter>
         </Table>
