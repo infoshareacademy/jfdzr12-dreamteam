@@ -10,7 +10,7 @@ import { Button } from "~/atoms/ui/button";
 
 export const GuestCard = () => {
 
-  const { currentUserUID, eventID } = useParams();
+  const { eventID } = useParams();
 
   return (<>
     {/* <div className="fixed z-10 h-screen bg-table-pattern bg-cover bg-bottom top-0 left-0 right-0">
