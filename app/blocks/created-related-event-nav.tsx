@@ -70,7 +70,7 @@ export const CreatedRelatedEventNav = () => {
             {relatedEvents.map((event) => (
                 userUID === event.userUID && (
                     <div key={event._id}>
-                        <Card>
+                        <Card className='shadow-xl'>
                             <CardHeader>
                                 <CardTitle className="text-2xl text-center">{event.eventName}<span className="ml-2" style={{ fontSize: '18px' }} >🎉</span></CardTitle>
                             </CardHeader>
