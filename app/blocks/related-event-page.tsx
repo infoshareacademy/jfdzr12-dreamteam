@@ -1,5 +1,5 @@
 import { Link, useParams } from "@remix-run/react";
-import { PartyPopper } from "lucide-react";
+import { CalendarClock, PartyPopper, PencilLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card } from "~/atoms/ui/card";
@@ -38,14 +38,17 @@ export default function YourRelatedEvent() {
             {eventData && (
                 <Card className="absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 p-5 bg-background/20">
                     <div className="flex items-center justify-center mb-10 p-6">
-                        <h1 className="text-center scroll-m-20 text-xl font-bold md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-5xl">{eventData.eventName}</h1>
+                        <h1 className="text-center scroll-m-20 text-2xl font-bold md:text-3xl lg:text-4xl xl:text-4xl 2xl:text-5xl text-primary drop-shadow-xl">{eventData.eventName}</h1>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-items-center">
                         <Card className="grid col-start-1 justify-items-center w-full p-5 shadow-xl">
-                            <div className="flex items-center justify-center p-6">
+                            <div className="flex items-center justify-center p-6 font-bold font-xl">
                                 <p>{eventDateString}</p>
                             </div>
                             <div className="flex items-center justify-center p-6">
+                                <CalendarClock/>
+                            </div>
+                            <div className="flex items-center justify-center p-6 font-bold font-xl">
                                 <p>{eventData.eventTime}</p>
                             </div>
                         </Card>
@@ -64,7 +67,7 @@ export default function YourRelatedEvent() {
                     {eventData.other && (
                         <Card className="mt-4 shadow-xl">
                             <div className="flex items-center justify-center mt-5">
-                                <p>OTHER</p>
+                                <PencilLine/>
                             </div>
                             <div className="flex items-center justify-center p-6 whitespace-pre-wrap">
                                 <p>{eventData.other}</p>
