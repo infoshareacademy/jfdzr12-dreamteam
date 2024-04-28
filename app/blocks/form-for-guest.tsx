@@ -29,7 +29,7 @@ const textLabelAlcoholGuest = "Pick your preferred alcohol(s)";
 const textLabelAccommodation = "Will accommodation be needed? ";
 const textLabelTransport = "Will you require transportation? ";
 const textButtonSubmit = "Send";
-const textButtonCancel = "Cancel";
+const textButtonCancel = "Clear";
 
 const basicAnswer = [
   { value: 'yes', label: 'Yes' },
