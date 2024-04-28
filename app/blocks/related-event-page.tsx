@@ -36,7 +36,7 @@ export default function YourRelatedEvent() {
     return (
         <>
             {eventData && (
-                <Card className="absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 p-5">
+                <Card className="absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 p-5 bg-background/20">
                     <div className="flex items-center justify-center mb-10 p-6">
                         <h1 className="text-center scroll-m-20 text-2xl font-bold md:text-3xl lg:text-4xl xl:text-4xl 2xl:text-5xl text-primary drop-shadow-xl">{eventData.eventName}</h1>
                     </div>

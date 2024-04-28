@@ -38,7 +38,7 @@ export default function YourEvent() {
     return (
         <>
             {eventData && (
-                <Card className="absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 p-5">
+                <Card className="absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 p-5 bg-background/20">
                     <div className="flex items-center justify-center mt-5 mb-10 p-6">
                         <h1 className="text-center scroll-m-20 text-xl font-bold md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-5xl drop-shadow-xl">{content}</h1>
                     </div>
