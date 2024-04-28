@@ -147,4 +147,4 @@ export function relatedEventDate(eventData: RelatedEventData | null | undefined,
 }
 
 export const mainCardOnPage = "absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 mb-8"
-export const transparentCardOnPage = "absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 mb-8 bg-background/20"
+export const transparentCardOnPage = "lg:p-6 absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 mb-8 bg-background/20"
