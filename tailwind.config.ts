@@ -83,6 +83,7 @@ const config = {
         "table-pattern": "var(--table-image)",
         "error-pattern": "var(--error-image)",
         "hero-low": "var(--low-hero-image)",
+        "sign-up-pattern": "var(--sign-up-image)"
       }
     },
   },

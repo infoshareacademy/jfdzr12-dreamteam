@@ -64,21 +64,72 @@ export function calculateEventContent(eventData: EventData | null | undefined, l
     const eventDateString: string = eventDate.toLocaleDateString("en-GB");
 
     if (numberOfDays < -1) {
-      return { content: `You were married ${Math.abs(numberOfDays)} days ago. Best wishes!`, eventDate: eventDateString };
+      const content = (
+        <>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5">You were married <span className="text-primary">{Math.abs(numberOfDays)}</span> days ago</p>
+        </div>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5 text-center">Best wishes!</p>
+        </div>
+        </>
+      );
+      return { content, eventDate: eventDateString };
     } else if (numberOfDays === -1) {
-      return { content: "You were married yesterday. Best wishes!", eventDate: eventDateString };
+      const content = (
+        <>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5">You were married <span className="text-primary">yesterday</span></p>
+        </div>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5 text-center">Best wishes!</p>
+        </div>
+        </>
+      );
+      return { content, eventDate: eventDateString };
     } else if (numberOfDays === 0) {
       const partyPopper = <PartyPopper className="inline" />;
       const content = (
-        <div className="flex items-center">
-          {partyPopper}<p className="ml-5 mr-5">Your wedding is today! Have fun!</p>{partyPopper}
+        <>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5">Your wedding is</p>
         </div>
+        <div className="flex items-center justify-center mb-10 drop-shadow-2xl text-5xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl">
+          <p className="ml-5 mr-5"><span className="text-primary">today!</span></p>
+        </div>
+        <div className="flex items-center justify-center">
+          {partyPopper}<p className="ml-5 mr-5 text-center">Have fun!</p>{partyPopper}
+        </div>
+        </>
       );
       return { content, eventDate: eventDateString };
     } else if (numberOfDays === 1) {
-      return { content: "Your wedding is tomorrow! Are you ready?", eventDate: eventDateString };
+      const content = (
+        <>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5">Your wedding is</p>
+        </div>
+        <div className="flex items-center justify-center mb-10 drop-shadow-2xl text-5xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl">
+          <p className="ml-5 mr-5"><span className="text-primary">tomorrow!</span></p>
+        </div>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5 text-center">Are you ready?</p>
+        </div>
+        </>
+      );
+      return { content, eventDate: eventDateString };
     } else {
-      return { content: `${numberOfDays} days until ${eventData.firstPerson} & ${eventData.secondPerson}'s wedding`, eventDate: eventDateString };
+      const content = (
+        <>
+        <div className="flex items-center justify-center mb-10 drop-shadow-2xl text-5xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl">
+          <p className="ml-5 mr-5"><span className="text-primary">{numberOfDays}</span></p>
+        </div>
+        <div className="flex items-center justify-center">
+          <p className="ml-5 mr-5 text-center">days until <span className="text-primary">{eventData.firstPerson} & {eventData.secondPerson}'s</span> wedding</p>
+        </div>
+      </>
+      );
+      return { content, eventDate: eventDateString };
     }
   }
 
@@ -95,4 +146,5 @@ export function relatedEventDate(eventData: RelatedEventData | null | undefined,
   }
 }
 
-export const mainCardOnPage = "absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12"
+export const mainCardOnPage = "absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 mb-8"
+export const transparentCardOnPage = "lg:p-6 absolute z-20 top-20 inset-x-1/2 -translate-x-1/2 w-80 sm:w-11/12 lg:w-10/12 2xl:w-9/12 mb-8 bg-background/20"

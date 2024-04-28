@@ -497,9 +497,9 @@
 //         </CardHeader>
 //         <CardContent>
 //           <div className="grid w-full items-center gap-4">
-     
+
 //               <div> 
-                
+
 //                <Button variant={"ghost"} onClick={handleLoadBudget}>Load Budget</Button>
 //                 {budgetDocuments.length > 0 && ( // Renderujemy przyciski na podstawie pobranych dokumentów
 //                   <LoadBudget onSelectBudget={(documentName) => setDocumentName(documentName)} budgetDocuments={budgetDocuments} />
@@ -576,12 +576,24 @@ import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
 import { Table, TableCell, TableFooter, TableHead, TableRow, TableHeader, TableBody } from '~/atoms/ui/table';
 import { addBudget } from '~/db/users-budget';
-import { LoadBudget } from '../db/load-budget'; 
+import { LoadBudget } from '../db/load-budget';
 import { getBudgetsFromFirebase } from '../db/getBudgetsFromFirebase';
+import { mainCardOnPage } from '~/lib/utils';
 
-interface NameFormProps {}
+// interface NameFormProps { }
+import {  useParams } from "@remix-run/react";
 
-export const BudgetForm: React.FC<NameFormProps> = () => {
+import { useToast } from '~/atoms/ui/use-toast';
+import { CheckCheck } from 'lucide-react';
+
+import { Link } from "@remix-run/react";
+
+
+interface NameFormProps {
+  eventIDProp: string; 
+}
+
+export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
   const [budgetEl, setBudgetEl] = useState<string[]>([]);
   const [budgetElAmount, setBudgetElAmount] = useState<number[]>([0]);
   const [budgetElInput, setBudgetElInput] = useState<string>('');
@@ -590,13 +602,18 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [budgetDocuments, setBudgetDocuments] = useState<string[]>([]);
 
+  const { currentUserUID, eventID } = useParams();
+
+  const { toast } = useToast();
+
   const handleCreateNewBudget = () => {
     setShowForm(true);
   };
 
   const handleLoadBudget = async () => {
+    if (eventID === undefined) {return}
     try {
-      const budgets = await getBudgetsFromFirebase();
+      const budgets = await getBudgetsFromFirebase(eventID);
       setBudgetDocuments(budgets);
     } catch (error) {
       console.error("Error loading budgets: ", error);
@@ -626,14 +643,23 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (eventID === undefined) {return}
     const budgetData = budgetEl.map((el, index) => ({
       element: el,
       amount: budgetElAmount[index],
     }));
 
     try {
-      await addBudget(budgetData, documentName);
+      await addBudget(budgetData, documentName, eventID);
       console.log("Budget saved successfully!");
+      toast({
+        className:
+        'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20 bg-emerald-300 text-black'
+      ,
+        title: "Success!",
+        description: (<><p>Your form has been saved successfully. </p><CheckCheck/></>),
+        duration: 6000,
+      });
     } catch (error) {
       console.error("Error saving budgets: ", error);
     }
@@ -649,6 +675,7 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
   const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
 
   return (
+    <div className={mainCardOnPage}>
     <div className="grid grid-cols-1 gap-4">
       <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
         <CardHeader>
@@ -659,18 +686,24 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
           <div className="grid w-full items-center gap-4">
             {!showForm && (
               <div>
-                
-                <Button variant={"ghost"} onClick={handleCreateNewBudget}>Create New Budget</Button>
-                <Button variant={"ghost"} onClick={handleLoadBudget}>Load Budget</Button>
+                <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
+                <Button className="w-full inline-flex" variant="outline" onClick={handleCreateNewBudget}>Create New Budget</Button>
+                <Button className="w-full inline-flex" variant="outline" onClick={handleLoadBudget}>Load Budget</Button>
+                {/* <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link> */}
+                {/* <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link> */}
+                <Link to={`/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link>
+                 </div>
+               
                 {budgetDocuments.length > 0 && ( // Renderujemy przyciski na podstawie pobranych dokumentów
                   <LoadBudget onSelectBudget={(documentName) => setDocumentName(documentName)} budgetDocuments={budgetDocuments} />
                 )}
+               
               </div>
             )}
             {showForm && (
               <form onSubmit={handleSubmit}>
                 <Label>
-                  Budget name:
+                Budget description:
                   <Input
                     type="text"
                     value={documentName}
@@ -680,7 +713,7 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
                 </Label>
                 <br />
                 <Label>
-                  Item name:
+                Item name:
                   <Input
                     type="text"
                     value={budgetElInput}
@@ -689,7 +722,7 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
                 </Label>
                 <br />
                 <Label>
-                  Amount:
+                Value[$]:
                   <Input
                     type="number"
                     value={budgetElAmount[budgetElAmount.length - 1] || 0}
@@ -697,8 +730,13 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
                   />
                 </Label>
                 <br />
-                <Button variant={"ghost"} type="button" onClick={handleAddToBudget}>Add item</Button>
-                <Button variant={"ghost"} type="submit">Save budget</Button>
+                <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
+                <Button  className="w-full inline-flex" variant="outline" type="button" onClick={handleAddToBudget}>Add item</Button>
+                <Button  className="w-full inline-flex" variant="outline" type="submit">Save budget</Button>
+                {/* <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link> */}
+                {/* <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link> */}
+                
+                <Link to={`/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link></div>
                 <br /><br />
               </form>
             )} 
@@ -711,7 +749,7 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
           <TableHeader>
             <TableRow>
               <TableHead>List of items:</TableHead>
-              <TableHead>Amount:</TableHead>
+              <TableHead>Value:</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -728,7 +766,7 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell>TOTAL AMOUNT:</TableCell>
+              <TableCell>TOTAL VALUE:</TableCell>
               <TableCell>{totalAmount}</TableCell>
             </TableRow>
           </TableFooter>
@@ -737,6 +775,7 @@ export const BudgetForm: React.FC<NameFormProps> = () => {
       
       )}
     
+    </div>
     </div>
   );
 };

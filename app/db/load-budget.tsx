@@ -56,26 +56,61 @@ import { BudgetForm } from '~/blocks/budgetForm';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
 import { Table, TableCell, TableFooter, TableHead, TableRow, TableHeader, TableBody } from '~/atoms/ui/table';
 
+import { useCurrentUser } from "~/db/auth";
+import { eventRef } from "~/db/event-ref";
+import {  useParams } from "@remix-run/react";
+import { EventData } from "~/lib/utils";
+import { getYourEvent } from "~/db/get-your-event";
+import { mainCardOnPage } from '~/lib/utils';
+
 // interface LoadBudgetProps {
 //   onSelectBudget: (documentData: { name: string, elements: { element: string, amount: number }[] }) => void;
 // }
 
 interface LoadBudgetProps {
   onSelectBudget: (budget: number, elements: { element: string, amount: number }[]) => void;
+  userLoggedIn: boolean; // Nowy prop do przechowywania informacji o zalogowanym użytkowniku
+  eventIDProp: string; // Nowy prop do przechowywania ID wydarzenia
 }
 
-export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
+export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget, eventIDProp
+ }) => {
   const [budgetDocuments, setBudgetDocuments] = useState<string[]>([]);
   const [selectedBudget, setSelectedBudget] = useState<string | null>(null); // Nowy stan do przechowywania wybranego budżetu
   const [budgetDocumentsData, setBudgetDocumentsData] = useState< {element: string, amount: number }[]>([]); //
   
-  useEffect(() => {
-    loadBudgetsFromFirebase();
-  }, []);
+const [eventData, setEventData] = useState<EventData | null>();
+const { currentUserUID, eventID } = useParams();
+const user = useCurrentUser();
+const loading = user.status === 'loading';
+  
+useEffect(() => {
+  if (user.status === 'authenticated') {
+      getYourEvent(eventID, eventRef)
+          .then(res => {
+              if (res) {
+                  setEventData(res as EventData);
+              } else {
+                  setEventData(null);
+              }
+          })
+  } else {
+      setEventData(null)
+  }
+}, [user.status])
 
-  const loadBudgetsFromFirebase = async () => {
+
+  
+useEffect(() => {
+  console.log("eventID", eventID)
+  if (eventID === undefined) {
+    return} 
+       loadBudgetsFromFirebase(eventID); // Dodaj paramEventID jako argument
+}, [eventID]);
+
+  const loadBudgetsFromFirebase = async (eventID:string) => {
     try {
-      const budgets = await getBudgetsFromFirebase();
+      const budgets = await getBudgetsFromFirebase(eventID);
       setBudgetDocuments(budgets);
     } catch (error) {
       console.error("Błąd podczas ładowania budżetów: ", error);
@@ -95,31 +130,40 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
         setSelectedBudget(documentName); // Ustawienie wybranego budżetu
         setBudgetDocumentsData(elements); // Ustawienie danych budżetu
   
-        console.log("Załadowano dane budżetu:", elements); 
+        console.log("Budget data has been loaded:", elements); 
       } else {
-        console.error("Nieprawidłowe lub brak danych budżetu.", documentName);
+        console.error("Invalid or missing budget data.", documentName);
       }
     } catch (error) {
-      console.error("Błąd podczas ładowania danych budżetu: ", error);
+      console.error("Error while loading budget data: ", error);
     }
   };
+
+  
   return (
-    <div>
-      <div>
+    <div >
+    <div >
+      
+      {eventData && (
+      
+     
+
+        <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
+
         {budgetDocuments.map((documentName, index) => (
-          <Button key={index} variant="ghost" onClick={() => handleSelectBudget(documentName)}>
+          <Button key={index}  variant="outline" onClick={() => handleSelectBudget(documentName)}>
             {documentName}
           </Button>
         ))}
-      </div>
+      </div>)}
       <div>
         <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
-          {budgetDocumentsData.length > 0 && (
+        {selectedBudget && budgetDocumentsData.length > 0 && (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>List of items:</TableHead>
-                  <TableHead>Amount:</TableHead>
+                  <TableHead>Value:</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -134,6 +178,7 @@ export const LoadBudget: React.FC<LoadBudgetProps> = ({ onSelectBudget }) => {
           )}
         </Card>
       </div>
+    </div>
     </div>
   );}
   
