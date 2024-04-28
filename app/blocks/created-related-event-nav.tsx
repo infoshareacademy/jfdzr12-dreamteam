@@ -66,7 +66,7 @@ export const CreatedRelatedEventNav = () => {
 
     return (
         // <div id="created-related-event-nav">
-        <div className="right-section section grid gap-4">
+        <div className="grid gap-4">
             {relatedEvents.map((event) => (
                 userUID === event.userUID && (
                     <div key={event._id}>

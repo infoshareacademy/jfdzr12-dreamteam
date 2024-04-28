@@ -67,11 +67,11 @@ export const CreatedEventNav: React.FC = () => {
 
 
     return (
-        <div className="left-section section">
+        <div className="grid gap-4">
             {events.map((event) => (
                 <React.Fragment key={event._id}>
                     {userUID === event.userUID && (
-                        <div key={event._id}>
+                        <div key={event._id} >
                             <Card className='shadow-xl'>
                                 <CardHeader>
                                     <CardTitle className="text-2xl text-center">{event.firstPerson} & {event.secondPerson} <span style={{ fontSize: '18px' }}  >👩‍❤️‍👨</span></CardTitle>
