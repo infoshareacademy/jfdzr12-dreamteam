@@ -161,7 +161,7 @@ export default function RelatedEvent() {
                                     </div>
                                 </div>
 
-                                <div className="text-lg mb-2">
+                                {/* <div className="text-lg mb-2">
                                     <p className="border-t-2 pt-4">Code</p>
                                     <CardDescription className="mb-6">{"Your wedding code (if you have one)"}</CardDescription>
                                     <div className="grid grid-cols-3 gap-4">
@@ -170,7 +170,7 @@ export default function RelatedEvent() {
                                             <Input name="eventCode" />
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <div className="text-lg mb-2">
                                     <p className="border-t-2 pt-4">Other</p>
