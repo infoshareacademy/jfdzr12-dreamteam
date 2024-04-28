@@ -580,7 +580,7 @@ import { LoadBudget } from '../db/load-budget';
 import { getBudgetsFromFirebase } from '../db/getBudgetsFromFirebase';
 import { mainCardOnPage } from '~/lib/utils';
 
-interface NameFormProps { }
+// interface NameFormProps { }
 import {  useParams } from "@remix-run/react";
 
 import { useToast } from '~/atoms/ui/use-toast';
@@ -675,6 +675,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
   const totalAmount = budgetElAmount.reduce((prev, next) => prev + next, 0);
 
   return (
+    <div className={mainCardOnPage}>
     <div className="grid grid-cols-1 gap-4">
       <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
         <CardHeader>
@@ -689,7 +690,8 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
                 <Button className="w-full inline-flex" variant="outline" onClick={handleCreateNewBudget}>Create New Budget</Button>
                 <Button className="w-full inline-flex" variant="outline" onClick={handleLoadBudget}>Load Budget</Button>
                 {/* <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link> */}
-                <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link>
+                {/* <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link> */}
+                <Link to={`/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link>
                  </div>
                
                 {budgetDocuments.length > 0 && ( // Renderujemy przyciski na podstawie pobranych dokumentów
@@ -732,8 +734,9 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
                 <Button  className="w-full inline-flex" variant="outline" type="button" onClick={handleAddToBudget}>Add item</Button>
                 <Button  className="w-full inline-flex" variant="outline" type="submit">Save budget</Button>
                 {/* <Link to={`/${currentUserUID}/events`}><Button className="w-full inline-flex" variant="outline">Back to your events</Button></Link> */}
-                <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link>
-                </div>
+                {/* <Link to={`/${currentUserUID}/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link> */}
+                
+                <Link to={`/events/your-event/${eventID}`}><Button className="w-full inline-flex" variant="secondary">Back to your event</Button></Link></div>
                 <br /><br />
               </form>
             )} 
@@ -772,6 +775,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
       
       )}
     
+    </div>
     </div>
   );
 };

@@ -61,6 +61,7 @@ import { eventRef } from "~/db/event-ref";
 import {  useParams } from "@remix-run/react";
 import { EventData } from "~/lib/utils";
 import { getYourEvent } from "~/db/get-your-event";
+import { mainCardOnPage } from '~/lib/utils';
 
 // interface LoadBudgetProps {
 //   onSelectBudget: (documentData: { name: string, elements: { element: string, amount: number }[] }) => void;
@@ -140,7 +141,8 @@ useEffect(() => {
 
   
   return (
-    <div>
+    <div >
+    <div >
       
       {eventData && (
       
@@ -176,6 +178,7 @@ useEffect(() => {
           )}
         </Card>
       </div>
+    </div>
     </div>
   );}
   
