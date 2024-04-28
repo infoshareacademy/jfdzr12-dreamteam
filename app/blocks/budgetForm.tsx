@@ -581,7 +581,7 @@ import { getBudgetsFromFirebase } from '../db/getBudgetsFromFirebase';
 import { mainCardOnPage } from '~/lib/utils';
 
 // interface NameFormProps { }
-import {  useParams } from "@remix-run/react";
+import { useParams } from "@remix-run/react";
 
 import { useToast } from '~/atoms/ui/use-toast';
 import { CheckCheck, SquareX } from 'lucide-react';
@@ -590,10 +590,10 @@ import { Link } from "@remix-run/react";
 
 
 interface NameFormProps {
-  eventIDProp: string; 
+  eventIDProp: string;
 }
 
-export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
+export const BudgetForm: React.FC<NameFormProps> = ({ eventIDProp }) => {
   const [budgetEl, setBudgetEl] = useState<string[]>([]);
   const [budgetElAmount, setBudgetElAmount] = useState<number[]>([0]);
   const [budgetElInput, setBudgetElInput] = useState<string>('');
@@ -611,7 +611,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
   };
 
   const handleLoadBudget = async () => {
-    if (eventID === undefined) {return}
+    if (eventID === undefined) { return }
     try {
       const budgets = await getBudgetsFromFirebase(eventID);
       setBudgetDocuments(budgets);
@@ -643,7 +643,7 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (eventID === undefined) {return}
+    if (eventID === undefined) { return }
     const budgetData = budgetEl.map((el, index) => ({
       element: el,
       amount: budgetElAmount[index],
@@ -654,8 +654,8 @@ export const BudgetForm: React.FC<NameFormProps> = ({eventIDProp}) => {
       console.log("Budget saved successfully!");
       toast({
         className:
-        'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20 bg-emerald-300 text-black'
-      ,
+          'top-0 right-0 flex fixed md:max-w-[420px] md:top-20 md:right-20 bg-emerald-300 text-black'
+        ,
         title: "Success!",
         description: (<><p>Your budget has been saved successfully. </p><CheckCheck/></>),
         duration: 6000,

@@ -101,8 +101,12 @@ export const RelatedEventGuestListForm = () => {
     setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
   }
 
-  function clearErrors() {
+  function clearErrorsAndInputs() {
     setErrors({});
+    const form = document.getElementById("GuestListForm");
+    if (form) {
+      form.reset();
+    }
   }
 
   return (
@@ -136,7 +140,7 @@ export const RelatedEventGuestListForm = () => {
           </div>
         </form>
         <SheetFooter className="grid gap-4 py-4 grid-cols-2">
-          <Button type='reset' variant='secondary' className="w-full" onClick={clearErrors}>Cancel</Button>
+          <Button type='reset' variant='secondary' className="w-full" onClick={clearErrorsAndInputs}>Cancel</Button>
           <Button type='submit' form='RelatedEventGuestListForm' >Add</Button>
           <SheetClose className="col-span-full hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Close form</SheetClose>
         </SheetFooter>

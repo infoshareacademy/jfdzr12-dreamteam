@@ -6,13 +6,13 @@ import { db } from '~/db/firebase';
 import { useCurrentUser } from '~/db/auth';
 import { getUserUID } from '~/db/get-user-uid';
 import React, { useEffect, useState } from 'react';
-import { CreatedRelatedEventNav } from './created-related-event-nav';
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
-  } from '~/atoms/ui/card';
+} from '~/atoms/ui/card';
+import { X } from "lucide-react"
 
 
 interface Event {
@@ -27,9 +27,9 @@ export const CreatedEventNav: React.FC = () => {
     const [events, setEvents] = useState<Event[]>([]);
     const [userUID, setUserUID] = useState<string | null>();
     const user = useCurrentUser();
-    
+
     useEffect(() => {
-        if(user.status === 'authenticated') {
+        if (user.status === 'authenticated') {
             getUserUID()
                 .then(res => setUserUID(res))
         } else {
@@ -66,22 +66,21 @@ export const CreatedEventNav: React.FC = () => {
 
 
 
-return (
-    <div className="container">
+    return (
         <div className="left-section section">
             {events.map((event) => (
                 <React.Fragment key={event._id}>
                     {userUID === event.userUID && (
-                        <div className="m-2">
-                            <Card className="max-w-md mx-auto">
+                        <div key={event._id}>
+                            <Card className='shadow-xl'>
                                 <CardHeader>
-                                    <CardTitle className="text-sm">{event.firstPerson} & {event.secondPerson}<span className="ml-2" style={{ fontSize: '18px' }}  >👩‍❤️‍👨</span></CardTitle>
+                                    <CardTitle className="text-2xl text-center">{event.firstPerson} & {event.secondPerson} <span style={{ fontSize: '18px' }}  >👩‍❤️‍👨</span></CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="flex justify-between items-center">
-                                        <Button className="p-4" onClick={() => handleDelete(event._id)} variant="destructive">Delete</Button>
-                                        <Link to={`your-event/${event.eventID}`}>
-                                            <Button className="p-4 ml-auto" variant="outline">Details</Button>
+                                    <div className="grid lg:grid-cols-2 gap-4">
+                                        <Button className="p-4" onClick={() => handleDelete(event._id)} variant="secondary">Delete <X className='h-6 text-red-700' /></Button>
+                                        <Link to={`your-event/${event.eventID}`} className='grid'>
+                                            <Button className="p-4" variant="default">Details</Button>
                                         </Link>
                                     </div>
                                 </CardContent>
@@ -91,9 +90,5 @@ return (
                 </React.Fragment>
             ))}
         </div>
-        <div className="right-section section">
-            <CreatedRelatedEventNav />
-        </div>
-    </div>
-);
+    );
 }

@@ -7,13 +7,13 @@ import { db } from '~/db/firebase';
 import React from 'react';
 import { useCurrentUser } from '~/db/auth';
 import { getUserUID } from '~/db/get-user-uid';
-import { PartyPopper } from 'lucide-react';
+import { PartyPopper, X } from 'lucide-react';
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle,
-  } from '~/atoms/ui/card';
+} from '~/atoms/ui/card';
 
 interface RelatedEvent {
     eventName: string;
@@ -28,7 +28,7 @@ export const CreatedRelatedEventNav = () => {
 
     useEffect(() => {
         if (user.status === 'authenticated') {
-            getUserUID().then(uid => setUserUID(uid)); 
+            getUserUID().then(uid => setUserUID(uid));
         } else {
             setUserUID(null);
         }
@@ -37,7 +37,7 @@ export const CreatedRelatedEventNav = () => {
     useEffect(() => {
         const unsubscribe = getRelatedEventList();
         return () => {
-            unsubscribe(); 
+            unsubscribe();
         }
     }, []);
 
@@ -62,23 +62,23 @@ export const CreatedRelatedEventNav = () => {
                 console.error('Error deleting event data', error);
             });
     };
-    
 
-return (
-    <div id="created-related-event-nav">
-        <div className="flex-col items-center"> 
+
+    return (
+        // <div id="created-related-event-nav">
+        <div className="right-section section grid gap-4">
             {relatedEvents.map((event) => (
-                userUID === event.userUID && ( 
-                    <div className="m-2" key={event._id}>
-                        <Card className="max-w-md mx-auto">
+                userUID === event.userUID && (
+                    <div key={event._id}>
+                        <Card className='shadow-xl'>
                             <CardHeader>
-                                <CardTitle   className="text-sm">{event.eventName}<span className="ml-2" style={{ fontSize: '18px' }} >🎉</span></CardTitle>
+                                <CardTitle className="text-2xl text-center">{event.eventName}<span className="ml-2" style={{ fontSize: '18px' }} >🎉</span></CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="flex justify-between items-center">
-                                    <Button className="p-4" onClick={() => handleDelete(event._id)} variant="destructive">Delete</Button>
-                                    <Link to={`related-event/${event.eventID}`}>
-                                        <Button className="p-4 ml-auto" variant="outline">Details</Button>
+                                <div className="grid lg:grid-cols-2 gap-4">
+                                    <Button className="p-4" onClick={() => handleDelete(event._id)} variant="secondary">Delete<X className='h-6 text-red-700' /></Button>
+                                    <Link to={`related-event/${event.eventID}`} className='grid'>
+                                        <Button className="p-4" variant="default">Details</Button>
                                     </Link>
                                 </div>
                             </CardContent>
@@ -87,5 +87,6 @@ return (
                 )
             ))}
         </div>
-    </div>
-)}
+        // </div>
+    )
+}
