@@ -1,5 +1,5 @@
 import { Link, useParams } from "@remix-run/react";
-import { Heart, HeartHandshake, Wine } from "lucide-react";
+import { Heart, HeartHandshake, PencilLine, Wine } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "~/atoms/ui/button";
 import { Card } from "~/atoms/ui/card";
@@ -45,26 +45,26 @@ export default function YourEvent() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
                         <Card className="grid col-start-1 justify-items-center w-full p-5 shadow-xl">
                             <HeartHandshake className="mb-5"/>
-                            <h1 className="mb-5">CEREMONY</h1>
+                            <h1 className="mb-5 font-bold font-xl">CEREMONY</h1>
                             <p className="text-center">{`Place: ${eventData.ceremonyPlace}`}</p>
                             <p className="text-center">{`Street: ${eventData.ceremonyStreetAddress}`}</p>
                             <p className="text-center">{`City: ${eventData.ceremonyCityAddress}`}</p>
                             <p className="text-center">{`Country: ${eventData.ceremonyCountryAddress}`}</p>
                         </Card>
                         <Card className="grid justify-items-center w-full p-5 shadow-xl">
-                            <div className="flex items-center justify-center p-6">
+                            <div className="flex items-center justify-center p-6 font-bold font-xl">
                                 <p>{eventDate}</p>
                             </div>
                             <div className="flex items-center justify-center">
                                 <Heart />
                             </div>
-                            <div className="flex items-center justify-center p-6">
+                            <div className="flex items-center justify-center p-6 font-bold font-xl">
                                 <p>{eventData.eventTime}</p>
                             </div>
                         </Card>
                         <Card className="grid justify-items-center w-full p-5 shadow-xl">
                             <Wine className="mb-5" />
-                            <h1 className="mb-5">RECEPTION</h1>
+                            <h1 className="mb-5 font-bold font-xl">RECEPTION</h1>
                             <p className="text-center">{`Place: ${eventData.receptionPlace}`}</p>
                             <p className="text-center">{`Street: ${eventData.receptionStreetAddress}`}</p>
                             <p className="text-center">{`City: ${eventData.receptionCityAddress}`}</p>
@@ -74,7 +74,7 @@ export default function YourEvent() {
                     {eventData.other && (
                         <Card className="mt-4 shadow-xl">
                             <div className="flex items-center justify-center mt-5">
-                                <p>OTHER</p>
+                                <PencilLine/>
                             </div>
                             <div className="flex items-center justify-center p-6 whitespace-pre-wrap">
                                 <p>{eventData.other}</p>
