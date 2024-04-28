@@ -129,12 +129,12 @@ useEffect(() => {
         setSelectedBudget(documentName); // Ustawienie wybranego budżetu
         setBudgetDocumentsData(elements); // Ustawienie danych budżetu
   
-        console.log("Załadowano dane budżetu:", elements); 
+        console.log("Budget data has been loaded:", elements); 
       } else {
-        console.error("Nieprawidłowe lub brak danych budżetu.", documentName);
+        console.error("Invalid or missing budget data.", documentName);
       }
     } catch (error) {
-      console.error("Błąd podczas ładowania danych budżetu: ", error);
+      console.error("Error while loading budget data: ", error);
     }
   };
 
@@ -144,24 +144,24 @@ useEffect(() => {
       
       {eventData && (
       
-      <div>
+     
 
-
+        <div className="m-10 grid grid-cols-1 md:grid-cols-4 gap-4 justify-center">
 
         {budgetDocuments.map((documentName, index) => (
-          <Button key={index} variant="ghost" onClick={() => handleSelectBudget(documentName)}>
+          <Button key={index}  variant="outline" onClick={() => handleSelectBudget(documentName)}>
             {documentName}
           </Button>
         ))}
       </div>)}
       <div>
         <Card className="w-9/12 mt-5 mb-6 mx-auto dashboard-06-chunk-0">
-          {budgetDocumentsData.length > 0 && (
+        {selectedBudget && budgetDocumentsData.length > 0 && (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>List of items:</TableHead>
-                  <TableHead>Amount:</TableHead>
+                  <TableHead>Value:</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
