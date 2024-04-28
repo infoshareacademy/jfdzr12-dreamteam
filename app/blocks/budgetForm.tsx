@@ -497,9 +497,9 @@
 //         </CardHeader>
 //         <CardContent>
 //           <div className="grid w-full items-center gap-4">
-     
+
 //               <div> 
-                
+
 //                <Button variant={"ghost"} onClick={handleLoadBudget}>Load Budget</Button>
 //                 {budgetDocuments.length > 0 && ( // Renderujemy przyciski na podstawie pobranych dokumentów
 //                   <LoadBudget onSelectBudget={(documentName) => setDocumentName(documentName)} budgetDocuments={budgetDocuments} />
@@ -576,9 +576,11 @@ import { Label } from '~/atoms/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/atoms/ui/card';
 import { Table, TableCell, TableFooter, TableHead, TableRow, TableHeader, TableBody } from '~/atoms/ui/table';
 import { addBudget } from '~/db/users-budget';
-import { LoadBudget } from '../db/load-budget'; 
+import { LoadBudget } from '../db/load-budget';
 import { getBudgetsFromFirebase } from '../db/getBudgetsFromFirebase';
+import { mainCardOnPage } from '~/lib/utils';
 
+interface NameFormProps { }
 import {  useParams } from "@remix-run/react";
 
 import { useToast } from '~/atoms/ui/use-toast';

@@ -7,6 +7,13 @@ import { useCurrentUser } from '~/db/auth';
 import { getUserUID } from '~/db/get-user-uid';
 import React, { useEffect, useState } from 'react';
 import { CreatedRelatedEventNav } from './created-related-event-nav';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+  } from '~/atoms/ui/card';
+
 
 interface Event {
     firstPerson: string;
@@ -57,28 +64,36 @@ export const CreatedEventNav: React.FC = () => {
             });
     };
 
-    return (
-        <div className="container">
-            <div className="left-section section">
-                    <div className="flex flex-col items-center "> 
-                        {events.map((event) => (
-                            <React.Fragment key={event._id}>
-                                {userUID === event.userUID && (
-                                    <div className="m-4"> 
+
+
+return (
+    <div className="container">
+        <div className="left-section section">
+            {events.map((event) => (
+                <React.Fragment key={event._id}>
+                    {userUID === event.userUID && (
+                        <div className="m-2">
+                            <Card className="max-w-md mx-auto">
+                                <CardHeader>
+                                    <CardTitle className="text-sm">{event.firstPerson} & {event.secondPerson}<span className="ml-2" style={{ fontSize: '18px' }}  >👩‍❤️‍👨</span></CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="flex justify-between items-center">
+                                        <Button className="p-4" onClick={() => handleDelete(event._id)} variant="destructive">Delete</Button>
                                         <Link to={`your-event/${event.eventID}`}>
-                                            <Button className="p-4 " variant="outline"> {event.firstPerson} & {event.secondPerson} </Button>
+                                            <Button className="p-4 ml-auto" variant="outline">Details</Button>
                                         </Link>
-                                        <button className="p-1 rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
                                     </div>
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </div>
-                
-            </div>
-            <div className="right-section section">
-            <CreatedRelatedEventNav />
-            </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
+                </React.Fragment>
+            ))}
         </div>
-    );
+        <div className="right-section section">
+            <CreatedRelatedEventNav />
+        </div>
+    </div>
+);
 }

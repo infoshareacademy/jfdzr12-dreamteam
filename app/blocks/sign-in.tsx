@@ -7,7 +7,7 @@ import { Label } from '~/atoms/ui/label';
 import { loginWithEmailAndPassword } from "~/db/auth";
 import { resetPassword } from "~/db/auth";
 import { Link, useNavigate } from "@remix-run/react"; 
-import { getUserUID } from "~/db/get-user-uid";
+
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -46,8 +46,7 @@ export function SignIn() {
       console.log("Sign in successful!");
       setEmail("");
       setPassword("");
-      const currentUserUID = await getUserUID();
-      navigate(`/${currentUserUID}/events`);
+      navigate(`/events`);
     } else {
       console.error("Sign in error:", signInResult.error);
       setSignInDisabled(false);
@@ -119,7 +118,7 @@ export function SignIn() {
             {passwordError && <p className="text-red-500">{passwordError}</p>}
           </div>
          
-          <p className="/forgot-password" className="text-sm  hover:underline" onClick={handleForgotPassword}  style={{ cursor: 'pointer' }}>
+          <p className="text-sm hover:underline" onClick={handleForgotPassword} style={{ cursor: 'pointer' }}>
             Forgot Password? Please check email
           </p>
           <Button type="button" className="w-full" onClick={handleSignIn} disabled={signInDisabled || buttonClicked}>

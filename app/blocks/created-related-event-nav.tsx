@@ -7,6 +7,13 @@ import { db } from '~/db/firebase';
 import React from 'react';
 import { useCurrentUser } from '~/db/auth';
 import { getUserUID } from '~/db/get-user-uid';
+import { PartyPopper } from 'lucide-react';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+  } from '~/atoms/ui/card';
 
 interface RelatedEvent {
     eventName: string;
@@ -14,7 +21,6 @@ interface RelatedEvent {
     eventID: string;
     userUID: string;
 }
-
 export const CreatedRelatedEventNav = () => {
     const [relatedEvents, setRelatedEvents] = useState<RelatedEvent[]>([]);
     const [userUID, setUserUID] = useState<string | null>();
@@ -57,21 +63,29 @@ export const CreatedRelatedEventNav = () => {
             });
     };
     
+
 return (
     <div id="created-related-event-nav">
-        <div className="flex flex-col items-center"> 
-        {relatedEvents.map((event) => (
-            userUID === event.userUID && ( 
-                <div className="m-4" key={event._id}>
-                    <Link to={`related-event/${event.eventID}`}>
-                        <Button className="p-4 " variant="outline">{event.eventName}</Button>
-                    </Link>
-                    <button className=" p-1 rounded-full mt-2 sticky top-0 " onClick={() => handleDelete(event._id)}>X</button>
-                </div>
-            )
-        ))}
+        <div className="flex-col items-center"> 
+            {relatedEvents.map((event) => (
+                userUID === event.userUID && ( 
+                    <div className="m-2" key={event._id}>
+                        <Card className="max-w-md mx-auto">
+                            <CardHeader>
+                                <CardTitle   className="text-sm">{event.eventName}<span className="ml-2" style={{ fontSize: '18px' }} >🎉</span></CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex justify-between items-center">
+                                    <Button className="p-4" onClick={() => handleDelete(event._id)} variant="destructive">Delete</Button>
+                                    <Link to={`related-event/${event.eventID}`}>
+                                        <Button className="p-4 ml-auto" variant="outline">Details</Button>
+                                    </Link>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                )
+            ))}
+        </div>
     </div>
-    </div>
-);
-};
-
+)}

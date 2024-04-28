@@ -35,16 +35,14 @@ export const Header = () => {
     if (userUID) {
       return (
         <>
-          <Button variant={"ghost"}><Link to={`/${userUID}/events`}>Events</Link></Button>
+          <Button variant={"ghost"}><Link to="/events">Events</Link></Button>
           <Button variant={"ghost"} className="self-center text-sm font-medium transition-colors" onClick={handleLogout}>Sign out</Button>
         </>
       )
     } else {
       return (
         <>
-          <Button variant={"ghost"} >
-            <Link to='/guest'>Guest</Link>
-          </Button>
+          <Button variant={"ghost"} ><Link to='/guest'>Guest</Link></Button>
           <Button variant={"ghost"}>
             <Link to='/sign-in' className="self-center text-sm font-medium transition-colors">Sign in</Link>
           </Button>
@@ -62,14 +60,14 @@ export const Header = () => {
               <SheetTrigger>
                 <Menu className="h-6 md:hidden w-6" />
               </SheetTrigger>
-              <SheetContent side="left" className="w-[300px sm:w-[400px]">
+              <SheetContent side="left" >
                 <nav className="flex flex-col gap-4">
                   {renderNav()}
                 </nav>
               </SheetContent>
             </Sheet>
-            <Link to="/" className="ml-4 lg:ml-0">
-              <h1 className="flex items-center gap-1.5 text-xl font-bold"><Heart className="h-6" />DreamDay</h1>
+            <Link to={"/"} className="ml-4 lg:ml-0">
+              <h1 className="flex items-center gap-1.5 text-xl font-bold bg-transparent p-4"><Heart className="h-6" />DreamDay</h1>
             </Link>
           </div>
 
