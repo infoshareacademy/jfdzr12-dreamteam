@@ -27,7 +27,7 @@ export default function SignInPage() {
             <CreatedEventNav />
             <CreatedRelatedEventNav />
          </CardContent>
-         <CardFooter className='grid lg:grid-cols-2 gap-4 justify-center justify-items-center mt-4'>
+         <CardFooter className='grid lg:grid-cols-2 gap-4 justify-center justify-items-center mt-8'>
             <AddEvent />
             <AddRelatedEvent />
          </CardFooter>
